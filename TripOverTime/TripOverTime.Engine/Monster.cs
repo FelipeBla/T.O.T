@@ -6,5 +6,6 @@ namespace TripOverTime.Engine
 {
     class Monster
     {
+        Life _life;
     }
 }

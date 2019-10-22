@@ -6,5 +6,6 @@ namespace TripOverTime.Engine
 {
     class Player
     {
+        Life _life;
     }
 }
