@@ -6,9 +6,9 @@ LIMIT
 9 2
 LIMITEND
 BLOCKS
-0 AIR imgpath
-1 DIRT imgpath
-2 GRASS imgpath
+0 AIR imgpath false
+1 DIRT imgpath true
+2 GRASS imgpath true
 BLOCKSEND
 MAP
 0000000000
