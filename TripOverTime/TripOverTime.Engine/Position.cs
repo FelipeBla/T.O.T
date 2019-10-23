@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TripOverTime.Engine
+namespace TripOverTime.EngineNamespace
 {
-    class Position
+    public class Position
     {
         double _x;
         double _y;

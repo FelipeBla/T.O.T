@@ -2,7 +2,7 @@
 using SFML;
 
 
-namespace TripOverTime.Engine
+namespace TripOverTime.EngineNamespace
 {
     public class Engine
     {
@@ -17,8 +17,24 @@ namespace TripOverTime.Engine
             _game = new Game();
             _settings = new Settings();
             _gui = new GUI();
-
-
         }
+
+        public Menu GetMenu
+        {
+            get => _menu;
+        }
+        public Game GetGame
+        {
+            get => _game;
+        }
+        public Settings GetSettings
+        {
+            get => _settings;
+        }
+        public GUI GetGUI
+        {
+            get => _gui;
+        }
+
     }
 }
