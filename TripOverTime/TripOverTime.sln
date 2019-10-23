@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripOverTime.Engine", "TripOverTime.Engine\TripOverTime.Engine.csproj", "{F2D085EC-2A6D-48F3-B661-2CE36A7D0F94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripOverTime.Engine", "TripOverTime.Engine\TripOverTime.Engine.csproj", "{F2D085EC-2A6D-48F3-B661-2CE36A7D0F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripOverTime.Main", "TripOverTime.Main\TripOverTime.Main.csproj", "{2CA9517B-9711-4F48-8790-BBCB4604F93F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripOverTime.Main", "TripOverTime.Main\TripOverTime.Main.csproj", "{2CA9517B-9711-4F48-8790-BBCB4604F93F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripOverTime.Tests", "TripOverTime.Tests\TripOverTime.Tests.csproj", "{6F4517E6-5CE7-475A-B444-DC7F111A0F00}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F2D085EC-2A6D-48F3-B661-2CE36A7D0F94} = {F2D085EC-2A6D-48F3-B661-2CE36A7D0F94}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{2CA9517B-9711-4F48-8790-BBCB4604F93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA9517B-9711-4F48-8790-BBCB4604F93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA9517B-9711-4F48-8790-BBCB4604F93F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F4517E6-5CE7-475A-B444-DC7F111A0F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F4517E6-5CE7-475A-B444-DC7F111A0F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F4517E6-5CE7-475A-B444-DC7F111A0F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F4517E6-5CE7-475A-B444-DC7F111A0F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
