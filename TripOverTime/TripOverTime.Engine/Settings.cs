@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TripOverTime.Engine
+namespace TripOverTime.EngineNamespace
 {
-    class Settings
+    public class Settings
     {
     }
 }
