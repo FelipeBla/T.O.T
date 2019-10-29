@@ -6,7 +6,9 @@ namespace TripOverTime.EngineNamespace
 {
     class Player
     {
-        const string PLAYER_ID = "420";
+        internal const string PLAYER_ID = "420";
+        internal const int PLAYER_WIDTH = 128;
+        internal const int PLAYER_HEIGHT = 256;
 
         readonly Game _context;
         readonly String _name;
@@ -25,32 +27,20 @@ namespace TripOverTime.EngineNamespace
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
         }
 
-        private String Name
-        {
-            get => _name;
-        }
-
         internal bool IsAlive
         {
             get => _life.CurrentLife > 0;
         }
 
-        private Position position
+        internal Position Position
         {
             get => _position;
             set { _position = value; }
         }
-        private Life life
-        {
-            get => _life;
-            set { _life = value; }
-        }
 
-        private int attack
+        internal Sprite GetPlayerSprite
         {
-            get { return _attack; }
-            set { _attack = value; }
+            get => _sprite;
         }
-
     }
 }

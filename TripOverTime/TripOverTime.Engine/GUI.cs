@@ -29,27 +29,45 @@ namespace TripOverTime.EngineNamespace
             _window.KeyPressed += Window_KeyPressed;
         }
 
-        public void ShowMap()
+
+        public void InitGame()
         {
             LoadMap();
-            while(_window.IsOpen)
+        }
+
+        public void ShowMap()
+        {
+            if (!_window.IsOpen) _context.CLOSE = true;
+
+            _window.Clear();
+
+            // Background
+            _window.Draw(_background);
+
+            // Events
+            _window.DispatchEvents();
+
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
             {
-                _window.Clear();
-                // Background
-                _window.Draw(_background);
-
-                _window.DispatchEvents();
-
-                // Load sprites
-                foreach(KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
-                {
-                    s.Value.GetSprite.Position = s.Key;
-                    s.Value.GetSprite.Position += _moveTheMapOf;
-                    _window.Draw(s.Value.GetSprite);
-                }
-
-                _window.Display();
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position += _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
             }
+
+            // Player
+            if (_context.GetGame.GetPlayer.IsAlive)
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X, _context.GetGame.GetPlayer.Position.X);
+                _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
+            }
+
+            // Monsters
+
+
+            // Display
+            _window.Display();
+
         }
 
         private void LoadMap()
@@ -64,15 +82,15 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height/2);
+            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height / 2);
             _window.Draw(_background);
 
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
-            foreach(KeyValuePair<Position, Sprite> s in map)
+            foreach (KeyValuePair<Position, Sprite> s in map)
             {
-                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X*128, _videoMode.Height + s.Key.Y*-128); //128*128 = Size of a sprite
+                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _videoMode.Height + s.Key.Y * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
@@ -85,7 +103,7 @@ namespace TripOverTime.EngineNamespace
         {
             var window = (Window)sender;
 
-            switch(e.Code)
+            switch (e.Code)
             {
                 case Keyboard.Key.Escape:
                     window.Close();

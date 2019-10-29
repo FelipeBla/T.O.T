@@ -5,6 +5,8 @@ namespace TripOverTime.EngineNamespace
 {
     public class Engine
     {
+        internal bool CLOSE = false;
+
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
         Settings _settings;
@@ -39,5 +41,9 @@ namespace TripOverTime.EngineNamespace
             get => _gui;
         }
 
+        public bool Close
+        {
+            get => CLOSE;
+        }
     }
 }
