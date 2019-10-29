@@ -6,47 +6,46 @@ namespace TripOverTime.EngineNamespace
 {
     class Player
     {
+        const string PLAYER_ID = "420";
 
         readonly Game _context;
         readonly String _name;
         Position _position;
         Life _life;
-        bool _isAlive;
         int _attack;
+        Sprite _sprite;
 
-        public Player(Game context, String name, Position position, Life life, int attack)
+        internal Player(Game context, String name, Position position, Life life, int attack, string imgPath)
         {
             _context = context;
             _name = name;
             _position = position;
             _life = life;
-            _isAlive = true;
             _attack = attack;
+            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+        }
 
-        }
-        private Game context
+        private String Name
         {
-            get { return _context; }
+            get => _name;
         }
-        private String name
+
+        internal bool IsAlive
         {
-            get { return _name; }
+            get => _life.CurrentLife > 0;
         }
+
         private Position position
         {
-            get { return _position; }
+            get => _position;
             set { _position = value; }
         }
         private Life life
         {
-            get { return _life; }
+            get => _life;
             set { _life = value; }
         }
-        private bool isAlive
-        {
-            get { return _isAlive; }
-            set { _isAlive = value; }
-        }
+
         private int attack
         {
             get { return _attack; }

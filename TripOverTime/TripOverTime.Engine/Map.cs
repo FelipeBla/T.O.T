@@ -13,11 +13,13 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
+        Game _context;
 
-        internal Map(string mapPath)
+        internal Map(Game context, string mapPath)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
 
+            _context = context;
             _map = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;

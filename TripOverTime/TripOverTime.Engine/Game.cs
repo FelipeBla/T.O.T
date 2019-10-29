@@ -6,24 +6,25 @@ namespace TripOverTime.EngineNamespace
 {
     public class Game
     {
+        Engine _context;
         Player _player;
         List<Monster> _monsters;
         Map _map;
 
-        internal Game()
+        internal Game(string mapPath, string playerPath)
         {
-        }
-
-        public void StartGame(string mapPath)
-        {
-            _player = new Player(this, "player", new Position(), new Life(), 1);
+            _player = new Player(this, "player", new Position(), new Life(100, 100), 1, playerPath);
             _monsters = new List<Monster>();
-            _map = new Map(mapPath);
+            _map = new Map(this, mapPath);
         }
 
         internal Map GetMapObject
         {
             get => _map;
+        }
+        internal Player GetPlayer
+        {
+            get => _player;
         }
     }
 }

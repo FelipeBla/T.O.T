@@ -1,7 +1,6 @@
 ﻿using System;
 using SFML;
 
-
 namespace TripOverTime.EngineNamespace
 {
     public class Engine
@@ -14,9 +13,13 @@ namespace TripOverTime.EngineNamespace
         public Engine()
         {
             _menu = new Menu();
-            _game = new Game();
             _settings = new Settings();
             _gui = new GUI(this);
+        }
+
+        public void StartGame(string mapPath, string playerPath)
+        {
+            _game = new Game(mapPath, playerPath);
         }
 
         public Menu GetMenu

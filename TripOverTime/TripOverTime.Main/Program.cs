@@ -11,7 +11,7 @@ namespace TripOverTime.Main
 
             Engine engine = new Engine();
 
-            engine.GetGame.StartGame(@"..\..\..\..\Maps\test.totmap");
+            engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\128x256\Green\alienGreen_stand.png");
             engine.GetGUI.ShowMap();
 
         }
