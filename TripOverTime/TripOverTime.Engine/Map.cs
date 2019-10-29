@@ -106,6 +106,11 @@ namespace TripOverTime.EngineNamespace
             get => _map;
         }
 
+        internal Position GetLimitMax
+        {
+            get => _limitMax;
+        }
+
         internal string GetBackground
         {
             get => _backgroundPath;

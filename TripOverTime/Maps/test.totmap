@@ -2,8 +2,8 @@ BACKGROUNDPATH
 D:\PI_S3\T.O.T\TripOverTime\Assets\Backgrounds\blue_grass.png
 BACKGROUNDPATHEND
 LIMIT
-0 0
-39 1
+0 1
+39 2
 LIMITEND
 BLOCKS
 0 GRASS D:\PI_S3\T.O.T\TripOverTime\Assets\Ground\Grass\grassMid.png true

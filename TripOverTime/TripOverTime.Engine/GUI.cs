@@ -13,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         VideoMode _videoMode;
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed;
         SFML.Graphics.Sprite _background;
+        private SFML.System.Vector2f _moveTheMapOf;
 
         internal GUI(Engine context)
         {
@@ -22,6 +23,7 @@ namespace TripOverTime.EngineNamespace
             _window.SetVerticalSyncEnabled(true);
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
             _background = new SFML.Graphics.Sprite();
+            _moveTheMapOf = new SFML.System.Vector2f(0, 0);
 
             // Define function callled for events
             _window.KeyPressed += Window_KeyPressed;
@@ -42,6 +44,7 @@ namespace TripOverTime.EngineNamespace
                 foreach(KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
                 {
                     s.Value.GetSprite.Position = s.Key;
+                    s.Value.GetSprite.Position += _moveTheMapOf;
                     _window.Draw(s.Value.GetSprite);
                 }
 
@@ -54,18 +57,14 @@ namespace TripOverTime.EngineNamespace
             if (!_window.IsOpen) throw new Exception("Window is not open!");
 
             // Set background
-            Texture backgroundTexture = new Texture(_context.GetGame.GetMapObject.GetBackground, new IntRect(0, 0, 800, 600));
+            Texture backgroundTexture = new Texture(_context.GetGame.GetMapObject.GetBackground);
             if (backgroundTexture == null) throw new Exception("Texture null!");
             backgroundTexture.Repeated = true;
 
-            _background = new SFML.Graphics.Sprite(backgroundTexture, new IntRect(0, 0, (int)_videoMode.Width, (int)_videoMode.Height) );
+            _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            float xScale = (float)_videoMode.Width / (float)backgroundTexture.Size.X;
-            float yScale = (float)_videoMode.Height / (float)backgroundTexture.Size.Y;
-
-            _background.Scale = new SFML.System.Vector2f(xScale, yScale);
-            //_background.Position = new SFML.System.Vector2f(100, 0);
+            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height/2);
             _window.Draw(_background);
 
 
@@ -73,7 +72,7 @@ namespace TripOverTime.EngineNamespace
 
             foreach(KeyValuePair<Position, Sprite> s in map)
             {
-                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X*128, _videoMode.Height/2 + s.Key.Y*-128); //128*128 = Size of a sprite
+                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X*128, _videoMode.Height + s.Key.Y*-128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
@@ -85,9 +84,32 @@ namespace TripOverTime.EngineNamespace
         private void Window_KeyPressed(object sender, KeyEventArgs e)
         {
             var window = (Window)sender;
-            if (e.Code == Keyboard.Key.Escape)
+
+            switch(e.Code)
             {
-                window.Close();
+                case Keyboard.Key.Escape:
+                    window.Close();
+                    break;
+                case Keyboard.Key.Right:
+                    if (_moveTheMapOf == new SFML.System.Vector2f(-128 * _context.GetGame.GetMapObject.GetLimitMax.X, 0)) Console.WriteLine("Border of the map");
+                    else
+                    {
+                        //Map
+                        _moveTheMapOf -= new SFML.System.Vector2f(128, 0);
+
+                        //Player
+                    }
+                    break;
+                case Keyboard.Key.Left:
+                    if (_moveTheMapOf == new SFML.System.Vector2f(0, 0)) Console.WriteLine("Border of the map");
+                    else
+                    {
+                        //Map
+                        _moveTheMapOf += new SFML.System.Vector2f(128, 0);
+
+                        //Player
+                    }
+                    break;
             }
         }
 
