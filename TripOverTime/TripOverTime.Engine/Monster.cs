@@ -13,7 +13,7 @@ namespace TripOverTime.EngineNamespace
         bool _isAlive;
         int _attack;
 
-        public Monster(Game context, String name, Double position, Life life, int attack)
+        public Monster(Game context, String name, Position position, Life life, int attack)
         {
             _context = context;
             _name = name;
