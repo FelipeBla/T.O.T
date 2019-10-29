@@ -8,7 +8,7 @@ namespace TripOverTime.EngineNamespace
     {
         readonly Game _context;
         readonly String _name;
-        Double _position;
+        Position _position;
         Life _life;
         bool _isAlive;
         int _attack;
