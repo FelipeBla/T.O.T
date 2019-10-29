@@ -14,7 +14,7 @@ namespace TripOverTime.EngineNamespace
         internal Game(string mapPath, string playerPath)
         {
             _map = new Map(this, mapPath);
-            _player = new Player(this, "player", new Position(), new Life(100, 100), 1, playerPath);
+            _player = new Player(this, "player", new Position(3, 4), new Life(100, 100), 1, playerPath);
             _monsters = new List<Monster>();
         }
 

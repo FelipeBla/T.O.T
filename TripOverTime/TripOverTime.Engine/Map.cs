@@ -82,6 +82,13 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal Sprite SpriteWithPosition(Position p)
+        {
+            Sprite s;
+            _map.TryGetValue(p, out s);
+            return s;
+        }
+
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach(Sprite spr in _sprites)
