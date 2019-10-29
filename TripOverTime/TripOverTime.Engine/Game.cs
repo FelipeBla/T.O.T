@@ -7,7 +7,7 @@ namespace TripOverTime.EngineNamespace
     public class Game
     {
         Player _player;
-        Monster _monster;
+        List<Monster> _monsters;
         Map _map;
 
         internal Game()
@@ -16,8 +16,8 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath)
         {
-            _player = new Player();
-            _monster = new Monster();
+            _player = new Player(this, "player", new Position(), new Life(), 1);
+            _monsters = new List<Monster>();
             _map = new Map(mapPath);
         }
 

@@ -62,7 +62,7 @@ namespace TripOverTime.EngineNamespace
             foreach(string s in blocks)
             {
                 string[] str = s.Split(" ");
-                _sprites.Add(new Sprite(Convert.ToUInt16(str[0]), str[1], str[2], Convert.ToBoolean(str[3]), this));
+                _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
             }
 
             // Get map
@@ -82,11 +82,9 @@ namespace TripOverTime.EngineNamespace
 
         private Sprite RetrieveSpriteWithId(string strId)
         {
-            ushort id = Convert.ToUInt16(strId);
-
             foreach(Sprite spr in _sprites)
             {
-                if (spr.Id == id) return spr;
+                if (spr.Id == strId) return spr;
             }
 
             throw new Exception("ID INCONNU, ERREUR DANS LA MAP!");
