@@ -16,7 +16,7 @@ namespace TripOverTime.EngineNamespace
             _menu = new Menu();
             _game = new Game();
             _settings = new Settings();
-            _gui = new GUI();
+            _gui = new GUI(this);
         }
 
         public Menu GetMenu
