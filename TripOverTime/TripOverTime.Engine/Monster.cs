@@ -31,7 +31,7 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _name; }
         }
-        private Double position
+        private Position position
         {
             get { return _position; }
             set { _position = value; }
