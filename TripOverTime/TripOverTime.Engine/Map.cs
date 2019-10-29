@@ -48,13 +48,14 @@ namespace TripOverTime.EngineNamespace
 
             // Get background path
             _backgroundPath = StringBetweenString(text, "BACKGROUNDPATH", "BACKGROUNDPATHEND");
+            _backgroundPath = _backgroundPath.Replace("\r", "");
 
             // Get limits
             string[] limits = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
             string[] limitMin = limits[0].Split(" ");
-            _limitMin = new Position(Convert.ToDouble(limitMin[0]), Convert.ToDouble(limitMin[1]));
+            _limitMin = new Position(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
             string[] limitMax = limits[1].Split(" ");
-            _limitMax = new Position(Convert.ToDouble(limitMax[0]), Convert.ToDouble(limitMax[1]));
+            _limitMax = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
@@ -100,6 +101,14 @@ namespace TripOverTime.EngineNamespace
 
 
         // Getters & Setters
-        
+        internal Dictionary<Position, Sprite> GetMap
+        {
+            get => _map;
+        }
+
+        internal string GetBackground
+        {
+            get => _backgroundPath;
+        }
     }
 }

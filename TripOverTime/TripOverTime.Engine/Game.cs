@@ -21,5 +21,9 @@ namespace TripOverTime.EngineNamespace
             _map = new Map(mapPath);
         }
 
+        internal Map GetMapObject
+        {
+            get => _map;
+        }
     }
 }
