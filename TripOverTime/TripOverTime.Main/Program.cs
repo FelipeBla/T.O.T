@@ -11,7 +11,7 @@ namespace TripOverTime.Main
 
             Engine engine = new Engine();
 
-            engine.GetGame.StartGame(@"D:\PI_S3\T.O.T\TripOverTime\Maps\test.totmap");
+            engine.GetGame.StartGame(@"..\..\..\..\Maps\test.totmap");
             engine.GetGUI.ShowMap();
 
         }
