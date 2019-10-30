@@ -82,13 +82,6 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        internal Sprite SpriteWithPosition(Position p)
-        {
-            Sprite s;
-            _map.TryGetValue(p, out s);
-            return s;
-        }
-
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach(Sprite spr in _sprites)
@@ -106,7 +99,6 @@ namespace TripOverTime.EngineNamespace
             return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
-
         // Getters & Setters
         internal Dictionary<Position, Sprite> GetMap
         {
@@ -116,6 +108,11 @@ namespace TripOverTime.EngineNamespace
         internal Position GetLimitMax
         {
             get => _limitMax;
+        }
+
+        internal Position GetLimitMin
+        {
+            get => _limitMin;
         }
 
         internal string GetBackground

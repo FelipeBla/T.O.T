@@ -21,7 +21,7 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath);
+            _game = new Game(mapPath, playerPath, new Position(0, 0.7f)); //0, -0.7f
         }
 
         /// <summary>
@@ -34,12 +34,14 @@ namespace TripOverTime.EngineNamespace
 
             //Gravity
             Sprite s = null;
-            if (_game.GetMapObject.GetMap.TryGetValue(new Position(_game.GetPlayer.Position.X, _game.GetPlayer.Position.Y - 1), out s)) Console.WriteLine("ok");
-            if (s != null && !s.IsSolid)
+            if (_game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.Position.X), (float)Math.Round(_game.GetPlayer.Position.Y - 1)), out s))
             {
-                //Block under player isn't solid
-                _game.GetPlayer.Position.Y--;
-                Console.WriteLine("descends!");
+                if (!s.IsSolid)
+                {
+                    //Block under player isn't solid
+                    //_game.GetPlayer.Position.Y -= 1;
+                    Console.WriteLine("descends!");
+                }
             }
 
             return _game.GetPlayer.IsAlive;

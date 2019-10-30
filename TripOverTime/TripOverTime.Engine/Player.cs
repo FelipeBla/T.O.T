@@ -7,8 +7,8 @@ namespace TripOverTime.EngineNamespace
     class Player
     {
         internal const string PLAYER_ID = "420";
-        internal const int PLAYER_WIDTH = 128;
-        internal const int PLAYER_HEIGHT = 256;
+        internal const float pw = 128;
+        internal const float ph = 256;
 
         readonly Game _context;
         readonly String _name;
@@ -41,6 +41,16 @@ namespace TripOverTime.EngineNamespace
         internal Sprite GetPlayerSprite
         {
             get => _sprite;
+        }
+
+        internal float PLAYER_WIDTH
+        {
+            get => pw;
+        }
+
+        internal float PLAYER_HEIGHT
+        {
+            get => ph;
         }
     }
 }

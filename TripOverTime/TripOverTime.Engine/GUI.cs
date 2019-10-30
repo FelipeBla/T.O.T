@@ -44,26 +44,25 @@ namespace TripOverTime.EngineNamespace
             // Background
             _window.Draw(_background);
 
-            // Events
-            _window.DispatchEvents();
-
             // Load map
             foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
             {
                 s.Value.GetSprite.Position = s.Key;
-                s.Value.GetSprite.Position += _moveTheMapOf;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(s.Value.GetSprite);
             }
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X, _context.GetGame.GetPlayer.Position.X);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _context.GetGame.GetPlayer.Position.Y * 128);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
             // Monsters
 
+            // Events
+            _window.DispatchEvents();
 
             // Display
             _window.Display();
@@ -109,24 +108,46 @@ namespace TripOverTime.EngineNamespace
                     window.Close();
                     break;
                 case Keyboard.Key.Right:
-                    if (_moveTheMapOf == new SFML.System.Vector2f(-128 * _context.GetGame.GetMapObject.GetLimitMax.X, 0)) Console.WriteLine("Border of the map");
+                    if (_moveTheMapOf == new SFML.System.Vector2f(-128 * _context.GetGame.GetMapObject.GetLimitMax.X, 0) && _context.GetGame.GetPlayer.Position.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
                     else
                     {
-                        //Map
-                        _moveTheMapOf -= new SFML.System.Vector2f(128, 0);
-
-                        //Player
+                        // If player centered on screen, move the map now and not the player
+                        if( _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width/2)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X += 0.2f;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf += new SFML.System.Vector2f(128, 0);
+                        }
                     }
                     break;
                 case Keyboard.Key.Left:
-                    if (_moveTheMapOf == new SFML.System.Vector2f(0, 0)) Console.WriteLine("Border of the map");
+                    if (_moveTheMapOf == new SFML.System.Vector2f(0, 0) && _context.GetGame.GetPlayer.Position.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
                     else
                     {
-                        //Map
-                        _moveTheMapOf += new SFML.System.Vector2f(128, 0);
+                        // If player left on screen, move the map now and not the player
+                        if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X -= 0.2f;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf -= new SFML.System.Vector2f(128, 0);
+                        }
 
-                        //Player
                     }
+                    break;
+                case Keyboard.Key.Up:
+                    if(_context.GetGame.GetPlayer.Position.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
+                    {
+                        _context.GetGame.GetPlayer.Position.Y -= 1;
+                    }
+                    
                     break;
             }
         }
