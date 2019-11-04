@@ -8,6 +8,7 @@ namespace TripOverTime.EngineNamespace
     class Map
     {
         Dictionary<Position, Sprite> _map;
+        List<Position> _checkpointPosition;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _mapPath;
@@ -21,6 +22,7 @@ namespace TripOverTime.EngineNamespace
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
+            _checkpointPosition = new List<Position>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
 
@@ -77,6 +79,10 @@ namespace TripOverTime.EngineNamespace
                 for(int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
                 {
                     _map.Add(new Position(x, y), RetrieveSpriteWithId( mapParsed[indexTemp].Substring(x, 1) ));
+                    if (mapParsed[indexTemp].Substring(x, 1) == "2")
+                    {
+                        _checkpointPosition.Add(new Position(x, y));
+                    }
                 }
                 indexTemp++;
             }

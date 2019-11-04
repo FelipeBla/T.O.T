@@ -6,5 +6,12 @@ namespace TripOverTime.EngineNamespace
 {
     class Checkpoint
     {
+        Position _position;
+        List<Position> _checkpointPosition;
+
+        public Checkpoint()
+        {
+            
+        }
     }
 }
