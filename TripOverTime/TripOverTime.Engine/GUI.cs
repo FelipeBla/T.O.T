@@ -113,19 +113,24 @@ namespace TripOverTime.EngineNamespace
                     if (_context.GetGame.GetPlayer.RealPosition.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
                     else
                     {
-                        // If player centered on screen, move the map now and not the player
-                        if( _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width/2)
-                        {
-                            // Player move
-                            _context.GetGame.GetPlayer.Position.X += 0.2f;
-                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
-                        }
-                        else
-                        {
-                            //Map move
-                            _moveTheMapOf += new SFML.System.Vector2f(25.6f, 0);
-                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
-                        }
+                        //Sprite s = null;
+                        //if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X += 0.2f), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y)), out s)) // Block is solid?
+                        //{
+                            //if (s.IsSolid) Console.WriteLine("Block is solid!");
+                            // If player centered on screen, move the map now and not the player
+                            /*else*/ if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width / 2)
+                            {
+                                // Player move
+                                _context.GetGame.GetPlayer.Position.X += 0.2f;
+                                _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                            }
+                            else
+                            {
+                                //Map move
+                                _moveTheMapOf += new SFML.System.Vector2f(25.6f, 0);
+                                _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                            }
+                        //}
                     }
                     break;
                 case Keyboard.Key.Left:

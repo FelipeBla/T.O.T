@@ -31,7 +31,7 @@ namespace TripOverTime.EngineNamespace
 
         internal bool IsAlive
         {
-            get => _life.CurrentLife > 0;
+            get => _life.CurrentPoint > 0;
         }
 
         internal Position Position

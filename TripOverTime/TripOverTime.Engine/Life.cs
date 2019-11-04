@@ -24,6 +24,7 @@ namespace TripOverTime.EngineNamespace
         {
             _maxPoint = maxPoint;
             _minPoint = minPoint;
+            _currentPoint = maxPoint;
         }
 
         public ushort CurrentPoint
