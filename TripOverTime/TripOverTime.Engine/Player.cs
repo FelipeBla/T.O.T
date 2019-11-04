@@ -12,7 +12,8 @@ namespace TripOverTime.EngineNamespace
 
         readonly Game _context;
         readonly String _name;
-        Position _position;
+        Position _position; // Graphical position
+        Position _realPosition;
         Life _life;
         int _attack;
         Sprite _sprite;
@@ -22,6 +23,7 @@ namespace TripOverTime.EngineNamespace
             _context = context;
             _name = name;
             _position = position;
+            _realPosition = new Position(_position.X, _position.Y);
             _life = life;
             _attack = attack;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
@@ -35,7 +37,16 @@ namespace TripOverTime.EngineNamespace
         internal Position Position
         {
             get => _position;
-            set { _position = value; }
+            set 
+            { 
+                _position = value;
+            }
+        }
+
+        internal Position RealPosition
+        {
+            get => _realPosition;
+            set { _realPosition = value; }
         }
 
         internal Sprite GetPlayerSprite

@@ -57,6 +57,7 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _videoMode.Height + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
                 Console.WriteLine("X: " + _context.GetGame.GetPlayer.Position.X + "   Y:" + _context.GetGame.GetPlayer.Position.Y);
+                Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + "   Real Y:" + _context.GetGame.GetPlayer.RealPosition.Y);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
@@ -109,7 +110,7 @@ namespace TripOverTime.EngineNamespace
                     window.Close();
                     break;
                 case Keyboard.Key.Right:
-                    if (_moveTheMapOf == new SFML.System.Vector2f(-128 * _context.GetGame.GetMapObject.GetLimitMax.X, 0) && _context.GetGame.GetPlayer.Position.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
+                    if (_context.GetGame.GetPlayer.RealPosition.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
                     else
                     {
                         // If player centered on screen, move the map now and not the player
@@ -117,17 +118,18 @@ namespace TripOverTime.EngineNamespace
                         {
                             // Player move
                             _context.GetGame.GetPlayer.Position.X += 0.2f;
+                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
                         }
                         else
                         {
                             //Map move
-                            _moveTheMapOf += new SFML.System.Vector2f(128, 0);
+                            _moveTheMapOf += new SFML.System.Vector2f(25.6f, 0);
+                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
                         }
                     }
                     break;
                 case Keyboard.Key.Left:
-                    // bug movethemapof ==
-                    if (_moveTheMapOf == new SFML.System.Vector2f(0, 0) && _context.GetGame.GetPlayer.Position.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
+                    if (_context.GetGame.GetPlayer.RealPosition.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
                     else
                     {
                         // If player left on screen, move the map now and not the player
@@ -135,19 +137,22 @@ namespace TripOverTime.EngineNamespace
                         {
                             // Player move
                             _context.GetGame.GetPlayer.Position.X -= 0.2f;
+                            _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
                         }
                         else
                         {
                             //Map move
-                            _moveTheMapOf -= new SFML.System.Vector2f(128, 0);
+                            _moveTheMapOf -= new SFML.System.Vector2f(25.6f, 0);
+                            _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
                         }
 
                     }
                     break;
                 case Keyboard.Key.Up:
-                    if(_context.GetGame.GetPlayer.Position.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
+                    if(_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
                     {
                         _context.GetGame.GetPlayer.Position.Y += 1;
+                        _context.GetGame.GetPlayer.RealPosition.Y += 1;
                     }
                     
                     break;
