@@ -113,21 +113,21 @@ namespace TripOverTime.EngineNamespace
                     else
                     {
                         Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + 0.5f), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out s)) // Block is solid?
+                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + 0.25f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         {
                             if (s.IsSolid) Console.WriteLine("Block is solid!");
                             // If player centered on screen, move the map now and not the player
                             else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width / 2)
                             {
                                 // Player move
-                                _context.GetGame.GetPlayer.Position.X += 0.2f;
-                                _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                                _context.GetGame.GetPlayer.Position.X += 0.25f;
+                                _context.GetGame.GetPlayer.RealPosition.X += 0.25f;
                             }
                             else
                             {
                                 //Map move
-                                _moveTheMapOf += new SFML.System.Vector2f(25.6f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                                _moveTheMapOf += new SFML.System.Vector2f(32f, 0);
+                                _context.GetGame.GetPlayer.RealPosition.X += 0.25f;
                             }
                         }
                     }
@@ -137,21 +137,21 @@ namespace TripOverTime.EngineNamespace
                     else
                     {
                         Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - 0.5f), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out s)) // Block is solid?
+                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - 0.25f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         {
                             if (s.IsSolid) Console.WriteLine("Block is solid");
                             // If player left on screen, move the map now and not the player
                             else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
                             {
                                 // Player move
-                                _context.GetGame.GetPlayer.Position.X -= 0.2f;
-                                _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
+                                _context.GetGame.GetPlayer.Position.X -= 0.25f;
+                                _context.GetGame.GetPlayer.RealPosition.X -= 0.25f;
                             }
                             else
                             {
                                 //Map move
-                                _moveTheMapOf -= new SFML.System.Vector2f(25.6f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
+                                _moveTheMapOf -= new SFML.System.Vector2f(32f, 0);
+                                _context.GetGame.GetPlayer.RealPosition.X -= 0.25f;
                             }
                         }
                     }

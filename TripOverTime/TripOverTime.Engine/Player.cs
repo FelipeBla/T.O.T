@@ -37,8 +37,8 @@ namespace TripOverTime.EngineNamespace
             if (!_isJumping)
             {
                 _origin = new Position(_position.X, _position.Y);
-                _realPosition.Y += 0.05f;
-                _position.Y += 0.05f;
+                _realPosition.Y += 0.125f;
+                _position.Y += 0.125f;
                 _isJumping = true;
             }
         }
@@ -47,14 +47,14 @@ namespace TripOverTime.EngineNamespace
         {
             if(_isJumping && _origin != null && _position.Y <= _origin.Y + 1.5f)
             {
-                _realPosition.Y += 0.05f;
-                _position.Y += 0.05f;
+                _realPosition.Y += 0.125f;
+                _position.Y += 0.125f;
             }
             else
             {
                 _origin = null;
-                _realPosition.Y -= 0.05f;
-                _position.Y -= 0.05f;
+                _realPosition.Y -= 0.125f;
+                _position.Y -= 0.125f;
             }
         }
 
