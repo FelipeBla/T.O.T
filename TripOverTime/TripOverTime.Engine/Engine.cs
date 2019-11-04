@@ -21,7 +21,7 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 0.7f)); //0, -0.7f
+            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
         }
 
         /// <summary>
@@ -40,7 +40,6 @@ namespace TripOverTime.EngineNamespace
                 {
                     //Block under player isn't solid
                     //_game.GetPlayer.Position.Y -= 1;
-                    Console.WriteLine("descends!");
                 }
             }
 
