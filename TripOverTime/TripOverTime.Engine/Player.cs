@@ -17,6 +17,8 @@ namespace TripOverTime.EngineNamespace
         Life _life;
         int _attack;
         Sprite _sprite;
+        bool _isJumping;
+        Position _origin;
 
         internal Player(Game context, String name, Position position, Life life, int attack, string imgPath)
         {
@@ -26,9 +28,41 @@ namespace TripOverTime.EngineNamespace
             _realPosition = new Position(_position.X, _position.Y);
             _life = life;
             _attack = attack;
+            _isJumping = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
         }
 
+        internal void Jump()
+        {
+            if (!_isJumping)
+            {
+                _origin = new Position(_position.X, _position.Y);
+                _realPosition.Y += 0.125f;
+                _position.Y += 0.125f;
+                _isJumping = true;
+            }
+        }
+
+        internal void Gravity()
+        {
+            if(_isJumping && _origin != null && _position.Y <= _origin.Y + 1.5f)
+            {
+                _realPosition.Y += 0.125f;
+                _position.Y += 0.125f;
+            }
+            else
+            {
+                _origin = null;
+                _realPosition.Y -= 0.125f;
+                _position.Y -= 0.125f;
+            }
+        }
+
+        internal bool IsJumping
+        {
+            get => _isJumping;
+            set => _isJumping = value;
+        }
         internal bool IsAlive
         {
             get => _life.CurrentPoint > 0;
@@ -37,8 +71,8 @@ namespace TripOverTime.EngineNamespace
         internal Position Position
         {
             get => _position;
-            set 
-            { 
+            set
+            {
                 _position = value;
             }
         }

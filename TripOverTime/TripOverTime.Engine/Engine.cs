@@ -34,14 +34,17 @@ namespace TripOverTime.EngineNamespace
 
             //Gravity
             Sprite s = null;
-            if (_game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1)), out s))
+            if (_game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out s))
             {
                 if (!s.IsSolid)
                 {
                     //Block under player isn't solid
-                    _game.GetPlayer.RealPosition.Y -= 1;
-                    _game.GetPlayer.Position.Y -= 1;
+                    _game.GetPlayer.Gravity();
                     Console.WriteLine("GRAVITYYYYYYYYYYYY!");
+                }
+                else
+                {
+                    _game.GetPlayer.IsJumping = false;
                 }
             }
 
