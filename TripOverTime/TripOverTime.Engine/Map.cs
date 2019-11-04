@@ -111,6 +111,11 @@ namespace TripOverTime.EngineNamespace
             get => _map;
         }
 
+        internal List<Position> GetCheckpointPosition
+        {
+            get => _checkpointPosition;
+        }
+
         internal Position GetLimitMax
         {
             get => _limitMax;

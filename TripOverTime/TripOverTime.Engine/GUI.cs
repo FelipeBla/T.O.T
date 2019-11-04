@@ -152,6 +152,7 @@ namespace TripOverTime.EngineNamespace
                         }
 
                     }
+                    if (_context.GetGame.GetMapObject.GetCheckpointPosition.Contains(_context.GetGame.GetPlayer.Position) == true);
                     break;
                 case Keyboard.Key.Up:
                     if(_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)

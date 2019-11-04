@@ -7,11 +7,16 @@ namespace TripOverTime.EngineNamespace
     class Checkpoint
     {
         Position _position;
-        List<Position> _checkpointPosition;
+        Position _lastActivatedCheckpoint;
 
         public Checkpoint()
         {
             
         }
+        internal Position LastActivatedCheckpoint
+        {
+            set { _lastActivatedCheckpoint = value; }
+        }
+        
     }
 }
