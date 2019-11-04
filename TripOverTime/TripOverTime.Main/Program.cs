@@ -11,9 +11,20 @@ namespace TripOverTime.Main
 
             Engine engine = new Engine();
 
-            engine.GetGame.StartGame(@"..\..\..\..\Maps\test.totmap");
-            engine.GetGUI.ShowMap();
+            //Menu
 
+
+            // Start a game
+            engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink\alienPink_stand.png");
+            engine.GetGUI.InitGame();
+
+            bool playerAlive = true;
+            // GameLoop
+            while(!engine.Close && playerAlive)
+            {
+                playerAlive = engine.GameTick();
+                engine.GetGUI.ShowMap();
+            }
         }
     }
 }

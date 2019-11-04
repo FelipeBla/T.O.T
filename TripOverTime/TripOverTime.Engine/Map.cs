@@ -13,11 +13,13 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
+        Game _context;
 
-        internal Map(string mapPath)
+        internal Map(Game context, string mapPath)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
 
+            _context = context;
             _map = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
@@ -97,7 +99,6 @@ namespace TripOverTime.EngineNamespace
             return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
-
         // Getters & Setters
         internal Dictionary<Position, Sprite> GetMap
         {
@@ -107,6 +108,11 @@ namespace TripOverTime.EngineNamespace
         internal Position GetLimitMax
         {
             get => _limitMax;
+        }
+
+        internal Position GetLimitMin
+        {
+            get => _limitMin;
         }
 
         internal string GetBackground

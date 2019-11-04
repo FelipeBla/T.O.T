@@ -29,27 +29,46 @@ namespace TripOverTime.EngineNamespace
             _window.KeyPressed += Window_KeyPressed;
         }
 
-        public void ShowMap()
+
+        public void InitGame()
         {
             LoadMap();
-            while(_window.IsOpen)
+        }
+
+        public void ShowMap()
+        {
+            if (!_window.IsOpen) _context.CLOSE = true;
+
+            _window.Clear();
+
+            // Background
+            _window.Draw(_background);
+
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
             {
-                _window.Clear();
-                // Background
-                _window.Draw(_background);
-
-                _window.DispatchEvents();
-
-                // Load sprites
-                foreach(KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
-                {
-                    s.Value.GetSprite.Position = s.Key;
-                    s.Value.GetSprite.Position += _moveTheMapOf;
-                    _window.Draw(s.Value.GetSprite);
-                }
-
-                _window.Display();
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
             }
+
+            // Player
+            if (_context.GetGame.GetPlayer.IsAlive)
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _videoMode.Height + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
+                Console.WriteLine("X: " + _context.GetGame.GetPlayer.Position.X + "   Y:" + _context.GetGame.GetPlayer.Position.Y);
+                Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + "   Real Y:" + _context.GetGame.GetPlayer.RealPosition.Y);
+                _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
+            }
+
+            // Monsters
+
+            // Events
+            _window.DispatchEvents();
+
+            // Display
+            _window.Display();
+
         }
 
         private void LoadMap()
@@ -64,15 +83,15 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height/2);
+            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height / 2);
             _window.Draw(_background);
 
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
-            foreach(KeyValuePair<Position, Sprite> s in map)
+            foreach (KeyValuePair<Position, Sprite> s in map)
             {
-                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X*128, _videoMode.Height + s.Key.Y*-128); //128*128 = Size of a sprite
+                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _videoMode.Height + s.Key.Y * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
@@ -85,30 +104,57 @@ namespace TripOverTime.EngineNamespace
         {
             var window = (Window)sender;
 
-            switch(e.Code)
+            switch (e.Code)
             {
                 case Keyboard.Key.Escape:
                     window.Close();
                     break;
                 case Keyboard.Key.Right:
-                    if (_moveTheMapOf == new SFML.System.Vector2f(-128 * _context.GetGame.GetMapObject.GetLimitMax.X, 0)) Console.WriteLine("Border of the map");
+                    if (_context.GetGame.GetPlayer.RealPosition.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
                     else
                     {
-                        //Map
-                        _moveTheMapOf -= new SFML.System.Vector2f(128, 0);
-
-                        //Player
+                        // If player centered on screen, move the map now and not the player
+                        if( _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width/2)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X += 0.2f;
+                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf += new SFML.System.Vector2f(25.6f, 0);
+                            _context.GetGame.GetPlayer.RealPosition.X += 0.2f;
+                        }
                     }
                     break;
                 case Keyboard.Key.Left:
-                    if (_moveTheMapOf == new SFML.System.Vector2f(0, 0)) Console.WriteLine("Border of the map");
+                    if (_context.GetGame.GetPlayer.RealPosition.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
                     else
                     {
-                        //Map
-                        _moveTheMapOf += new SFML.System.Vector2f(128, 0);
+                        // If player left on screen, move the map now and not the player
+                        if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X -= 0.2f;
+                            _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf -= new SFML.System.Vector2f(25.6f, 0);
+                            _context.GetGame.GetPlayer.RealPosition.X -= 0.2f;
+                        }
 
-                        //Player
                     }
+                    break;
+                case Keyboard.Key.Up:
+                    if(_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
+                    {
+                        _context.GetGame.GetPlayer.Position.Y += 1;
+                        _context.GetGame.GetPlayer.RealPosition.Y += 1;
+                    }
+                    
                     break;
             }
         }

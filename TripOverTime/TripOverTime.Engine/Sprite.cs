@@ -47,10 +47,10 @@ namespace TripOverTime.EngineNamespace
             }
 
             // For GUI (texture, srpite)
-            _texture = new Texture(_imgPath, new IntRect(0, 0, 128, 128));
+            _texture = new Texture(_imgPath);
             if (_texture == null) throw new Exception("Texture null!");
 
-            _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(0, 0, 128, 128));
+            _sprite = new SFML.Graphics.Sprite(_texture);
             if (_sprite == null) throw new Exception("Sprite null!");
         }
 
