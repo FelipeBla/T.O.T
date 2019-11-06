@@ -152,7 +152,7 @@ namespace TripOverTime.EngineNamespace
                         }
 
                     }
-                    if (_context.GetGame.GetMapObject.GetCheckpointPosition.Contains(_context.GetGame.GetPlayer.Position) == true);
+                    if (_context.GetGame.GetMapObject.GetCheckpointPosition.Contains(_context.GetGame.GetPlayer.Position) == true) _context.GetCheckpoint.LastActivatedCheckpoint = _context.GetGame.GetPlayer.Position;
                     break;
                 case Keyboard.Key.Up:
                     if(_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)

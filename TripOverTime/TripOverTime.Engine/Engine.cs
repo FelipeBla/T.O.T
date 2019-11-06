@@ -9,6 +9,7 @@ namespace TripOverTime.EngineNamespace
 
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
+        Checkpoint _checkpoint;
         Settings _settings;
         GUI _gui;
 
@@ -55,6 +56,10 @@ namespace TripOverTime.EngineNamespace
         public Game GetGame
         {
             get => _game;
+        }
+        public Checkpoint GetCheckpoint
+        {
+            get => _checkpoint;
         }
         public Settings GetSettings
         {

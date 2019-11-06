@@ -4,17 +4,18 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    class Checkpoint
+    public class Checkpoint
     {
         Position _position;
         Position _lastActivatedCheckpoint;
 
-        public Checkpoint()
+        public Checkpoint(Position lastActivatedCheckpoint)
         {
-            
+            _lastActivatedCheckpoint = lastActivatedCheckpoint;
         }
         internal Position LastActivatedCheckpoint
         {
+            get { return _lastActivatedCheckpoint; }
             set { _lastActivatedCheckpoint = value; }
         }
         
