@@ -24,9 +24,6 @@ namespace TripOverTime.EngineNamespace
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
-
-            // Define function callled for events
-            _window.KeyPressed += Window_KeyPressed;
         }
 
 
@@ -62,9 +59,6 @@ namespace TripOverTime.EngineNamespace
 
             // Monsters
 
-            // Events
-            //_window.DispatchEvents();
-
             // Display
             _window.Display();
 
@@ -98,78 +92,65 @@ namespace TripOverTime.EngineNamespace
 
         internal void Events()
         {
-            _window.DispatchEvents();
-        }
 
-        /// <summary>
-        /// Function called when a key is pressed
-        /// </summary>
-        private void Window_KeyPressed(object sender, KeyEventArgs e)
-        {
-            var window = (Window)sender;
 
-            switch (e.Code)
-            {
-                case Keyboard.Key.Escape:
-                    window.Close();
-                    break;
-                case Keyboard.Key.Right:
-                    if (_context.GetGame.GetPlayer.RealPosition.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
-                    else
-                    {
-                        Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
-                        {
-                            if (s.IsSolid) ;
-                            // If player centered on screen, move the map now and not the player
-                            else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width / 2)
-                            {
-                                // Player move
-                                _context.GetGame.GetPlayer.Position.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
-                                _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
-                            }
-                            else
-                            {
-                                //Map move
-                                _moveTheMapOf += new SFML.System.Vector2f(32f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
-                            }
-                        }
-                    }
-                    break;
-                case Keyboard.Key.Left:
-                    if (_context.GetGame.GetPlayer.RealPosition.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
-                    else
-                    {
-                        Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
-                        {
-                            if (s.IsSolid) ;
-                            // If player left on screen, move the map now and not the player
-                            else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
-                            {
-                                // Player move
-                                _context.GetGame.GetPlayer.Position.X -= _context.GetGame.GetPlayer.PLAYER_MOVE; //0.25f
-                                _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
-                            }
-                            else
-                            {
-                                //Map move
-                                _moveTheMapOf -= new SFML.System.Vector2f(32f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
-                            }
-                        }
-                    }
-                    break;
-                case Keyboard.Key.Up:
-                    if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
-                    {
-                        _context.GetGame.GetPlayer.Jump();
-                    }
-
-                    break;
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
+                _window.Close();
             }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) {
+                if (_context.GetGame.GetPlayer.RealPosition.X >= _context.GetGame.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
+                else
+                {
+                    Sprite s = null;
+                    if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    {
+                        if (s.IsSolid) ;
+                        // If player centered on screen, move the map now and not the player
+                        else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width / 2)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
+                            _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf += new SFML.System.Vector2f(128 / (1 / _context.GetGame.GetPlayer.PLAYER_MOVE), 0);
+                            _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
+                        }
+                    }
+                }
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) {
+                if (_context.GetGame.GetPlayer.RealPosition.X <= _context.GetGame.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
+                else
+                {
+                    Sprite s = null;
+                    if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    {
+                        if (s.IsSolid) ;
+                        // If player left on screen, move the map now and not the player
+                        else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
+                        {
+                            // Player move
+                            _context.GetGame.GetPlayer.Position.X -= _context.GetGame.GetPlayer.PLAYER_MOVE; //0.25f
+                            _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
+                        }
+                        else
+                        {
+                            //Map move
+                            _moveTheMapOf -= new SFML.System.Vector2f(128/(1/_context.GetGame.GetPlayer.PLAYER_MOVE), 0);
+                            _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
+                        }
+                    }
+                }
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) {
+                if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
+                {
+                    _context.GetGame.GetPlayer.Jump();
+                }
+            }            
         }
-
     }
 }

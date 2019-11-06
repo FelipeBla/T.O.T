@@ -12,7 +12,7 @@ namespace TripOverTime.EngineNamespace
         internal const float JUMPING_SPEED = 0.1f;
         internal const float GRAVITY_SPEED = 0.1f;
         internal const float JUMPING_LIMIT = 1.5f;
-        internal const float PPLAYER_MOVE = 0.25f;
+        internal const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;
         readonly String _name;
@@ -66,6 +66,12 @@ namespace TripOverTime.EngineNamespace
         {
             _position.Y = (int)Math.Round(_position.Y);
             _realPosition.Y = (int)Math.Round(_realPosition.Y);
+        }
+
+        internal void RoundX() // To recalibrate X (because precision of float)
+        {
+            _realPosition.X = (float)Math.Round(_realPosition.X, 2);
+            _position.X = (float)Math.Round(_position.X, 2);
         }
 
         internal bool IsJumping
