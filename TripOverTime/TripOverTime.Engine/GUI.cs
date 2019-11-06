@@ -115,7 +115,7 @@ namespace TripOverTime.EngineNamespace
                         else
                         {
                             //Map move
-                            _moveTheMapOf += new SFML.System.Vector2f(32f, 0);
+                            _moveTheMapOf += new SFML.System.Vector2f(128 / (1 / _context.GetGame.GetPlayer.PLAYER_MOVE), 0);
                             _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
                         }
                     }
@@ -139,7 +139,7 @@ namespace TripOverTime.EngineNamespace
                         else
                         {
                             //Map move
-                            _moveTheMapOf -= new SFML.System.Vector2f(32f, 0);
+                            _moveTheMapOf -= new SFML.System.Vector2f(128/(1/_context.GetGame.GetPlayer.PLAYER_MOVE), 0);
                             _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
                         }
                     }

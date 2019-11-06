@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using TripOverTime.EngineNamespace;
 
 namespace TripOverTime.Main
@@ -9,6 +10,8 @@ namespace TripOverTime.Main
         {
             Console.WriteLine("Graphics tests !");
 
+            Stopwatch spGui = new Stopwatch();
+            Stopwatch spGame = new Stopwatch();
             Engine engine = new Engine();
 
             //Menu
@@ -20,11 +23,24 @@ namespace TripOverTime.Main
 
             bool playerAlive = true;
             // GameLoop
+            spGui.Start();
+            spGame.Start();
             while(!engine.Close && playerAlive)
             {
-                playerAlive = engine.GameTick();
-                engine.GetGUI.ShowMap();
-                //System.Threading.Thread.Sleep(1000 / 60);
+                if (spGame.ElapsedMilliseconds >= 1000/60)
+                {
+                    // GameTick
+                    playerAlive = engine.GameTick();
+                    spGame.Restart();
+                }
+
+                if (spGui.ElapsedMilliseconds >= 1000/60)
+                {
+                    //GUI
+                    engine.GetGUI.ShowMap();
+                    spGui.Restart();
+                }
+
             }
         }
     }

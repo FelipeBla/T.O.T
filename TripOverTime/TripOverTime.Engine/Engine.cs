@@ -51,6 +51,9 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
+            // Recalibrate float
+            _game.GetPlayer.RoundX();
+
             return _game.GetPlayer.IsAlive;
         }
 
