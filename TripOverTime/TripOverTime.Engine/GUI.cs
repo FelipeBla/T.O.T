@@ -56,14 +56,14 @@ namespace TripOverTime.EngineNamespace
             if (_context.GetGame.GetPlayer.IsAlive)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _videoMode.Height + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
-                Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + "   Real Y:" + _context.GetGame.GetPlayer.RealPosition.Y);
+                Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
             // Monsters
 
             // Events
-            _window.DispatchEvents();
+            //_window.DispatchEvents();
 
             // Display
             _window.Display();
@@ -96,6 +96,11 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void Events()
+        {
+            _window.DispatchEvents();
+        }
+
         /// <summary>
         /// Function called when a key is pressed
         /// </summary>
@@ -113,21 +118,21 @@ namespace TripOverTime.EngineNamespace
                     else
                     {
                         Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + 0.25f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X + _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         {
-                            if (s.IsSolid) Console.WriteLine("Block is solid!");
+                            if (s.IsSolid) ;
                             // If player centered on screen, move the map now and not the player
                             else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X < _videoMode.Width / 2)
                             {
                                 // Player move
-                                _context.GetGame.GetPlayer.Position.X += 0.25f;
-                                _context.GetGame.GetPlayer.RealPosition.X += 0.25f;
+                                _context.GetGame.GetPlayer.Position.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
+                                _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
                             }
                             else
                             {
                                 //Map move
                                 _moveTheMapOf += new SFML.System.Vector2f(32f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X += 0.25f;
+                                _context.GetGame.GetPlayer.RealPosition.X += _context.GetGame.GetPlayer.PLAYER_MOVE;
                             }
                         }
                     }
@@ -137,21 +142,21 @@ namespace TripOverTime.EngineNamespace
                     else
                     {
                         Sprite s = null;
-                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - 0.25f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                        if (_context.GetGame.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_context.GetGame.GetPlayer.RealPosition.X - _context.GetGame.GetPlayer.PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_context.GetGame.GetPlayer.RealPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         {
-                            if (s.IsSolid) Console.WriteLine("Block is solid");
+                            if (s.IsSolid) ;
                             // If player left on screen, move the map now and not the player
                             else if (_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X > _videoMode.Width / 5)
                             {
                                 // Player move
-                                _context.GetGame.GetPlayer.Position.X -= 0.25f;
-                                _context.GetGame.GetPlayer.RealPosition.X -= 0.25f;
+                                _context.GetGame.GetPlayer.Position.X -= _context.GetGame.GetPlayer.PLAYER_MOVE; //0.25f
+                                _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
                             }
                             else
                             {
                                 //Map move
                                 _moveTheMapOf -= new SFML.System.Vector2f(32f, 0);
-                                _context.GetGame.GetPlayer.RealPosition.X -= 0.25f;
+                                _context.GetGame.GetPlayer.RealPosition.X -= _context.GetGame.GetPlayer.PLAYER_MOVE;
                             }
                         }
                     }

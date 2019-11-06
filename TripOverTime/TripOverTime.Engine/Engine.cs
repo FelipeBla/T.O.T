@@ -32,20 +32,23 @@ namespace TripOverTime.EngineNamespace
         {
             if (_game == null) throw new Exception("Game not started!");
 
+            //Events
+            _gui.Events();
+
             //Gravity
-            Sprite s = null;
-            if (_game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out s))
+            Sprite sToPositive = null;
+            Sprite sToNegative = null;
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
             {
-                if (!s.IsSolid)
-                {
-                    //Block under player isn't solid
-                    _game.GetPlayer.Gravity();
-                    Console.WriteLine("GRAVITYYYYYYYYYYYY!");
-                }
-                else
-                {
-                    _game.GetPlayer.IsJumping = false;
-                }
+                //Block under player isn't solid
+                _game.GetPlayer.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
             return _game.GetPlayer.IsAlive;

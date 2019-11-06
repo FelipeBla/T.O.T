@@ -6,9 +6,13 @@ namespace TripOverTime.EngineNamespace
 {
     class Player
     {
-        internal const string PLAYER_ID = "420";
+        internal const string PLAYER_ID = "PLAYER420";
         internal const float pw = 128;
         internal const float ph = 256;
+        internal const float JUMPING_SPEED = 0.1f;
+        internal const float GRAVITY_SPEED = 0.1f;
+        internal const float JUMPING_LIMIT = 1.5f;
+        internal const float PPLAYER_MOVE = 0.25f;
 
         readonly Game _context;
         readonly String _name;
@@ -37,25 +41,31 @@ namespace TripOverTime.EngineNamespace
             if (!_isJumping)
             {
                 _origin = new Position(_position.X, _position.Y);
-                _realPosition.Y += 0.125f;
-                _position.Y += 0.125f;
+                _realPosition.Y += JUMPING_SPEED;
+                _position.Y += JUMPING_SPEED;
                 _isJumping = true;
             }
         }
 
         internal void Gravity()
         {
-            if(_isJumping && _origin != null && _position.Y <= _origin.Y + 1.5f)
+            if(_isJumping && _origin != null && _position.Y <= _origin.Y + JUMPING_LIMIT) // Jump
             {
-                _realPosition.Y += 0.125f;
-                _position.Y += 0.125f;
+                _realPosition.Y += JUMPING_SPEED;
+                _position.Y += JUMPING_SPEED;
             }
-            else
+            else // Fall
             {
                 _origin = null;
-                _realPosition.Y -= 0.125f;
-                _position.Y -= 0.125f;
+                _realPosition.Y -= GRAVITY_SPEED;
+                _position.Y -= GRAVITY_SPEED;
             }
+        }
+
+        internal void RoundY()
+        {
+            _position.Y = (int)Math.Round(_position.Y);
+            _realPosition.Y = (int)Math.Round(_realPosition.Y);
         }
 
         internal bool IsJumping
@@ -96,6 +106,11 @@ namespace TripOverTime.EngineNamespace
         internal float PLAYER_HEIGHT
         {
             get => ph;
+        }
+
+        internal float PLAYER_MOVE
+        {
+            get => PPLAYER_MOVE;
         }
     }
 }
