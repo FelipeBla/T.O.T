@@ -24,6 +24,7 @@ namespace TripOverTime.Main
             {
                 playerAlive = engine.GameTick();
                 engine.GetGUI.ShowMap();
+                System.Threading.Thread.Sleep(1000 / 60);
             }
         }
     }
