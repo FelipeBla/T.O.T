@@ -7,8 +7,8 @@ namespace TripOverTime.EngineNamespace
     class Player
     {
         internal const string PLAYER_ID = "PLAYER420";
-        internal const float pw = 128;
-        internal const float ph = 256;
+        internal float pw;
+        internal float ph;
         internal const float JUMPING_SPEED = 0.1f;
         internal const float GRAVITY_SPEED = 0.1f;
         internal const float JUMPING_LIMIT = 1.5f;
@@ -23,6 +23,7 @@ namespace TripOverTime.EngineNamespace
         Sprite _sprite;
         bool _isJumping;
         Position _origin;
+        string _orientation;
 
         internal Player(Game context, String name, Position position, Life life, int attack, string imgPath)
         {
@@ -34,6 +35,10 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _orientation = "right";
+
+            pw = _sprite.GetSprite.TextureRect.Width;
+            ph = _sprite.GetSprite.TextureRect.Height;
         }
 
         internal void Jump()
@@ -72,6 +77,81 @@ namespace TripOverTime.EngineNamespace
         {
             _realPosition.X = (float)Math.Round(_realPosition.X, 2);
             _position.X = (float)Math.Round(_position.X, 2);
+        }
+
+        internal SFML.System.Vector2f MoveRight(SFML.Window.VideoMode videoMode)
+        {
+            if (_orientation != "right")
+            {
+                //Sprite to right
+                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect(0, 0, (int)PLAYER_WIDTH, (int)PLAYER_HEIGHT);
+                _orientation = "right";
+            }
+
+            SFML.System.Vector2f moveTheMapOf = new SFML.System.Vector2f(0, 0);
+
+            if (_realPosition.X >= _context.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
+            else
+            {
+                Sprite s = null;
+                if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X + PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                {
+                    if (s.IsSolid) ;
+                    // If player centered on screen, move the map now and not the player
+                    else if (_sprite.GetSprite.Position.X < videoMode.Width / 2)
+                    {
+                        // Player move
+                        _position.X += PLAYER_MOVE;
+                        _realPosition.X += PLAYER_MOVE;
+                    }
+                    else
+                    {
+                        //Map move
+                        moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
+                        _realPosition.X += PLAYER_MOVE;
+                    }
+                }
+            }
+
+            return moveTheMapOf;
+        }
+
+        internal SFML.System.Vector2f MoveLeft(SFML.Window.VideoMode videoMode)
+        {
+            if(_orientation != "left")
+            {
+                //Sprite to left
+                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect((int)PLAYER_WIDTH, 0, (int)-PLAYER_WIDTH, (int)PLAYER_HEIGHT);
+                _orientation = "left";
+            }
+
+
+            SFML.System.Vector2f moveTheMapOf = new SFML.System.Vector2f(0, 0);
+
+            if (_realPosition.X <= _context.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
+            else
+            {
+                Sprite s = null;
+                if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X - PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                {
+                    if (s.IsSolid) ;
+                    // If player left on screen, move the map now and not the player
+                    else if (_sprite.GetSprite.Position.X > videoMode.Width / 5)
+                    {
+                        // Player move
+                        _position.X -= PLAYER_MOVE; //0.25f
+                        _realPosition.X -= PLAYER_MOVE;
+                    }
+                    else
+                    {
+                        //Map move
+                        moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
+                        _realPosition.X -= PLAYER_MOVE;
+                    }
+                }
+            }
+
+            return moveTheMapOf;
         }
 
         internal bool IsJumping
