@@ -119,5 +119,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _backgroundPath;
         }
+
+        internal Game GetGame
+        {
+            get => _context;
+        }
     }
 }

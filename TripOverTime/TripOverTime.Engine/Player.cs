@@ -9,8 +9,8 @@ namespace TripOverTime.EngineNamespace
         internal const string PLAYER_ID = "PLAYER420";
         internal float pw;
         internal float ph;
-        internal const float JUMPING_SPEED = 0.1f;
-        internal const float GRAVITY_SPEED = 0.1f;
+        internal const float JUMPING_SPEED = 0.2f;
+        internal const float GRAVITY_SPEED = 0.2f;
         internal const float JUMPING_LIMIT = 1.5f;
         internal const float PPLAYER_MOVE = 0.15f;
 
@@ -49,6 +49,8 @@ namespace TripOverTime.EngineNamespace
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
                 _isJumping = true;
+
+                _sprite.JumpAnimation();
             }
         }
 
@@ -81,6 +83,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveRight(SFML.Window.VideoMode videoMode)
         {
+            // ORIENTATION
             if (_orientation != "right")
             {
                 //Sprite to right
@@ -88,6 +91,10 @@ namespace TripOverTime.EngineNamespace
                 _orientation = "right";
             }
 
+            // ANIMATION
+            _sprite.WalkAnimation();
+
+            // MOVE
             SFML.System.Vector2f moveTheMapOf = new SFML.System.Vector2f(0, 0);
 
             if (_realPosition.X >= _context.GetMapObject.GetLimitMax.X) Console.WriteLine("Border of the map");
@@ -118,6 +125,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveLeft(SFML.Window.VideoMode videoMode)
         {
+            // ORIENTATION
             if(_orientation != "left")
             {
                 //Sprite to left
@@ -125,7 +133,10 @@ namespace TripOverTime.EngineNamespace
                 _orientation = "left";
             }
 
+            // ANIMATION
+            _sprite.WalkAnimation();
 
+            // MOVE
             SFML.System.Vector2f moveTheMapOf = new SFML.System.Vector2f(0, 0);
 
             if (_realPosition.X <= _context.GetMapObject.GetLimitMin.X) Console.WriteLine("Border of the map");
@@ -179,6 +190,10 @@ namespace TripOverTime.EngineNamespace
             set { _realPosition = value; }
         }
 
+        internal string Orientation
+        {
+            get => _orientation;
+        }
         internal Sprite GetPlayerSprite
         {
             get => _sprite;
