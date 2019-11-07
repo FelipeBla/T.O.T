@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using SFML;
 
 namespace TripOverTime.EngineNamespace
@@ -6,6 +7,7 @@ namespace TripOverTime.EngineNamespace
     public class Engine
     {
         internal bool CLOSE = false;
+        internal Stopwatch _timer;
 
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
@@ -17,6 +19,8 @@ namespace TripOverTime.EngineNamespace
             _menu = new Menu();
             _settings = new Settings();
             _gui = new GUI(this);
+            _timer = new Stopwatch();
+            _timer.Start();
         }
 
         public void StartGame(string mapPath, string playerPath)
@@ -77,6 +81,11 @@ namespace TripOverTime.EngineNamespace
         public bool Close
         {
             get => CLOSE;
+        }
+
+        internal Stopwatch Timer
+        {
+            get => _timer;
         }
     }
 }

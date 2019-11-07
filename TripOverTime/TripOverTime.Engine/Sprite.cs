@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using SFML.Graphics;
 
@@ -17,7 +19,9 @@ namespace TripOverTime.EngineNamespace
         bool _isPlayer;
         Map _context;
         Texture _texture; //img
+        Dictionary<string, Texture> _playerTexture;
         SFML.Graphics.Sprite _sprite;
+        Stopwatch _animTimer;
 
         internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false)
         {
@@ -34,6 +38,8 @@ namespace TripOverTime.EngineNamespace
             _isEnd = false;
             _isMonster = isMonster;
             _isPlayer = isPlayer;
+            _animTimer = new Stopwatch();
+            _animTimer.Start();
 
             if(_name == "CHECKPOINT")
             {
@@ -47,11 +53,96 @@ namespace TripOverTime.EngineNamespace
             }
 
             // For GUI (texture, srpite)
-            _texture = new Texture(_imgPath);
-            if (_texture == null) throw new Exception("Texture null!");
+            if (_isPlayer)
+            {
+                DirectoryInfo dir;
+                FileInfo[] img;
+                _playerTexture = new Dictionary<string, Texture>();
 
-            _sprite = new SFML.Graphics.Sprite(_texture);
+                dir = new DirectoryInfo(imgPath);
+                img = dir.GetFiles();
+
+                foreach (FileInfo f in img)
+                {
+                    if (f.Extension == ".png")
+                    {
+                        string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5 ); // -5 = ".png"
+                        _playerTexture.Add(action, new Texture(f.FullName));
+                        if (_playerTexture[action] == null) throw new Exception("Texture null!");
+                    }
+                }
+
+                _texture = _playerTexture["stand"];
+            }
+            else
+            {
+                _texture = new Texture(imgPath);
+                if (_texture == null) throw new Exception("Texture null!");
+            }
+
+            _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
             if (_sprite == null) throw new Exception("Sprite null!");
+        }
+
+        internal void WalkAnimation()
+        {
+            if (!_context.GetGame.GetPlayer.IsJumping)
+            {
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    {
+                        if (_sprite.Texture == _playerTexture["walk1"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk2"].Size);
+                            _sprite.Texture = _playerTexture["walk2"];
+                        }
+                        else
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk1"].Size);
+                            _sprite.Texture = _playerTexture["walk1"];
+                        }
+
+                        _animTimer.Restart();
+                    }
+                }
+                else //Left
+                {
+                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    {
+                        if (_sprite.Texture == _playerTexture["walk1"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk2"].Size.X, 0, -(int)_playerTexture["walk2"].Size.X, (int)_playerTexture["walk2"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk2"];
+                        }
+                        else
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk1"].Size.X, 0, -(int)_playerTexture["walk1"].Size.X, (int)_playerTexture["walk1"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk1"];
+                        }
+
+                        _animTimer.Restart();
+                    }
+                }
+            }
+            else JumpAnimation();
+        }
+
+        internal void JumpAnimation()
+        {
+            if (_context.GetGame.GetPlayer.IsJumping)
+            {
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump"].Size);
+                    _sprite.Texture = _playerTexture["jump"];
+                }
+                else //Left
+                {
+                    _sprite.TextureRect = new IntRect((int)_playerTexture["jump"].Size.X, 0, -(int)_playerTexture["jump"].Size.X, (int)_playerTexture["jump"].Size.Y);
+                    _sprite.Texture = _playerTexture["jump"];
+                }
+            }
         }
 
         internal Texture GetTexture

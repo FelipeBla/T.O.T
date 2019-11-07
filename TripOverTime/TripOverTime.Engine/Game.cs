@@ -26,5 +26,9 @@ namespace TripOverTime.EngineNamespace
         {
             get => _player;
         }
+        internal Engine GetEngine
+        {
+            get => _context;
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace TripOverTime.Main
         {
             Console.WriteLine("Graphics tests !");
 
+            // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
             Engine engine = new Engine();
@@ -18,7 +19,7 @@ namespace TripOverTime.Main
 
 
             // Start a game
-            engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink\alienPink_stand.png");
+            engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink");
             engine.GetGUI.InitGame();
 
             bool playerAlive = true;
@@ -27,14 +28,14 @@ namespace TripOverTime.Main
             spGame.Start();
             while(!engine.Close && playerAlive)
             {
-                if (spGame.ElapsedMilliseconds >= 1000/60)
+                if (spGame.ElapsedMilliseconds >= 1000/120)
                 {
                     // GameTick
                     playerAlive = engine.GameTick();
                     spGame.Restart();
                 }
 
-                if (spGui.ElapsedMilliseconds >= 1000/60)
+                if (spGui.ElapsedMilliseconds >= 1000/120)
                 {
                     //GUI
                     engine.GetGUI.ShowMap();
