@@ -30,6 +30,7 @@ namespace TripOverTime.EngineNamespace
         public ushort CurrentPoint
         {
             get { return _currentPoint; }
+            internal set => _currentPoint = value;
         }
 
         public bool IsFull

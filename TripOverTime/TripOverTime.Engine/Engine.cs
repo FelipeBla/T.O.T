@@ -14,11 +14,11 @@ namespace TripOverTime.EngineNamespace
         Settings _settings;
         GUI _gui;
 
-        public Engine()
+        public Engine(SFML.Graphics.RenderWindow window)
         {
-            _menu = new Menu();
+            _menu = new Menu(window);
             _settings = new Settings();
-            _gui = new GUI(this);
+            _gui = new GUI(this, window);
             _timer = new Stopwatch();
             _timer.Start();
         }
@@ -81,6 +81,7 @@ namespace TripOverTime.EngineNamespace
         public bool Close
         {
             get => CLOSE;
+            set => CLOSE = value;
         }
 
         internal Stopwatch Timer
