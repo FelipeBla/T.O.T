@@ -99,7 +99,6 @@ namespace TripOverTime.EngineNamespace
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) {
                 _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight(_videoMode);
-
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) {
                 _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft(_videoMode);

@@ -13,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
+        List<Position> _checkpointPosition;
         Game _context;
 
         internal Map(Game context, string mapPath)
@@ -119,7 +120,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _backgroundPath;
         }
-
+        internal List<Position> GetCheckpointPosition
+        {
+            get => _checkpointPosition;
+        }
         internal Game GetGame
         {
             get => _context;

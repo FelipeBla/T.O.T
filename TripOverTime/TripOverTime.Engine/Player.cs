@@ -119,6 +119,7 @@ namespace TripOverTime.EngineNamespace
                     }
                 }
             }
+            if (_context.GetGame.GetMapObject.GetCheckpointPosition.Contains(_context.GetGame.GetPlayer.Position) == true) _context.GetCheckpoint.LastActivatedCheckpoint = _context.GetGame.GetPlayer.Position;
 
             return moveTheMapOf;
         }

@@ -8,6 +8,7 @@ namespace TripOverTime.EngineNamespace
     {
         internal bool CLOSE = false;
         internal Stopwatch _timer;
+        internal Checkpoint _checkpoint;
 
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
@@ -86,6 +87,10 @@ namespace TripOverTime.EngineNamespace
         internal Stopwatch Timer
         {
             get => _timer;
+        }
+        public Checkpoint GetCheckpoint
+        {
+            get => _checkpoint;
         }
     }
 }
