@@ -14,6 +14,10 @@ namespace TripOverTime.EngineNamespace
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed;
         SFML.Graphics.Sprite _background;
         private SFML.System.Vector2f _moveTheMapOf;
+        SFML.Graphics.Sprite _hpBar;
+        SFML.Graphics.Sprite _hpBar2;
+        SFML.Graphics.Sprite _hpBar3;
+        private SFML.System.Vector2f _hpBarPosition;
 
         internal GUI(Engine context)
         {
@@ -24,6 +28,8 @@ namespace TripOverTime.EngineNamespace
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
+            _hpBar = new SFML.Graphics.Sprite();
+            _hpBarPosition = new SFML.System.Vector2f(0, 0);
         }
 
 
@@ -48,6 +54,12 @@ namespace TripOverTime.EngineNamespace
                 s.Value.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(s.Value.GetSprite);
             }
+
+            // Lifebar
+
+            _window.Draw(_hpBar);
+            _window.Draw(_hpBar2);
+            _window.Draw(_hpBar3);
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
@@ -78,6 +90,30 @@ namespace TripOverTime.EngineNamespace
 
             _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height / 2);
             _window.Draw(_background);
+
+            // Set lifeBar
+            Texture lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
+            if (lifebarTexture == null) throw new Exception("Texture null!");
+
+            _hpBar = new SFML.Graphics.Sprite(lifebarTexture);
+            if (_hpBar == null) throw new Exception("Sprite null!");
+
+            _hpBar.Position = new SFML.System.Vector2f(0, 0);
+            _window.Draw(_hpBar);
+
+            //lifebar 2
+            _hpBar2 = new SFML.Graphics.Sprite(lifebarTexture);
+            if (_hpBar2 == null) throw new Exception("Sprite null!");
+
+            _hpBar2.Position = new SFML.System.Vector2f(100, 0);
+            _window.Draw(_hpBar2);
+
+            //lifebar 3
+            _hpBar3 = new SFML.Graphics.Sprite(lifebarTexture);
+            if (_hpBar3 == null) throw new Exception("Sprite null!");
+
+            _hpBar3.Position = new SFML.System.Vector2f(200, 0);
+            _window.Draw(_hpBar3);
 
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;

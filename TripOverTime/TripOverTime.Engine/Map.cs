@@ -10,6 +10,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         List<Sprite> _sprites;
         string _backgroundPath;
+        string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\hudHeart_full.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
@@ -120,6 +121,10 @@ namespace TripOverTime.EngineNamespace
         internal string GetBackground
         {
             get => _backgroundPath;
+        }
+        internal string GetLifeBar
+        {
+            get => _lifebarPath;
         }
         internal List<Position> GetCheckpointPosition
         {
