@@ -83,6 +83,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveRight(SFML.Window.VideoMode videoMode)
         {
+            
             // ORIENTATION
             if (_orientation != "right")
             {
