@@ -15,6 +15,7 @@ namespace TripOverTime.EngineNamespace
         internal const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;
+        readonly Checkpoint _checkpoint;
         readonly String _name;
         Position _position; // Graphical position
         Position _realPosition;
@@ -120,7 +121,7 @@ namespace TripOverTime.EngineNamespace
                     }
                 }
             }
-            if (_context.GetGame.GetMapObject.GetCheckpointPosition.Contains(_context.GetGame.GetPlayer.Position) == true) _context.GetCheckpoint.LastActivatedCheckpoint = _context.GetGame.GetPlayer.Position;
+            if (_context.GetMapObject.GetCheckpointPosition.Contains(_context.GetPlayer.Position) == true) _checkpoint.LastActivatedCheckpoint = _context.GetPlayer.Position;
 
             return moveTheMapOf;
         }

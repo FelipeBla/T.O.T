@@ -24,6 +24,7 @@ namespace TripOverTime.EngineNamespace
             _map = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
+            _checkpointPosition = new List<Position>();
 
             GenerateMap();
         }
