@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SFML.Graphics;
+using SFML.Window;
+using System;
 using System.Diagnostics;
 using TripOverTime.EngineNamespace;
 
@@ -13,36 +15,65 @@ namespace TripOverTime.Main
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
-            Engine engine = new Engine();
+            float fps = 60;
+            float tps = 60;
+
+            //Window & Engine start
+            RenderWindow window = new RenderWindow(new VideoMode(800, 600), "T.O.T");
+            window.SetVerticalSyncEnabled(true);
+            Engine engine = new Engine(window);
 
             //Menu
-
-
-            // Start a game
-            engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink");
-            engine.GetGUI.InitGame();
-
-            bool playerAlive = true;
-            // GameLoop
-            spGui.Start();
-            spGame.Start();
-            while(!engine.Close && playerAlive)
+            while (!engine.Close) //GAMELOOP MASTER
             {
-                if (spGame.ElapsedMilliseconds >= 1000/120)
+                short choose = -2;
+                engine.GetMenu.StartMainMenu();
+                do
                 {
-                    // GameTick
-                    playerAlive = engine.GameTick();
-                    spGame.Restart();
-                }
+                    choose = engine.GetMenu.RunMainMenu();
+                } while (choose == -2);
 
-                if (spGui.ElapsedMilliseconds >= 1000/120)
+
+                if (choose == 0) //Lauch GAME
                 {
-                    //GUI
-                    engine.GetGUI.ShowMap();
-                    spGui.Restart();
-                }
+                    // Start a game
+                    engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink");
+                    engine.GetGUI.InitGame();
 
+                    bool playerAlive = true;
+                    // GameLoop
+                    spGui.Start();
+                    spGame.Start();
+                    while (playerAlive)
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            // GameTick
+                            playerAlive = engine.GameTick();
+                            spGame.Restart();
+                        }
+
+                        if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                        {
+                            //GUI
+                            engine.GetGUI.ShowMap();
+                            spGui.Restart();
+                        }
+
+                    }
+                }
+                else if (choose == 1) //Settings
+                {
+
+                }
+                else if (choose == -1)
+                {
+                    window.Close();
+                    engine.Close = true;
+                }
             }
+
+            Console.WriteLine("End Game");
         }
     }
 }

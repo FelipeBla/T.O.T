@@ -9,8 +9,8 @@ namespace TripOverTime.EngineNamespace
         internal const string PLAYER_ID = "PLAYER420";
         internal float pw;
         internal float ph;
-        internal const float JUMPING_SPEED = 0.2f;
-        internal const float GRAVITY_SPEED = 0.2f;
+        internal const float JUMPING_SPEED = 0.1f;
+        internal const float GRAVITY_SPEED = 0.1f;
         internal const float JUMPING_LIMIT = 1.5f;
         internal const float PPLAYER_MOVE = 0.15f;
 
@@ -82,7 +82,7 @@ namespace TripOverTime.EngineNamespace
             _position.X = (float)Math.Round(_position.X, 2);
         }
 
-        internal SFML.System.Vector2f MoveRight(SFML.Window.VideoMode videoMode)
+        internal SFML.System.Vector2f MoveRight(float width)
         {
             
             // ORIENTATION
@@ -107,7 +107,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (s.IsSolid) ;
                     // If player centered on screen, move the map now and not the player
-                    else if (_sprite.GetSprite.Position.X < videoMode.Width / 2)
+                    else if (_sprite.GetSprite.Position.X < width / 2)
                     {
                         // Player move
                         _position.X += PLAYER_MOVE;
@@ -126,7 +126,7 @@ namespace TripOverTime.EngineNamespace
             return moveTheMapOf;
         }
 
-        internal SFML.System.Vector2f MoveLeft(SFML.Window.VideoMode videoMode)
+        internal SFML.System.Vector2f MoveLeft(float width)
         {
             // ORIENTATION
             if(_orientation != "left")
@@ -150,7 +150,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (s.IsSolid) ;
                     // If player left on screen, move the map now and not the player
-                    else if (_sprite.GetSprite.Position.X > videoMode.Width / 5)
+                    else if (_sprite.GetSprite.Position.X > width / 5)
                     {
                         // Player move
                         _position.X -= PLAYER_MOVE; //0.25f
@@ -176,6 +176,11 @@ namespace TripOverTime.EngineNamespace
         internal bool IsAlive
         {
             get => _life.CurrentPoint > 0;
+        }
+
+        internal Life GetLife
+        {
+            get => _life;
         }
 
         internal Position Position

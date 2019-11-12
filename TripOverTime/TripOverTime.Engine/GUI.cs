@@ -10,7 +10,6 @@ namespace TripOverTime.EngineNamespace
     {
         Engine _context;
         RenderWindow _window;
-        VideoMode _videoMode;
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed;
         SFML.Graphics.Sprite _background;
         private SFML.System.Vector2f _moveTheMapOf;
@@ -19,12 +18,10 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar3;
         private SFML.System.Vector2f _hpBarPosition;
 
-        internal GUI(Engine context)
+        internal GUI(Engine context, RenderWindow window)
         {
             _context = context;
-            _videoMode = new VideoMode(800, 600);
-            _window = new RenderWindow(_videoMode, "T.O.T");
-            _window.SetVerticalSyncEnabled(true);
+            _window = window;
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
@@ -64,7 +61,7 @@ namespace TripOverTime.EngineNamespace
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _videoMode.Height + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
                 Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
@@ -88,7 +85,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_videoMode.Height / 2);
+            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
             _window.Draw(_background);
 
             // Set lifeBar
@@ -120,7 +117,7 @@ namespace TripOverTime.EngineNamespace
 
             foreach (KeyValuePair<Position, Sprite> s in map)
             {
-                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _videoMode.Height + s.Key.Y * -128); //128*128 = Size of a sprite
+                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
@@ -128,16 +125,14 @@ namespace TripOverTime.EngineNamespace
 
         internal void Events()
         {
-
-
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
-                _window.Close();
+                _context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) {
-                _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight(_videoMode);
+                _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) {
-                _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft(_videoMode);
+                _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) {
                 if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
