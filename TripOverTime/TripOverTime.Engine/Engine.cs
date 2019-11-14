@@ -6,9 +6,9 @@ namespace TripOverTime.EngineNamespace
 {
     public class Engine
     {
-        internal bool CLOSE = false;
-        internal Stopwatch _timer;
-        internal Checkpoint _checkpoint;
+        bool CLOSE = false;
+        Stopwatch _timer;
+        Checkpoint _checkpoint;
 
         Menu _menu;
         Game _game; // Contient Map, Player, Monster

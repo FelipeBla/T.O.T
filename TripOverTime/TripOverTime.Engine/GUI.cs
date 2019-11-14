@@ -37,7 +37,7 @@ namespace TripOverTime.EngineNamespace
 
         public void ShowMap()
         {
-            if (!_window.IsOpen) _context.CLOSE = true;
+            if (!_window.IsOpen) _context.Close = true;
 
             _window.Clear();
 

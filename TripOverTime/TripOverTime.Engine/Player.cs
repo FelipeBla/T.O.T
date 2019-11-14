@@ -6,13 +6,13 @@ namespace TripOverTime.EngineNamespace
 {
     class Player
     {
-        internal const string PLAYER_ID = "PLAYER420";
-        internal float pw;
-        internal float ph;
-        internal const float JUMPING_SPEED = 0.1f;
-        internal const float GRAVITY_SPEED = 0.1f;
-        internal const float JUMPING_LIMIT = 1.5f;
-        internal const float PPLAYER_MOVE = 0.15f;
+        const string PLAYER_ID = "PLAYER420";
+        float pw;
+        float ph;
+        const float JUMPING_SPEED = 0.1f;
+        const float GRAVITY_SPEED = 0.1f;
+        const float JUMPING_LIMIT = 1.5f;
+        const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;
         readonly Checkpoint _checkpoint;
