@@ -27,6 +27,7 @@ namespace TripOverTime.Main
             while (!engine.Close) //GAMELOOP MASTER
             {
                 short choose = -2;
+                short choose1 = -2;
                 engine.GetMenu.StartMainMenu();
                 do
                 {
@@ -64,8 +65,22 @@ namespace TripOverTime.Main
                 }
                 else if (choose == 1) //Settings
                 {
+                    choose = 1;
                     engine.GetSettings.StartSettings();
-
+                    do
+                    {
+                        choose1 = engine.GetSettings.RunSettings();
+                    } while (choose1 == -2);
+                    if (choose1 == 0) //resolution
+                    {
+                    }
+                    else if (choose1 == 1) //Settings2
+                    {
+                    }
+                    else if (choose1 == -1)//back to main menu
+                    {
+                        choose = -2;
+                    }
                 }
                 else if (choose == -1)
                 {
