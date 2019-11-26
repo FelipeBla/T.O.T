@@ -64,6 +64,7 @@ namespace TripOverTime.Main
                 }
                 else if (choose == 1) //Settings
                 {
+                    engine.GetSettings.StartSettings();
 
                 }
                 else if (choose == -1)

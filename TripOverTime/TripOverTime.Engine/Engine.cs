@@ -18,7 +18,7 @@ namespace TripOverTime.EngineNamespace
         public Engine(SFML.Graphics.RenderWindow window)
         {
             _menu = new Menu(window);
-            _settings = new Settings();
+            _settings = new Settings(window);
             _gui = new GUI(this, window);
             _timer = new Stopwatch();
             _timer.Start();
