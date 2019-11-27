@@ -20,6 +20,7 @@ namespace TripOverTime.EngineNamespace
         Map _context;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
+        Dictionary<string, Texture> _monsterTexture;
         SFML.Graphics.Sprite _sprite;
         Stopwatch _animTimer;
 
@@ -52,7 +53,7 @@ namespace TripOverTime.EngineNamespace
                 _isEnd = true;
             }
 
-            // For GUI (texture, srpite)
+            //For GUI(texture, srpite)
             if (_isPlayer)
             {
                 DirectoryInfo dir;
@@ -66,19 +67,44 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (f.Extension == ".png")
                     {
-                        string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5 ); // -5 = ".png"
+                        string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
                         _playerTexture.Add(action, new Texture(f.FullName));
                         if (_playerTexture[action] == null) throw new Exception("Texture null!");
                     }
                 }
 
                 _texture = _playerTexture["stand"];
+
+
+            }
+            else if (_isMonster)
+            {
+                DirectoryInfo dirMonster;
+                FileInfo[] imgMonster;
+                _monsterTexture = new Dictionary<string, Texture>();
+
+                dirMonster = new DirectoryInfo(imgPath);
+                imgMonster = dirMonster.GetFiles();
+
+                foreach (FileInfo f in imgMonster)
+                {
+                    if (f.Extension == ".png")
+                    {
+                        string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
+                        _monsterTexture.Add(action, new Texture(f.FullName));
+                        if (_monsterTexture[action] == null) throw new Exception("Texture null!");
+                    }
+                }
+
+                _texture = _monsterTexture["stand"];
             }
             else
             {
                 _texture = new Texture(imgPath);
                 if (_texture == null) throw new Exception("Texture null!");
             }
+
+            
 
             _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
             if (_sprite == null) throw new Exception("Sprite null!");

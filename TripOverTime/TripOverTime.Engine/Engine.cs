@@ -24,9 +24,9 @@ namespace TripOverTime.EngineNamespace
             _timer.Start();
         }
 
-        public void StartGame(string mapPath, string playerPath)
+        public void StartGame(string mapPath, string playerPath, string monsterPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
+            _game = new Game(mapPath, playerPath, new Position(0, 3), monsterPath); //0, 3
         }
 
         /// <summary>

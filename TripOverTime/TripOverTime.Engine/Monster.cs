@@ -4,16 +4,20 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    abstract class Monster
+    internal class Monster
     {
+        const string MONSTER_ID = "MONSTER420";
         readonly Game _context;
         readonly String _name;
         Position _position;
         Life _life;
         bool _isAlive;
         int _attack;
+        Sprite _sprite;
+        float pw;
+        float ph;
 
-        public Monster(Game context, String name, Position position, Life life, int attack)
+        internal Monster(Game context, String name, Position position, Life life, int attack, string imgPath)
         {
             _context = context;
             _name = name;
@@ -21,6 +25,9 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = attack;
+            _sprite = new Sprite(MONSTER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            pw = _sprite.GetSprite.TextureRect.Width;
+            ph = _sprite.GetSprite.TextureRect.Height;
 
         }
         private Game context
@@ -31,11 +38,16 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _name; }
         }
-        private Position position
+        internal Position Position
         {
-            get { return _position; }
-            set { _position = value; }
+            get => _position;
+            set
+            {
+                _position = value;
+            }
         }
+        
+
         private Life life
         {
             get { return _life; }
@@ -52,5 +64,9 @@ namespace TripOverTime.EngineNamespace
             set { _attack = value; }
         }
 
+        internal Sprite GetMonsterSprite
+        {
+            get => _sprite;
+        }
     }
 }
