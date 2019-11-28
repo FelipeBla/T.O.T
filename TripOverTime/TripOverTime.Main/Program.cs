@@ -8,6 +8,9 @@ namespace TripOverTime.Main
 {
     class Program
     {
+        private static uint _XResolution = 800;
+        private static uint _YResolution = 600;
+        private static uint _NbFPS = 60;
         static void Main(string[] args)
         {
             Console.WriteLine("Graphics tests !");
@@ -15,11 +18,11 @@ namespace TripOverTime.Main
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
-            float fps = 60;
+            float fps = _NbFPS;
             float tps = 60;
 
             //Window & Engine start
-            RenderWindow window = new RenderWindow(new VideoMode(800, 600), "T.O.T");
+            RenderWindow window = new RenderWindow(new VideoMode(_XResolution, _YResolution), "T.O.T");
             window.SetVerticalSyncEnabled(true);
             Engine engine = new Engine(window);
 
@@ -91,5 +94,22 @@ namespace TripOverTime.Main
 
             Console.WriteLine("End Game");
         }
+
+        private uint XResolution
+        {
+            get { return _XResolution; }
+            set { _XResolution = value; }
+        }
+        private uint YResolution
+        {
+            get { return _YResolution; }
+            set { _YResolution = value; }
+        }
+        private uint NbFPS
+        {
+            get { return _NbFPS; }
+            set { _NbFPS = value; }
+        }
+
     }
 }
