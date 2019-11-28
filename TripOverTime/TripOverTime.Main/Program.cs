@@ -88,7 +88,10 @@ namespace TripOverTime.Main
                     else if (choose1 == 1) //Settings2
                     {
                     }
-                    else if (choose1 == -1)//back to main menu
+                    else if (choose1 == -1) //Settings2
+                    {
+                    }
+                    else if (choose1 == -2)//back to main menu
                     {
                         choose = -2;
                     }
@@ -123,7 +126,7 @@ namespace TripOverTime.Main
             while (!engine.Close) //GAMELOOP MASTER
             {
                 short choose = -2;
-                short choose1 = -2;
+                short choose1 = -3;
                 engine.GetMenu.StartMainMenu();
                 do
                 {
@@ -166,7 +169,7 @@ namespace TripOverTime.Main
                     do
                     {
                         choose1 = engine.GetSettings.RunSettings();
-                    } while (choose1 == -2);
+                    } while (choose1 == -3);
                     if (choose1 == 0) //resolution
                     {
                         _XResolution = 800;
@@ -175,10 +178,15 @@ namespace TripOverTime.Main
                         engine.Close = true;
                         RunAgain();
                     }
-                    else if (choose1 == 1) //Settings2
+                    else if (choose1 == 1) //FPS
                     {
+                        engine.Close = true;
                     }
-                    else if (choose1 == -1)//back to main menu
+                    else if (choose1 == -1) //FPS
+                    {
+                        RunAgain();
+                    }
+                    else if (choose1 == -2)//back to main menu
                     {
                         choose = -2;
                     }
