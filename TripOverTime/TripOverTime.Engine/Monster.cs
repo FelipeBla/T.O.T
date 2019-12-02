@@ -41,10 +41,8 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
-            Console.WriteLine("jump marche");
             if (!_ismoving)
             {
-                Console.WriteLine("isjumping marche");
                 _origin = new Position(_position.X, _position.Y);
                 if(_orientation == "left")
                 {
@@ -58,6 +56,11 @@ namespace TripOverTime.EngineNamespace
 
                 _sprite.MonsterMoveAnimation();
             }
+        }
+
+        internal void MonsterDead()
+        {
+            _sprite.MonsterDeadAnimation();
         }
         internal void Gravity()
         {
@@ -108,7 +111,7 @@ namespace TripOverTime.EngineNamespace
             get { return _life; }
             set { _life = value; }
         }
-        private bool isAlive
+        internal bool isAlive
         {
             get { return _isAlive; }
             set { _isAlive = value; }
@@ -123,7 +126,7 @@ namespace TripOverTime.EngineNamespace
         {
             get => _sprite;
         }
-        internal bool IsJumping
+        internal bool IsMoving
         {
             get => _ismoving;
             set => _ismoving = value;

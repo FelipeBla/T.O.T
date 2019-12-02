@@ -24,9 +24,9 @@ namespace TripOverTime.EngineNamespace
             _timer.Start();
         }
 
-        public void StartGame(string mapPath, string playerPath, string monsterPath)
+        public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 3), monsterPath); //0, 3
+            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    m.IsJumping = false;
+                    m.IsMoving = false;
                     m.RoundY(); // Don't stuck player in ground
                 }
             }

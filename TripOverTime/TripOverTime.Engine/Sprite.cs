@@ -175,7 +175,7 @@ namespace TripOverTime.EngineNamespace
         {
             foreach (Monster m in _context.GetGame.GetMonsters)
             {
-                if (m.IsJumping)
+                if (m.IsMoving)
                 {
                     if (m.Orientation == "left") //left
                     {
@@ -213,6 +213,23 @@ namespace TripOverTime.EngineNamespace
                             _animTimer.Restart();
                         }
                     }
+                }
+            }
+        }
+
+        internal void MonsterDeadAnimation()
+        {
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                if (m.Orientation == "left") //left
+                {
+                    _sprite.Texture = _playerTexture["dead"];
+                }
+                else
+                {
+                    _sprite.TextureRect = new IntRect((int)_playerTexture["dead"].Size.X, 0, -(int)_playerTexture["dead"].Size.X, (int)_playerTexture["dead"].Size.Y);
+                    _sprite.Texture = _playerTexture["dead"];
+
                 }
             }
         }

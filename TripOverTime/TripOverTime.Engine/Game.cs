@@ -11,12 +11,12 @@ namespace TripOverTime.EngineNamespace
         List<Monster> _monsters;
         Map _map;
 
-        internal Game(string mapPath, string playerPath, Position startPosition, string monsterPath)
+        internal Game(string mapPath, string playerPath, Position startPosition)
         {
             _map = new Map(this, mapPath);
             _player = new Player(this, "player", startPosition, new Life(100, 100), 1, playerPath);
             _monsters = new List<Monster>();
-            _monsters.Add(new Monster(this, "frog", new Position(20, 5), new Life(100, 100), 1, monsterPath));
+            _monsters.Add(new Monster(this, "frog", new Position(20, 5), new Life(100, 100), 1, @"..\..\..\..\Assets\MonsterFrog"));
 
         }
 
