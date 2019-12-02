@@ -198,6 +198,21 @@ namespace TripOverTime.EngineNamespace
             set { _realPosition = value; }
         }
 
+        internal bool IsOnTheGround
+        {
+            get
+            {
+                Sprite sToPositive = null, sToNegative = null;
+                _context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         internal string Orientation
         {
             get => _orientation;
