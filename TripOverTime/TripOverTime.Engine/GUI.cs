@@ -69,8 +69,8 @@ namespace TripOverTime.EngineNamespace
             // Monsters
             foreach (Monster m in _context.GetGame.GetMonsters) 
             {
-                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 56);
-                Console.WriteLine("Real X: " + m.Position.X + " X:" + m.Position.X + " | Real Y: " + m.Position.Y + " Y: " + m.Position.Y);
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;                
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 

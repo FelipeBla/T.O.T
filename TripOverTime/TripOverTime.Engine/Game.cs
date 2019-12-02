@@ -16,7 +16,7 @@ namespace TripOverTime.EngineNamespace
             _map = new Map(this, mapPath);
             _player = new Player(this, "player", startPosition, new Life(100, 100), 1, playerPath);
             _monsters = new List<Monster>();
-            _monsters.Add(new Monster(this, "frog", new Position(0, 3), new Life(100, 100), 1, monsterPath));
+            _monsters.Add(new Monster(this, "frog", new Position(0, 5), new Life(100, 100), 1, monsterPath));
 
         }
 
