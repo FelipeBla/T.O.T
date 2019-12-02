@@ -59,6 +59,14 @@ namespace TripOverTime.EngineNamespace
             // Recalibrate float
             _game.GetPlayer.RoundX();
 
+            // WIN !!!
+            Position end = _game.GetMapObject.GetEndPosition;
+            if (end.X <= _game.GetPlayer.RealPosition.X)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+            }
+
             return _game.GetPlayer.IsAlive;
         }
 
