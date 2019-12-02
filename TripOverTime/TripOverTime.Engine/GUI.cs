@@ -62,7 +62,8 @@ namespace TripOverTime.EngineNamespace
             if (_context.GetGame.GetPlayer.IsAlive)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
-                Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
+                //Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
+                Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
@@ -135,7 +136,7 @@ namespace TripOverTime.EngineNamespace
                 _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
             }
             if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) {
-                if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y)
+                if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
                 {
                     _context.GetGame.GetPlayer.Jump();
                 }
