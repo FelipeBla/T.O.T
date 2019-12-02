@@ -49,6 +49,30 @@ namespace TripOverTime.EngineNamespace
 
             _window.Display();
         }
+
+        public void StartSettingsResolution()
+        {
+            //Background
+            // Set background
+            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _window.Draw(_background);
+
+            //Lines
+            _lines[0] = new Text("Resolution1", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[1] = new Text("Resolution1", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[2] = new Text("Resolution1", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
+            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 4);
+
+            _window.Display();
+        }
         public short RunSettings()
         {
             //Events
@@ -109,5 +133,6 @@ namespace TripOverTime.EngineNamespace
 
             return result;
         }
+
     }
 }
