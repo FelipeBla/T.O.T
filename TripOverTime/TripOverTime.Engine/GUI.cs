@@ -145,7 +145,19 @@ namespace TripOverTime.EngineNamespace
                 {
                     _context.GetGame.GetPlayer.Jump();
                 }
-            }            
+            }
+            
+            foreach(Monster m in _context.GetGame.GetMonsters)
+            {
+                if (m.Position.X - 6 < _context.GetGame.GetPlayer.Position.X && m.Position.X > _context.GetGame.GetPlayer.Position.X) //left
+                {
+                    
+                }
+                if (m.Position.X + 6 > _context.GetGame.GetPlayer.Position.X && m.Position.X < _context.GetGame.GetPlayer.Position.X) //right
+                { 
+
+                }
+            }
         }
     }
 }
