@@ -68,7 +68,6 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    m.IsJumping = false;
                     m.RoundY(); // Don't stuck player in ground
                 }
             }
