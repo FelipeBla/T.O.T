@@ -9,7 +9,7 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_SPEED = 0.1f;
         const float GRAVITY_SPEED = 0.1f;
         const float JUMPING_LIMIT = 1.5f;
-        const float MMONSTER_MOVE = 0.15f;
+        const float MMONSTER_MOVE = 0.10f;
         float pw;
         float ph;
 
@@ -21,7 +21,7 @@ namespace TripOverTime.EngineNamespace
         bool _isAlive;
         int _attack;
         Sprite _sprite;
-        bool _isJumping;
+        bool _ismoving;
         Position _origin;
         string _orientation;
 
@@ -39,20 +39,29 @@ namespace TripOverTime.EngineNamespace
 
         }
 
-        internal void Jump()
+        internal void MonsterMove()
         {
-            if (!_isJumping)
+            Console.WriteLine("jump marche");
+            if (!_ismoving)
             {
+                Console.WriteLine("isjumping marche");
                 _origin = new Position(_position.X, _position.Y);
-                _position.Y += JUMPING_SPEED;
-                _isJumping = true;
+                if(_orientation == "left")
+                {
+                    _position.X -= MMONSTER_MOVE;
+                }
+                else 
+                { 
+                    _position.X += MMONSTER_MOVE;
+                }
+                _ismoving = true;
 
-                _sprite.JumpAnimation();
+                _sprite.MonsterMoveAnimation();
             }
         }
         internal void Gravity()
         {
-            if (_isJumping && _origin != null && _position.Y <= _origin.Y + JUMPING_LIMIT) // Jump
+            if (_ismoving && _origin != null && _position.Y <= _origin.Y + JUMPING_LIMIT) // Jump
             {
                 _position.Y += JUMPING_SPEED;
             }
@@ -87,6 +96,12 @@ namespace TripOverTime.EngineNamespace
             set { _position = value;}
         }
 
+        internal string Orientation
+        {
+            get => _orientation;
+            set { _orientation = value; }
+        }
+
 
         private Life life
         {
@@ -110,8 +125,8 @@ namespace TripOverTime.EngineNamespace
         }
         internal bool IsJumping
         {
-            get => _isJumping;
-            set => _isJumping = value;
+            get => _ismoving;
+            set => _ismoving = value;
         }
     }
 }

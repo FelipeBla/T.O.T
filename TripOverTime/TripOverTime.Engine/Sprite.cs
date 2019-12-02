@@ -171,6 +171,52 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void MonsterMoveAnimation()
+        {
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                if (m.IsJumping)
+                {
+                    if (m.Orientation == "left") //left
+                    {
+                        if (_animTimer.ElapsedMilliseconds >= 250)
+                        {
+                            if (_sprite.Texture == _playerTexture["stand"])
+                            {
+                                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["move"].Size);
+                                _sprite.Texture = _playerTexture["move"];
+                            }
+                            else
+                            {
+                                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                                _sprite.Texture = _playerTexture["stand"];
+                            }
+
+                            _animTimer.Restart();
+                        }
+                    }
+                    else //right
+                    {
+                        if (_animTimer.ElapsedMilliseconds >= 250)
+                        {
+                            if (_sprite.Texture == _playerTexture["stand"])
+                            {
+                                _sprite.TextureRect = new IntRect((int)_playerTexture["move"].Size.X, 0, -(int)_playerTexture["move"].Size.X, (int)_playerTexture["move"].Size.Y);
+                                _sprite.Texture = _playerTexture["move"];
+                            }
+                            else
+                            {
+                                _sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, -(int)_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
+                                _sprite.Texture = _playerTexture["stand"];
+                            }
+
+                            _animTimer.Restart();
+                        }
+                    }
+                }
+            }
+        }
+
         internal Texture GetTexture
         {
             get => _texture;

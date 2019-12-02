@@ -149,13 +149,15 @@ namespace TripOverTime.EngineNamespace
             
             foreach(Monster m in _context.GetGame.GetMonsters)
             {
-                if (m.Position.X - 6 < _context.GetGame.GetPlayer.Position.X && m.Position.X > _context.GetGame.GetPlayer.Position.X) //left
+                if (m.Position.X - 6 < _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 1 > _context.GetGame.GetPlayer.RealPosition.X) //left
                 {
-                    
+                    m.Orientation = "left";
+                    m.MonsterMove();
                 }
-                if (m.Position.X + 6 > _context.GetGame.GetPlayer.Position.X && m.Position.X < _context.GetGame.GetPlayer.Position.X) //right
-                { 
-
+                if (m.Position.X + 6 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X + 1 < _context.GetGame.GetPlayer.RealPosition.X) //right
+                {
+                    m.Orientation = "right";
+                    m.MonsterMove();
                 }
             }
         }
