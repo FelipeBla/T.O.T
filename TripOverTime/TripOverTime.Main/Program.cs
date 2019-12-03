@@ -106,24 +106,88 @@ namespace TripOverTime.Main
                                 _YResolution = 720;
                                 window.Close();
                                 engine.Close = true;
-                            }
+                                RunAgain();
+                        }
                             else if (chooseSettings == -1) //1920 x 1080 
                             {
                                 _XResolution = 1920;
                                 _YResolution = 1080;
                                 window.Close();
                                 engine.Close = true;
-                            }
+                                RunAgain();
+                        }
                             else if (chooseSettings == -2)//back to main menu
                             {
                                 chooseSettings = -2;
                             }
                     }
-                    else if (chooseSettings == 1) //Settings2
+                    else if (chooseSettings == 1) //FPS
                     {
+                        chooseSettings = 0;
+                        engine.GetSettings.StartSettingsFPS();
+                        do
+                        {
+                            chooseResolution = engine.GetSettings.RunSettings();
+                        }
+                        while (chooseResolution == -3);
+                        if (chooseResolution == 0) //30
+                        {
+                            _NbFPS = 30;
+                            window.Close();
+                            engine.Close = true;
+                            RunAgain();
+                        }
+                        else if (chooseResolution == 1) //60
+                        {
+                            _NbFPS = 60;
+                            window.Close();
+                            engine.Close = true;
+                            RunAgain();
+                        }
+                        else if (chooseSettings == -1) //120
+                        {
+                            _NbFPS = 120;
+                            window.Close();
+                            engine.Close = true;
+                            RunAgain();
+                        }
+                        else if (chooseSettings == -2)//back to main menu
+                        {
+                            chooseSettings = -2;
+                        }
                     }
-                    else if (chooseSettings == -1) //Settings2
+                    else if (chooseSettings == -1) //KeyBinding
                     {
+                        chooseSettings = 0;
+                        engine.GetSettings.StartSettingsKB();
+                        do
+                        {
+                            chooseResolution = engine.GetSettings.RunSettings();
+                        }
+                        while (chooseResolution == -3);
+                        if (chooseResolution == 0) //30
+                        {
+                            _NbFPS = 30;
+                            window.Close();
+                            engine.Close = true;
+                            RunAgain();
+                        }
+                        else if (chooseResolution == 1) //60
+                        {
+                            _NbFPS = 60;
+                            window.Close();
+                            engine.Close = true;
+                        }
+                        else if (chooseSettings == -1) //120
+                        {
+                            _NbFPS = 120;
+                            window.Close();
+                            engine.Close = true;
+                        }
+                        else if (chooseSettings == -2)//back to main menu
+                        {
+                            chooseSettings = -2;
+                        }
                     }
                     else if (chooseSettings == -2)//back to main menu
                     {
