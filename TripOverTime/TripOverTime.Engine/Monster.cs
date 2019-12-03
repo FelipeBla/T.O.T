@@ -25,7 +25,7 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
 
-        internal Monster(Game context, String name, Position position, Life life, int attack, string imgPath)
+        internal Monster(Game context, String name, Position position, Life life, int attack)
         {
             _context = context;
             _name = name;
@@ -33,7 +33,7 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = attack;
-            _sprite = new Sprite(MONSTER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, false, true);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
 
