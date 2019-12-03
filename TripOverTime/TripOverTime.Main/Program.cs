@@ -89,7 +89,7 @@ namespace TripOverTime.Main
                         engine.GetSettings.StartSettingsResolution();
                             do
                             {
-                                chooseResolution = engine.GetSettings.RunSettings();
+                                chooseResolution = engine.GetSettings.RunSettingsResolution();
                             }
                             while (chooseResolution == -3);
                             if (chooseResolution == 0) //800x600
@@ -127,7 +127,7 @@ namespace TripOverTime.Main
                         engine.GetSettings.StartSettingsFPS();
                         do
                         {
-                            chooseResolution = engine.GetSettings.RunSettings();
+                            chooseResolution = engine.GetSettings.RunSettingsFPS();
                         }
                         while (chooseResolution == -3);
                         if (chooseResolution == 0) //30

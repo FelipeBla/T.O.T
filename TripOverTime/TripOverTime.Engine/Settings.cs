@@ -14,6 +14,9 @@ namespace TripOverTime.EngineNamespace
 
         RenderWindow _window;
         ushort _selected;
+        ushort _selectedResolution;
+        ushort _selectedFPS;
+        ushort _selectedKB;
         Text[] _lines;
         Text[] _linesKB;
         SFML.Graphics.Sprite _background;
@@ -184,7 +187,69 @@ namespace TripOverTime.EngineNamespace
 
             return result;
         }
-        public short RunSettingsKB()
+
+        public short RunSettingsResolution()
+        {
+            //Events
+            short result = -2;
+            short tampon = 0;
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            {
+                _window.Close();
+                result = -1;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            {
+                if (_selectedResolution == 2) result = -1;
+                else result = (short)_selectedResolution;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedResolution < MAX_LINES - 1)
+            {
+                tampon = 1;
+                _selectedResolution++;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedResolution > 0)
+            {
+                tampon = 2;
+                _selectedResolution--;
+            }
+
+
+            //Graphics
+            _window.Clear();
+            _window.Draw(_background);
+
+            for (int i = 0; i < MAX_LINES; i++)
+            {
+                if (i == _selected)
+                {
+                    _lines[i].Color = Color.Red;
+                }
+                else
+                {
+                    _lines[i].Color = Color.White;
+                }
+                _window.Draw(_lines[i]);
+            }
+
+            _window.Display();
+
+            if (tampon == 1)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+            }
+            else if (tampon == 2)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+            }
+
+            return result;
+        }
+
+        public short RunSettingsFPS()
         {
             //Events
             short result = -2;
@@ -199,18 +264,78 @@ namespace TripOverTime.EngineNamespace
             if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
                 if (_selected == 2) result = -1;
-                else result = (short)_selected;
+                else result = (short)_selectedFPS;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES_KB - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
             {
                 tampon = 1;
-                _selected++;
+                _selectedFPS++;
             }
             else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
             {
                 tampon = 2;
-                _selected--;
+                _selectedFPS--;
+            }
+
+
+            //Graphics
+            _window.Clear();
+            _window.Draw(_background);
+
+            for (int i = 0; i < MAX_LINES; i++)
+            {
+                if (i == _selectedFPS)
+                {
+                    _lines[i].Color = Color.Red;
+                }
+                else
+                {
+                    _lines[i].Color = Color.White;
+                }
+                _window.Draw(_lines[i]);
+            }
+
+            _window.Display();
+
+            if (tampon == 1)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+            }
+            else if (tampon == 2)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+            }
+
+            return result;
+        }
+        public short RunSettingsKB()
+        {
+            //Events
+            short result = -2;
+            short tampon = 0;
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            {
+                _window.Close();
+                result = -1;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            {
+                if (_selectedKB == 2) result = -1;
+                else result = (short)_selectedKB;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES_KB - 1)
+            {
+                tampon = 1;
+                _selectedKB++;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedKB > 0)
+            {
+                tampon = 2;
+                _selectedKB--;
             }
 
 
@@ -220,7 +345,7 @@ namespace TripOverTime.EngineNamespace
 
             for (int i = 0; i < MAX_LINES_KB; i++)
             {
-                if (i == _selected)
+                if (i == _selectedKB)
                 {
                     _linesKB[i].Color = Color.Red;
                 }
