@@ -146,8 +146,20 @@ namespace TripOverTime.EngineNamespace
                     _context.GetGame.GetPlayer.Jump();
                 }
             }
-            
-            foreach(Monster m in _context.GetGame.GetMonsters)
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) // ATTACK
+            {
+
+                foreach (Monster m in _context.GetGame.GetMonsters)
+                {
+                    if (m.Position.X +2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X) //left
+                    {
+                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.Attack);
+                    }
+                }
+            }
+
+            foreach (Monster m in _context.GetGame.GetMonsters)
             {
                 if (!m.isAlive)
                 {

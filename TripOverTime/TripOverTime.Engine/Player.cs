@@ -20,13 +20,13 @@ namespace TripOverTime.EngineNamespace
         Position _position; // Graphical position
         Position _realPosition;
         Life _life;
-        int _attack;
+        ushort _attack;
         Sprite _sprite;
         bool _isJumping;
         Position _origin;
         string _orientation;
 
-        internal Player(Game context, String name, Position position, Life life, int attack, string imgPath)
+        internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
             _context = context;
             _name = name;
@@ -201,6 +201,11 @@ namespace TripOverTime.EngineNamespace
         internal string Orientation
         {
             get => _orientation;
+        }
+
+        internal ushort Attack
+        {
+            get => _attack;
         }
         internal Sprite GetPlayerSprite
         {

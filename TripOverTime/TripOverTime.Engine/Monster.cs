@@ -106,17 +106,20 @@ namespace TripOverTime.EngineNamespace
         }
 
 
-        private Life life
+        internal Life life
         {
             get { return _life; }
             set { _life = value; }
         }
         internal bool isAlive
         {
-            get { return _isAlive; }
+            get  
+            {
+                return _life.GetCurrentPoint() > 0; 
+            }
             set { _isAlive = value; }
         }
-        private int attack
+        internal int attack
         {
             get { return _attack; }
             set { _attack = value; }
