@@ -85,6 +85,7 @@ namespace TripOverTime.Main
                     } while (chooseSettings == -2);
                     if (chooseSettings == 0) //resolution
                     {
+                        choose = 1;
                         chooseSettings = 0;
                         engine.GetSettings.StartSettingsResolution();
                             do
@@ -123,6 +124,7 @@ namespace TripOverTime.Main
                     }
                     else if (chooseSettings == 1) //FPS
                     {
+                        choose = 1;
                         chooseSettings = 0;
                         engine.GetSettings.StartSettingsFPS();
                         do
@@ -158,11 +160,12 @@ namespace TripOverTime.Main
                     }
                     else if (chooseSettings == -1) //KeyBinding
                     {
+                        choose = 1;
                         chooseSettings = 0;
                         engine.GetSettings.StartSettingsKB();
                         do
                         {
-                            chooseResolution = engine.GetSettings.RunSettings();
+                            chooseResolution = engine.GetSettings.RunSettingsKB();
                         }
                         while (chooseResolution == -3);
                         if (chooseResolution == 0) //30
