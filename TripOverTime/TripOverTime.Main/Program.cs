@@ -10,9 +10,7 @@ namespace TripOverTime.Main
 {
     class Program
     {
-        private static uint _XResolution = 800;
-        private static uint _YResolution = 600;
-        private static uint _NbFPS = 60;
+        
 
         static void Main(string[] args)
         {
@@ -26,11 +24,11 @@ namespace TripOverTime.Main
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
-            float fps = _NbFPS;
+            float fps = Settings.NbFPS;
             float tps = 60;
 
             //Window & Engine start
-            RenderWindow window = new RenderWindow(new VideoMode(_XResolution, _YResolution), "T.O.T");
+            RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
             window.SetVerticalSyncEnabled(true);
             Engine engine = new Engine(window);
 
@@ -97,24 +95,24 @@ namespace TripOverTime.Main
                             while (chooseResolution == -3);
                             if (chooseResolution == 0) //800x600
                             {
-                                _XResolution = 800;
-                                _YResolution = 600;
+                                Settings.XResolution = 800;
+                                Settings.YResolution = 600;
                                 window.Close();
                                 engine.Close = true;
                                 RunAgain();
                             }
                             else if (chooseResolution == 1) //1280 x 720
                             {
-                                _XResolution = 1280;
-                                _YResolution = 720;
+                                Settings.XResolution = 1280;
+                                Settings.YResolution = 720;
                                 window.Close();
                                 engine.Close = true;
                                 RunAgain();
                         }
                             else if (chooseResolution == -1) //1920 x 1080 
                             {
-                                _XResolution = 1920;
-                                _YResolution = 1080;
+                                Settings.XResolution = 1920;
+                                Settings.YResolution = 1080;
                                 window.Close();
                                 engine.Close = true;
                                 RunAgain();
@@ -136,21 +134,21 @@ namespace TripOverTime.Main
                         while (chooseFPS == -3);
                         if (chooseFPS == 0) //30
                         {
-                            _NbFPS = 30;
+                            Settings.NbFPS = 30;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
                         else if (chooseFPS == 1) //60
                         {
-                            _NbFPS = 60;
+                            Settings.NbFPS = 60;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
                         else if (chooseFPS == -1) //120
                         {
-                            _NbFPS = 120;
+                            Settings.NbFPS = 120;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
@@ -172,20 +170,20 @@ namespace TripOverTime.Main
                         while (chooseKB == -3);
                         if (chooseKB == 0) //30
                         {
-                            _NbFPS = 30;
+                            Settings.NbFPS = 30;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
                         else if (chooseKB == 1) //60
                         {
-                            _NbFPS = 60;
+                            Settings.NbFPS = 60;
                             window.Close();
                             engine.Close = true;
                         }
                         else if (chooseKB == -1) //120
                         {
-                            _NbFPS = 120;
+                            Settings.NbFPS = 120;
                             window.Close();
                             engine.Close = true;
                         }
@@ -207,21 +205,6 @@ namespace TripOverTime.Main
             }
 
             Console.WriteLine("End Game");
-        }
-        private uint XResolution
-        {
-            get { return _XResolution; }
-            set { _XResolution = value; }
-        }
-        private uint YResolution
-        {
-            get { return _YResolution; }
-            set { _YResolution = value; }
-        }
-        private uint NbFPS
-        {
-            get { return _NbFPS; }
-            set { _NbFPS = value; }
         }
 
     }
