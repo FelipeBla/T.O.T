@@ -40,6 +40,8 @@ namespace TripOverTime.Main
                 short choose = -2;
                 short chooseSettings = -2;
                 short chooseResolution = -2;
+                short chooseFPS = -2;
+                short chooseKB = -2;
                 engine.GetMenu.StartMainMenu();
                 do
                 {
@@ -109,7 +111,7 @@ namespace TripOverTime.Main
                                 engine.Close = true;
                                 RunAgain();
                         }
-                            else if (chooseSettings == -1) //1920 x 1080 
+                            else if (chooseResolution == -1) //1920 x 1080 
                             {
                                 _XResolution = 1920;
                                 _YResolution = 1080;
@@ -117,7 +119,7 @@ namespace TripOverTime.Main
                                 engine.Close = true;
                                 RunAgain();
                         }
-                            else if (chooseSettings == -2)//back to main menu
+                            else if (chooseResolution == -2)//back to main menu
                             {
                                 chooseSettings = -2;
                             }
@@ -129,31 +131,31 @@ namespace TripOverTime.Main
                         engine.GetSettings.StartSettingsFPS();
                         do
                         {
-                            chooseResolution = engine.GetSettings.RunSettingsFPS();
+                            chooseFPS = engine.GetSettings.RunSettingsFPS();
                         }
-                        while (chooseResolution == -3);
-                        if (chooseResolution == 0) //30
+                        while (chooseFPS == -3);
+                        if (chooseFPS == 0) //30
                         {
                             _NbFPS = 30;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
-                        else if (chooseResolution == 1) //60
+                        else if (chooseFPS == 1) //60
                         {
                             _NbFPS = 60;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
-                        else if (chooseSettings == -1) //120
+                        else if (chooseFPS == -1) //120
                         {
                             _NbFPS = 120;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
-                        else if (chooseSettings == -2)//back to main menu
+                        else if (chooseFPS == -2)//back to main menu
                         {
                             chooseSettings = -2;
                         }
@@ -165,29 +167,29 @@ namespace TripOverTime.Main
                         engine.GetSettings.StartSettingsKB();
                         do
                         {
-                            chooseResolution = engine.GetSettings.RunSettingsKB();
+                            chooseKB = engine.GetSettings.RunSettingsKB();
                         }
-                        while (chooseResolution == -3);
-                        if (chooseResolution == 0) //30
+                        while (chooseKB == -3);
+                        if (chooseKB == 0) //30
                         {
                             _NbFPS = 30;
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
-                        else if (chooseResolution == 1) //60
+                        else if (chooseKB == 1) //60
                         {
                             _NbFPS = 60;
                             window.Close();
                             engine.Close = true;
                         }
-                        else if (chooseSettings == -1) //120
+                        else if (chooseKB == -1) //120
                         {
                             _NbFPS = 120;
                             window.Close();
                             engine.Close = true;
                         }
-                        else if (chooseSettings == -2)//back to main menu
+                        else if (chooseKB == -2)//back to main menu
                         {
                             chooseSettings = -2;
                         }
