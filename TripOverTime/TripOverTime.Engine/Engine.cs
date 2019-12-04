@@ -56,9 +56,25 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
+            //Gravity
+            foreach (Monster m in _game.GetMonsters)
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+                {
+                    //Block under player isn't solid
+                    m.Gravity();
+                }
+                else
+                {
+                    m.IsMoving = false;
+                    m.RoundY(); // Don't stuck player in ground
+                }
+            }
+
             // Recalibrate float
             _game.GetPlayer.RoundX();
-
             return _game.GetPlayer.IsAlive;
         }
 

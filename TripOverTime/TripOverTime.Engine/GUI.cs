@@ -68,6 +68,12 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Monsters
+            foreach (Monster m in _context.GetGame.GetMonsters) 
+            {
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;                
+                _window.Draw(m.GetMonsterSprite.GetSprite);
+            }
 
             // Display
             _window.Display();
@@ -141,7 +147,37 @@ namespace TripOverTime.EngineNamespace
                 {
                     _context.GetGame.GetPlayer.Jump();
                 }
-            }            
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) // ATTACK
+            {
+
+                foreach (Monster m in _context.GetGame.GetMonsters)
+                {
+                    if (m.Position.X +2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X) //left
+                    {
+                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.Attack);
+                    }
+                }
+            }
+
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                if (!m.isAlive)
+                {
+                    m.MonsterDead();
+                }
+                else if (m.Position.X - 6 < _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 1 > _context.GetGame.GetPlayer.RealPosition.X) //left
+                {
+                    m.Orientation = "left";
+                    m.MonsterMove();
+                }
+                else if (m.Position.X + 6 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X + 1 < _context.GetGame.GetPlayer.RealPosition.X) //right
+                {
+                    m.Orientation = "right";
+                    m.MonsterMove();
+                }
+            }
         }
     }
 }
