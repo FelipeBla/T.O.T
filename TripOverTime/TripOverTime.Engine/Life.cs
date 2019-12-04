@@ -20,7 +20,7 @@ namespace TripOverTime.EngineNamespace
         {
         }
 
-        public Life(ushort maxPoint, ushort minPoint)
+        public Life(ushort maxPoint, ushort minPoint = 1)
         {
             _maxPoint = maxPoint;
             _minPoint = minPoint;
@@ -85,9 +85,15 @@ namespace TripOverTime.EngineNamespace
 
         public void DecreasedPoint(ushort damage)
         {
-            if (damage < 0 || damage > _currentPoint) return;
-
-            _currentPoint -= damage;
+            if (damage < 0 ) return;
+            if (damage >= _currentPoint) 
+            { 
+                _currentPoint = 0; 
+            }
+            else
+            {
+                _currentPoint -= damage;
+            }
         }
 
         public void BonusPoint(ushort bonus)

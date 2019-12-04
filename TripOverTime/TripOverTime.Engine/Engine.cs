@@ -26,7 +26,7 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
+            _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
-            //Gravity
+            //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
@@ -56,9 +56,25 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
+            //Gravity 4 monsters
+            foreach (Monster m in _game.GetMonsters)
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+                {
+                    //Block under player isn't solid
+                    m.Gravity();
+                }
+                else
+                {
+                    m.IsMoving = false;
+                    m.RoundY(); // Don't stuck player in ground
+                }
+            }
+
             // Recalibrate float
             _game.GetPlayer.RoundX();
-
             // WIN !!!
             Position end = _game.GetMapObject.GetEndPosition;
             if (end.X <= _game.GetPlayer.RealPosition.X)

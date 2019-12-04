@@ -11,11 +11,12 @@ namespace TripOverTime.EngineNamespace
         List<Monster> _monsters;
         Map _map;
 
-        internal Game(string mapPath, string playerPath, Position startPosition)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition)
         {
+            _context = context;
             _map = new Map(this, mapPath);
-            _player = new Player(this, "player", startPosition, new Life(100, 100), 1, playerPath);
-            _monsters = new List<Monster>();
+            _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
+            _monsters = _map.GenerateMonsters();
         }
 
         internal Map GetMapObject
@@ -29,6 +30,12 @@ namespace TripOverTime.EngineNamespace
         internal Engine GetEngine
         {
             get => _context;
+        }
+
+        internal List<Monster> GetMonsters
+        {
+            get => _monsters;
+            set => _monsters = value;
         }
     }
 }
