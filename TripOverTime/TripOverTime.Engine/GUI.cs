@@ -17,9 +17,19 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _hpBar3;
         private SFML.System.Vector2f _hpBarPosition;
+        SFML.Window.Keyboard.Key _LeftAction;
+        SFML.Window.Keyboard.Key _RightAction;
+        SFML.Window.Keyboard.Key _JumpAction;
+        SFML.Window.Keyboard.Key _AttackAction;
+
 
         internal GUI(Engine context, RenderWindow window)
         {
+            _AttackAction = Keyboard.Key.Space;
+            _JumpAction = Keyboard.Key.Up;
+            _LeftAction = Keyboard.Key.Left;
+            _RightAction = Keyboard.Key.Right;
+
             _context = context;
             _window = window;
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
@@ -136,20 +146,20 @@ namespace TripOverTime.EngineNamespace
                 _context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
 
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) {
+            if (Keyboard.IsKeyPressed(_RightAction)) {
                 _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) {
+            if (Keyboard.IsKeyPressed(_LeftAction)) {
                 _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) {
+            if (Keyboard.IsKeyPressed(_JumpAction)) {
                 if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
                 {
                     _context.GetGame.GetPlayer.Jump();
                 }
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) // ATTACK
+            if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
             {
 
                 foreach (Monster m in _context.GetGame.GetMonsters)
@@ -178,6 +188,29 @@ namespace TripOverTime.EngineNamespace
                     m.MonsterMove();
                 }
             }
+        }
+        internal SFML.Window.Keyboard.Key RightAction
+        {
+            get { return _RightAction; }
+            set { _RightAction = value; }
+        }
+
+        internal SFML.Window.Keyboard.Key LeftAction
+        {
+            get { return _LeftAction; }
+            set { _LeftAction = value; }
+        }
+
+        internal SFML.Window.Keyboard.Key JumpAction
+        {
+            get { return _JumpAction; }
+            set { _JumpAction = value; }
+        }
+
+        internal SFML.Window.Keyboard.Key AttackAction
+        {
+            get { return _AttackAction; }
+            set { _AttackAction = value; }
         }
     }
 }
