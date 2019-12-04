@@ -20,7 +20,7 @@ namespace TripOverTime.EngineNamespace
         {
         }
 
-        public Life(ushort maxPoint, ushort minPoint)
+        public Life(ushort maxPoint, ushort minPoint = 1)
         {
             _maxPoint = maxPoint;
             _minPoint = minPoint;

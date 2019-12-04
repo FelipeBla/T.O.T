@@ -26,7 +26,7 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
+            _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
         }
 
         /// <summary>
