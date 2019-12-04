@@ -9,7 +9,7 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_SPEED = 0.1f;
         const float GRAVITY_SPEED = 0.1f;
         const float JUMPING_LIMIT = 1.5f;
-        const float MMONSTER_MOVE = 0.10f;
+        const float MONSTER_MOVE = 0.10f;
         float pw;
         float ph;
 
@@ -41,16 +41,25 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
+            Console.WriteLine("Frog position: [ " + _position.X + " ; " + _position.Y + " ]");
             if (!_ismoving)
             {
+                Sprite s = null;
+
                 _origin = new Position(_position.X, _position.Y);
-                if(_orientation == "left")
+                if (_orientation == "left")
                 {
-                    _position.X -= MMONSTER_MOVE;
+                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - MONSTER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                        if (!s.IsSolid)
+                            _position.X -= MONSTER_MOVE;
                 }
-                else 
-                { 
-                    _position.X += MMONSTER_MOVE;
+                else
+                {
+                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + MONSTER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    {
+                        if (!s.IsSolid)
+                            _position.X += MONSTER_MOVE;
+                    }
                 }
                 _ismoving = true;
 
@@ -96,7 +105,7 @@ namespace TripOverTime.EngineNamespace
         internal Position Position
         {
             get => _position;
-            set { _position = value;}
+            set { _position = value; }
         }
 
         internal string Orientation
@@ -113,9 +122,9 @@ namespace TripOverTime.EngineNamespace
         }
         internal bool isAlive
         {
-            get  
+            get
             {
-                return _life.GetCurrentPoint() > 0; 
+                return _life.GetCurrentPoint() > 0;
             }
             set { _isAlive = value; }
         }
