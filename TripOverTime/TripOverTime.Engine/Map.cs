@@ -20,6 +20,7 @@ namespace TripOverTime.EngineNamespace
         internal Map(Game context, string mapPath)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
+            if (context == null) throw new ArgumentNullException("Context null!");
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
@@ -39,6 +40,9 @@ namespace TripOverTime.EngineNamespace
         /// BLOCKS
         /// id name imgPath
         /// BLOCKS
+        /// MONSTER
+        /// id name [x;y] hp imgDirPath
+        /// MONSTER
         /// MAP
         /// 
         /// MAP
@@ -70,6 +74,8 @@ namespace TripOverTime.EngineNamespace
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
             }
 
+            
+
             // Get map
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
 
@@ -84,6 +90,28 @@ namespace TripOverTime.EngineNamespace
                 indexTemp++;
             }
         }
+
+        internal List<Monster> GenerateMonsters()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get monsters
+            // name x y hp
+            string[] strmonsters = StringBetweenString(text, "MONSTER", "MONSTEREND").Split("\n");
+            List<Monster> monsters = new List<Monster>();
+            foreach (string s in strmonsters)
+            {
+                string[] str = s.Split(" ");
+
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToInt32(str[4])));
+            }
+
+            return monsters;
+        } 
 
         private Sprite RetrieveSpriteWithId(string strId)
         {

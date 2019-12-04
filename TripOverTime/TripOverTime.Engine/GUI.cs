@@ -143,8 +143,7 @@ namespace TripOverTime.EngineNamespace
         internal void Events()
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
-                _context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
-
+                //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
             }
             if (Keyboard.IsKeyPressed(_RightAction)) {
                 _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
