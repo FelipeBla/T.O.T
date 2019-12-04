@@ -9,9 +9,9 @@ namespace TripOverTime.EngineNamespace
         const string PLAYER_ID = "PLAYER420";
         float pw;
         float ph;
-        const float JUMPING_SPEED = 0.1f;
-        const float GRAVITY_SPEED = 0.1f;
-        const float JUMPING_LIMIT = 1.5f;
+        const float JUMPING_SPEED = 0.09f;
+        const float GRAVITY_SPEED = 0.09f;
+        const float JUMPING_LIMIT = 1.1f;
         const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;

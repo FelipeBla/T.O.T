@@ -18,6 +18,7 @@ namespace TripOverTime.EngineNamespace
         bool _isMonster;
         bool _isPlayer;
         Map _context;
+        int _jump;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
@@ -41,6 +42,7 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
+            _jump = 1;
 
             if(_name == "CHECKPOINT")
             {
@@ -116,12 +118,32 @@ namespace TripOverTime.EngineNamespace
             {
                 if (_context.GetGame.GetPlayer.Orientation == "right") //Right
                 {
-                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    if (_animTimer.ElapsedMilliseconds >= 100)
                     {
                         if (_sprite.Texture == _playerTexture["walk1"])
                         {
                             _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk2"].Size);
                             _sprite.Texture = _playerTexture["walk2"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk2"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk3"].Size);
+                            _sprite.Texture = _playerTexture["walk3"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk3"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk4"].Size);
+                            _sprite.Texture = _playerTexture["walk4"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk4"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk5"].Size);
+                            _sprite.Texture = _playerTexture["walk5"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk5"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["walk6"].Size);
+                            _sprite.Texture = _playerTexture["walk6"];
                         }
                         else
                         {
@@ -134,12 +156,32 @@ namespace TripOverTime.EngineNamespace
                 }
                 else //Left
                 {
-                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    if (_animTimer.ElapsedMilliseconds >= 100)
                     {
                         if (_sprite.Texture == _playerTexture["walk1"])
                         {
                             _sprite.TextureRect = new IntRect((int)_playerTexture["walk2"].Size.X, 0, -(int)_playerTexture["walk2"].Size.X, (int)_playerTexture["walk2"].Size.Y);
                             _sprite.Texture = _playerTexture["walk2"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk2"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk3"].Size.X, 0, -(int)_playerTexture["walk3"].Size.X, (int)_playerTexture["walk3"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk3"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk3"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk4"].Size.X, 0, -(int)_playerTexture["walk4"].Size.X, (int)_playerTexture["walk4"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk4"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk4"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk5"].Size.X, 0, -(int)_playerTexture["walk5"].Size.X, (int)_playerTexture["walk5"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk5"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["walk5"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["walk6"].Size.X, 0, -(int)_playerTexture["walk6"].Size.X, (int)_playerTexture["walk6"].Size.Y);
+                            _sprite.Texture = _playerTexture["walk6"];
                         }
                         else
                         {
@@ -160,16 +202,76 @@ namespace TripOverTime.EngineNamespace
             {
                 if (_context.GetGame.GetPlayer.Orientation == "right") //Right
                 {
-                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump"].Size);
-                    _sprite.Texture = _playerTexture["jump"];
+                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    {
+                        if (_sprite.Texture == _playerTexture["jump2"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump3"].Size);
+                            _sprite.Texture = _playerTexture["jump3"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["jump3"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump4"].Size);
+                            _sprite.Texture = _playerTexture["jump4"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["jump4"])
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump5"].Size);
+                            _sprite.Texture = _playerTexture["jump5"];
+                        }
+                        else
+                        {
+                            _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump2"].Size);
+                            _sprite.Texture = _playerTexture["jump2"];
+                        }
+
+                        _animTimer.Restart();
+                    }
                 }
                 else //Left
                 {
-                    _sprite.TextureRect = new IntRect((int)_playerTexture["jump"].Size.X, 0, -(int)_playerTexture["jump"].Size.X, (int)_playerTexture["jump"].Size.Y);
-                    _sprite.Texture = _playerTexture["jump"];
+                    if (_animTimer.ElapsedMilliseconds >= 250)
+                    {
+                        if (_sprite.Texture == _playerTexture["jump2"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["jump3"].Size.X, 0, -(int)_playerTexture["jump3"].Size.X, (int)_playerTexture["jump3"].Size.Y);
+                            _sprite.Texture = _playerTexture["jump3"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["jump3"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["jump4"].Size.X, 0, -(int)_playerTexture["jump4"].Size.X, (int)_playerTexture["jump4"].Size.Y);
+                            _sprite.Texture = _playerTexture["jump4"];
+                        }
+                        else if (_sprite.Texture == _playerTexture["jump4"])
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["jump5"].Size.X, 0, -(int)_playerTexture["jump5"].Size.X, (int)_playerTexture["jump5"].Size.Y);
+                            _sprite.Texture = _playerTexture["jump5"];
+                        }
+                        else
+                        {
+                            _sprite.TextureRect = new IntRect((int)_playerTexture["jump2"].Size.X, 0, -(int)_playerTexture["jump2"].Size.X, (int)_playerTexture["jump2"].Size.Y);
+                            _sprite.Texture = _playerTexture["jump2"];
+                        }
+
+                        _animTimer.Restart();
+                    }
                 }
             }
+
+            //if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+            //{
+            //    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["jump1"].Size);
+            //    _sprite.Texture = _playerTexture["jump1"];
+            //}
+            //else //Left
+            //{
+            //    _sprite.TextureRect = new IntRect((int)_playerTexture["jump1"].Size.X, 0, -(int)_playerTexture["jump1"].Size.X, (int)_playerTexture["jump1"].Size.Y);
+            //    _sprite.Texture = _playerTexture["jump1"];
+            //}
+
+
         }
+        
 
         internal void MonsterMoveAnimation()
         {

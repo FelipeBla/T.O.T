@@ -61,7 +61,7 @@ namespace TripOverTime.EngineNamespace
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 +18);
                 //Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
                 Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
@@ -154,7 +154,7 @@ namespace TripOverTime.EngineNamespace
 
                 foreach (Monster m in _context.GetGame.GetMonsters)
                 {
-                    if (m.Position.X +2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X) //left
+                    if (m.Position.X +2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
                     {
                         m.life.DecreasedPoint(_context.GetGame.GetPlayer.Attack);
                     }
