@@ -126,6 +126,19 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
+
+        internal Position GetEndPosition
+        {
+            get
+            {
+                foreach(KeyValuePair<Position, Sprite> s in _map)
+                {
+                    if (s.Value.IsEnd) return s.Key;
+                }
+                throw new InvalidOperationException("END NOT FOUND!");
+            }
+        }
+
         internal List<Position> GetCheckpointPosition
         {
             get => _checkpointPosition;

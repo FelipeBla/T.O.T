@@ -53,16 +53,16 @@ namespace TripOverTime.Main
                     engine.StartGame(@"..\..\..\..\Maps\test.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink"); //map, player sprite
                     engine.GetGUI.InitGame();
 
-                    bool playerAlive = true;
+                    short result = 1;
                     // GameLoop
                     spGui.Start();
                     spGame.Start();
-                    while (playerAlive)
+                    while (result == 1)
                     {
                         if (spGame.ElapsedMilliseconds >= 1000 / tps)
                         {
                             // GameTick
-                            playerAlive = engine.GameTick();
+                            result = engine.GameTick();
                             spGame.Restart();
                         }
 
@@ -72,7 +72,20 @@ namespace TripOverTime.Main
                             engine.GetGUI.ShowMap();
                             spGui.Restart();
                         }
-
+                    }
+                    if (result == 0)
+                    {
+                        //WIN
+                        Console.WriteLine("YOU WIN!");
+                    }
+                    else if (result == -1)
+                    {
+                        //DIE
+                        Console.WriteLine("YOU DIE!");
+                    }
+                    else
+                    {
+                        throw new Exception("WTF?!");
                     }
                 }
                 else if (choose == 1) //Settings

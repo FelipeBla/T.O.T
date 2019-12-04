@@ -239,6 +239,15 @@ namespace TripOverTime.EngineNamespace
         {
             get => _isSolid;
         }
+
+        internal bool IsEnd
+        {
+            get => _isEnd;
+        }
+        internal bool IsCheckpoint
+        {
+            get => _isCheckpoint;
+        }
         internal string Id
         {
             get => _id;

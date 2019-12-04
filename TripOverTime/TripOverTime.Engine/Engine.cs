@@ -33,7 +33,7 @@ namespace TripOverTime.EngineNamespace
         /// 
         /// </summary>
         /// <returns>True if player is alive</returns>
-        public bool GameTick()
+        public short GameTick()
         {
             if (_game == null) throw new Exception("Game not started!");
 
@@ -75,7 +75,18 @@ namespace TripOverTime.EngineNamespace
 
             // Recalibrate float
             _game.GetPlayer.RoundX();
-            return _game.GetPlayer.IsAlive;
+            // WIN !!!
+            Position end = _game.GetMapObject.GetEndPosition;
+            if (end.X <= _game.GetPlayer.RealPosition.X)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 0;
+            }
+
+            // Dead return -1;
+
+            return 1;
         }
 
         public Menu GetMenu
