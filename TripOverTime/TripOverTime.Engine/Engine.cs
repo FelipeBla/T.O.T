@@ -40,7 +40,7 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
-            //Gravity
+            //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
@@ -56,7 +56,7 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
-            //Gravity
+            //Gravity 4 monsters
             foreach (Monster m in _game.GetMonsters)
             {
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
