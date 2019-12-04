@@ -33,7 +33,7 @@ namespace TripOverTime.EngineNamespace
         /// 
         /// </summary>
         /// <returns>True if player is alive</returns>
-        public bool GameTick()
+        public short GameTick()
         {
             if (_game == null) throw new Exception("Game not started!");
 
@@ -65,9 +65,12 @@ namespace TripOverTime.EngineNamespace
             {
                 Console.WriteLine("YOUWINNNNNNNNNN");
                 // SHOW WIN MENU !
+                return 0;
             }
 
-            return _game.GetPlayer.IsAlive;
+            // Dead return -1;
+
+            return 1;
         }
 
         public Menu GetMenu
