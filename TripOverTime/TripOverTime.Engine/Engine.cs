@@ -56,6 +56,13 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
+            // Attack
+            if (_game.GetPlayer.IsAttack)
+            {
+                Console.WriteLine("attack :" + _game.GetPlayer.IsAttack);
+                _game.GetPlayer.Attack();
+            }
+
             //Gravity
             foreach (Monster m in _game.GetMonsters)
             {

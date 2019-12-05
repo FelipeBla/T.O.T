@@ -25,6 +25,7 @@ namespace TripOverTime.EngineNamespace
         bool _isJumping;
         Position _origin;
         string _orientation;
+        bool _isAttack;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -35,6 +36,7 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _attack = attack;
             _isJumping = false;
+            _isAttack = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             _orientation = "right";
 
@@ -67,6 +69,14 @@ namespace TripOverTime.EngineNamespace
                 _origin = null;
                 _realPosition.Y -= GRAVITY_SPEED;
                 _position.Y -= GRAVITY_SPEED;
+            }
+        }
+
+        internal void Attack()
+        {
+            if (_isAttack)
+            {
+                _sprite.AttackAnimation();
             }
         }
 
@@ -173,6 +183,13 @@ namespace TripOverTime.EngineNamespace
             get => _isJumping;
             set => _isJumping = value;
         }
+
+        internal bool IsAttack
+        {
+            get => _isAttack;
+            set => _isAttack = value;
+        }
+
         internal bool IsAlive
         {
             get => _life.CurrentPoint > 0;
@@ -218,7 +235,7 @@ namespace TripOverTime.EngineNamespace
             get => _orientation;
         }
 
-        internal ushort Attack
+        internal ushort GetAttack
         {
             get => _attack;
         }
