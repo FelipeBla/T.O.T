@@ -49,6 +49,7 @@ namespace TripOverTime.EngineNamespace
             {
                 //Block under player isn't solid
                 _game.GetPlayer.Gravity();
+
             }
             else
             {

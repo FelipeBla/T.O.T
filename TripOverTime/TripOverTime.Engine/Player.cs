@@ -9,8 +9,8 @@ namespace TripOverTime.EngineNamespace
         const string PLAYER_ID = "PLAYER420";
         float pw;
         float ph;
-        const float JUMPING_SPEED = 0.09f;
-        const float GRAVITY_SPEED = 0.09f;
+        const float JUMPING_SPEED = 0.06f;
+        const float GRAVITY_SPEED = 0.06f;
         const float JUMPING_LIMIT = 1.1f;
         const float PPLAYER_MOVE = 0.15f;
 
@@ -63,6 +63,7 @@ namespace TripOverTime.EngineNamespace
             {
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
+                _sprite.JumpAnimation();
             }
             else // Fall
             {
