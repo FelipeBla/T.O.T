@@ -88,7 +88,8 @@ namespace TripOverTime.EngineNamespace
             if (damage < 0 ) return;
             if (damage >= _currentPoint) 
             { 
-                _currentPoint = 0; 
+                _currentPoint = 0;
+                Console.WriteLine("The player is dead.");
             }
             else
             {
@@ -99,6 +100,8 @@ namespace TripOverTime.EngineNamespace
         public void BonusPoint(ushort bonus)
         {
             _currentPoint += Convert.ToUInt16(Math.Max(Convert.ToInt32(bonus), 0));
+
         }
     }
+
 }
