@@ -73,7 +73,7 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 56);
                 //Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
-                Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
+                //Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
