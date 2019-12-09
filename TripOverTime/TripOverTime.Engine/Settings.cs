@@ -183,7 +183,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.Black;
+                    _lines[i].Color = Color.Black; //meilleure visibilité
                 }
                 _window.Draw(_lines[i]);
             }
