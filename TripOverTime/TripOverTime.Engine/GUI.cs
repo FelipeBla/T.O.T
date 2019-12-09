@@ -61,16 +61,14 @@ namespace TripOverTime.EngineNamespace
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 +18);
-                //Console.WriteLine("Real X: " + _context.GetGame.GetPlayer.RealPosition.X + " X:" + _context.GetGame.GetPlayer.Position.X + " | Real Y: " + _context.GetGame.GetPlayer.RealPosition.Y + " Y: " + _context.GetGame.GetPlayer.Position.Y);
-                //Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 -65);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
             // Monsters
             foreach (Monster m in _context.GetGame.GetMonsters) 
             {
-                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128);
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 -40);
                 m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;                
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
