@@ -64,30 +64,7 @@ namespace TripOverTime.EngineNamespace
                 _ismoving = true;
 
                 _sprite.MonsterMoveAnimation();
-            }
-            Console.WriteLine("Fly position: [ " + _position.X + " ; " + _position.Y + " ]");
-            if (!_ismoving)
-            {
-                Sprite s = null;
-
-                _origin = new Position(_position.X, _position.Y);
-                if (_orientation == "left")
-                {
-                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - MONSTER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
-                        if (!s.IsSolid)
-                            _position.X -= MONSTER_MOVE;
-                }
-                else
-                {
-                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + MONSTER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
-                    {
-                        if (!s.IsSolid)
-                            _position.X += MONSTER_MOVE;
-                    }
-                }
-                _ismoving = true;
-
-                _sprite.MonsterMoveAnimation();
+           
             }
        
         }
