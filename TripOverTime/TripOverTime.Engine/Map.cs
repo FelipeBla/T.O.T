@@ -68,7 +68,7 @@ namespace TripOverTime.EngineNamespace
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
-            foreach(string s in blocks)
+            foreach (string s in blocks)
             {
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
@@ -163,6 +163,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (s.Value.IsEnd) return s.Key;
                 }
+                
                 throw new InvalidOperationException("END NOT FOUND!");
             }
         }

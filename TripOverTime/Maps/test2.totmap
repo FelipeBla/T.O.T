@@ -1,5 +1,5 @@
 BACKGROUNDPATH
-..\..\..\..\Assets\Backgrounds\blue_grass.png
+..\..\..\..\Assets\Backgrounds\game_background_1.png
 BACKGROUNDPATHEND
 LIMIT
 0 1
@@ -7,18 +7,19 @@ LIMIT
 LIMITEND
 BLOCKS
 A AIR ..\..\..\..\Assets\air.png false
-G GRASS ..\..\..\..\Assets\Ground\Grass\grassMid.png true
-1 DIRT ..\..\..\..\Assets\Ground\Grass\grassCenter.png true
-2 CHECKPOINT ..\..\..\..\Assets\Items\flagYellow_down.png false
+G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
+1 DIRT ..\..\..\..\Assets\Ground\Snow\snowCenter.png true
+2 TRAP ..\..\..\..\Assets\Tiles\spikes.png true
 3 END ..\..\..\..\Assets\Items\flagGreen_down.png false
 BLOCKSEND
 MONSTER
 Frog 3 3 50 1
+Fly 20 3 50 1
 MONSTEREND
 MAP
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAGG1GAAAAAAAAA2AAAAAAAAAAAAAAAAAAA3A
-GGGGG1111GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
-1111111111111111111111111111111111111111
+AAAAAGG1GGAAGAAAAAAAAAAAAAAAAAAAAAAAAA3A
+GGGGG11111AA1GGGGGGGGGGGGGGGGGGGGGGGGGGG
+1111111111221111111111111111111111111111
 MAPEND
