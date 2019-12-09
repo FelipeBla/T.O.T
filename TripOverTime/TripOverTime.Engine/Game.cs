@@ -17,7 +17,8 @@ namespace TripOverTime.EngineNamespace
             _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
             _monsters = new List<Monster>();
             _monsters.Add(new Monster(this, "Golem1", new Position(20, 5), new Life(50, 1), 1));
-           
+            _monsters.Add(new Monster(this, "Golem2", new Position(5, 5), new Life(50, 1), 1));
+
         }
 
         internal Map GetMapObject
