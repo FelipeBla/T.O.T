@@ -18,7 +18,7 @@ namespace TripOverTime.EngineNamespace
         bool _isMonster;
         bool _isPlayer;
         Map _context;
-        int _jump;
+        int _incrementation;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
@@ -42,7 +42,7 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
-            _jump = 1;
+            _incrementation = 1;
 
             if (_name == "CHECKPOINT")
             {
@@ -261,64 +261,43 @@ namespace TripOverTime.EngineNamespace
 
         internal void AttackAnimation()
         {
-
-            if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+            int nbrAction = 5;
+            string action = "attack";
+            if (_context.GetGame.GetPlayer.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
             {
-                if (_animTimer.ElapsedMilliseconds >= 100)
-                {
-                    if (_sprite.Texture == _playerTexture["attack1"])
-                    {
-                        _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["attack2"].Size);
-                        _sprite.Texture = _playerTexture["attack2"];
-                    }
-                    else if (_sprite.Texture == _playerTexture["attack2"])
-                    {
-                        _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["attack3"].Size);
-                        _sprite.Texture = _playerTexture["attack3"];
-                    }
-                    else if (_sprite.Texture == _playerTexture["attack3"])
-                    {
-                        _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["attack4"].Size);
-                        _sprite.Texture = _playerTexture["attack4"];
-                        _context.GetGame.GetPlayer.IsAttack = false;
-                    }
-                    else
-                    {
-                        _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["attack1"].Size);
-                        _sprite.Texture = _playerTexture["attack1"];
-                    }
 
-                    _animTimer.Restart();
+                string numberTexture = action + _incrementation;
+                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_incrementation + 1 == nbrAction)
+                {
+                    _context.GetGame.GetPlayer.IsAttack = false;
+                    _incrementation = 1;
                 }
+                else
+                {
+                    _incrementation++;
+                }
+                _animTimer.Restart();
+
             }
-            else //Left
+            else if (_animTimer.ElapsedMilliseconds >= 100) //left
             {
-                if (_animTimer.ElapsedMilliseconds >= 100)
+                string numberTexture = action + _incrementation;
+                _sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, -(int)_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_incrementation + 1 == nbrAction)
                 {
-                    if (_sprite.Texture == _playerTexture["attack1"])
-                    {
-                        _sprite.TextureRect = new IntRect((int)_playerTexture["attack2"].Size.X, 0, -(int)_playerTexture["attack2"].Size.X, (int)_playerTexture["attack2"].Size.Y);
-                        _sprite.Texture = _playerTexture["attack2"];
-                    }
-                    else if (_sprite.Texture == _playerTexture["attack2"])
-                    {
-                        _sprite.TextureRect = new IntRect((int)_playerTexture["attack3"].Size.X, 0, -(int)_playerTexture["attack3"].Size.X, (int)_playerTexture["attack3"].Size.Y);
-                        _sprite.Texture = _playerTexture["attack3"];
-                    }
-                    else if (_sprite.Texture == _playerTexture["attack3"])
-                    {
-                        _sprite.TextureRect = new IntRect((int)_playerTexture["attack4"].Size.X, 0, -(int)_playerTexture["attack4"].Size.X, (int)_playerTexture["attack4"].Size.Y);
-                        _sprite.Texture = _playerTexture["attack4"];
-                        _context.GetGame.GetPlayer.IsAttack = false;
-                    }
-                    else
-                    {
-                        _sprite.TextureRect = new IntRect((int)_playerTexture["attack1"].Size.X, 0, -(int)_playerTexture["attack1"].Size.X, (int)_playerTexture["attack1"].Size.Y);
-                        _sprite.Texture = _playerTexture["attack1"];
-                    }
-
-                    _animTimer.Restart();
+                    _context.GetGame.GetPlayer.IsAttack = false;
+                    _incrementation = 1;
                 }
+                else
+                {
+                    _incrementation++;
+                }
+                _animTimer.Restart();
+
+
             }
             
         }

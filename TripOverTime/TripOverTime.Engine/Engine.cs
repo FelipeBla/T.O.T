@@ -60,7 +60,6 @@ namespace TripOverTime.EngineNamespace
             // Attack
             if (_game.GetPlayer.IsAttack)
             {
-                Console.WriteLine("attack :" + _game.GetPlayer.IsAttack);
                 _game.GetPlayer.Attack();
             }
 
