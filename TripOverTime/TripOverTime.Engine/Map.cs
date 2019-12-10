@@ -10,19 +10,23 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         List<Sprite> _sprites;
         string _backgroundPath;
+        string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\hudHeart_full.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
+        List<Position> _checkpointPosition;
         Game _context;
 
         internal Map(Game context, string mapPath)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
+            if (context == null) throw new ArgumentNullException("Context null!");
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
+            _checkpointPosition = new List<Position>();
 
             GenerateMap();
         }
@@ -36,6 +40,9 @@ namespace TripOverTime.EngineNamespace
         /// BLOCKS
         /// id name imgPath
         /// BLOCKS
+        /// MONSTER
+        /// id name [x;y] hp imgDirPath
+        /// MONSTER
         /// MAP
         /// 
         /// MAP
@@ -61,11 +68,13 @@ namespace TripOverTime.EngineNamespace
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
-            foreach(string s in blocks)
+            foreach (string s in blocks)
             {
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
             }
+
+            
 
             // Get map
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
@@ -81,6 +90,28 @@ namespace TripOverTime.EngineNamespace
                 indexTemp++;
             }
         }
+
+        internal List<Monster> GenerateMonsters()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get monsters
+            // name x y hp
+            string[] strmonsters = StringBetweenString(text, "MONSTER", "MONSTEREND").Split("\n");
+            List<Monster> monsters = new List<Monster>();
+            foreach (string s in strmonsters)
+            {
+                string[] str = s.Split(" ");
+
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToInt32(str[4])));
+            }
+
+            return monsters;
+        } 
 
         private Sprite RetrieveSpriteWithId(string strId)
         {
@@ -119,7 +150,28 @@ namespace TripOverTime.EngineNamespace
         {
             get => _backgroundPath;
         }
+        internal string GetLifeBar
+        {
+            get => _lifebarPath;
+        }
 
+        internal Position GetEndPosition
+        {
+            get
+            {
+                foreach(KeyValuePair<Position, Sprite> s in _map)
+                {
+                    if (s.Value.IsEnd) return s.Key;
+                }
+                
+                throw new InvalidOperationException("END NOT FOUND!");
+            }
+        }
+
+        internal List<Position> GetCheckpointPosition
+        {
+            get => _checkpointPosition;
+        }
         internal Game GetGame
         {
             get => _context;

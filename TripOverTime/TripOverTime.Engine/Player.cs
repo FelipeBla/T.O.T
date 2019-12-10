@@ -6,26 +6,27 @@ namespace TripOverTime.EngineNamespace
 {
     class Player
     {
-        internal const string PLAYER_ID = "PLAYER420";
-        internal float pw;
-        internal float ph;
-        internal const float JUMPING_SPEED = 0.1f;
-        internal const float GRAVITY_SPEED = 0.1f;
-        internal const float JUMPING_LIMIT = 1.5f;
-        internal const float PPLAYER_MOVE = 0.15f;
+        const string PLAYER_ID = "PLAYER420";
+        float pw;
+        float ph;
+        const float JUMPING_SPEED = 0.1f;
+        const float GRAVITY_SPEED = 0.1f;
+        const float JUMPING_LIMIT = 1.5f;
+        const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;
+        readonly Checkpoint _checkpoint;
         readonly String _name;
         Position _position; // Graphical position
         Position _realPosition;
         Life _life;
-        int _attack;
+        ushort _attack;
         Sprite _sprite;
         bool _isJumping;
         Position _origin;
         string _orientation;
 
-        internal Player(Game context, String name, Position position, Life life, int attack, string imgPath)
+        internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
             _context = context;
             _name = name;
@@ -83,6 +84,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveRight(float width)
         {
+            
             // ORIENTATION
             if (_orientation != "right")
             {
@@ -119,6 +121,7 @@ namespace TripOverTime.EngineNamespace
                     }
                 }
             }
+            if (_context.GetMapObject.GetCheckpointPosition.Contains(_context.GetPlayer.Position) == true) _checkpoint.LastActivatedCheckpoint = _context.GetPlayer.Position;
 
             return moveTheMapOf;
         }
@@ -195,9 +198,29 @@ namespace TripOverTime.EngineNamespace
             set { _realPosition = value; }
         }
 
+        internal bool IsOnTheGround
+        {
+            get
+            {
+                Sprite sToPositive = null, sToNegative = null;
+                _context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         internal string Orientation
         {
             get => _orientation;
+        }
+
+        internal ushort Attack
+        {
+            get => _attack;
         }
         internal Sprite GetPlayerSprite
         {
