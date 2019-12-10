@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SFML;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -10,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         Stopwatch _timer;
         Checkpoint _checkpoint;
 
+        SFML.Graphics.RenderWindow _window;
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
         Settings _settings;
@@ -17,6 +21,7 @@ namespace TripOverTime.EngineNamespace
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
+            _window = window;
             _menu = new Menu(window);
             _settings = new Settings(window);
             _gui = new GUI(this, window);
@@ -87,6 +92,52 @@ namespace TripOverTime.EngineNamespace
             // Dead return -1;
 
             return 1;
+        }
+
+        public void WinMenu()
+        {
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("YOU WIN !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 64));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 48));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+            lines.Add(new Text("Press ENTER to QUIT", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width)/2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool quit = false;
+
+            while(!quit)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    quit = true;
+                System.Threading.Thread.Sleep(1);
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(_window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
         }
 
         public Menu GetMenu

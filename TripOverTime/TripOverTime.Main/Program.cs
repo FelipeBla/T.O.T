@@ -37,17 +37,23 @@ namespace TripOverTime.Main
             //Menu
             while (!engine.Close) //GAMELOOP MASTER
             {
-                engine = new Engine(window); // Redemarre le jeu
+                System.Threading.Thread.Sleep(200); // Evite certains bug
+                //engine = new Engine(window); // Redemarre le jeu
                 short choose = -2;
                 short chooseSettings = -2;
                 short chooseResolution = -2;
                 short chooseFPS = -2;
                 short chooseKB = -2;
                 engine.GetMenu.StartMainMenu();
+                spGame.Start();
 
                 do
                 {
-                    choose = engine.GetMenu.RunMainMenu();
+                    if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                    {
+                        choose = engine.GetMenu.RunMainMenu();
+                        spGame.Restart();
+                    }
                 } while (choose == -2);
 
 
@@ -60,7 +66,6 @@ namespace TripOverTime.Main
                     short result = 1;
                     // GameLoop
                     spGui.Start();
-                    spGame.Start();
                     while (result == 1)
                     {
                         if (spGame.ElapsedMilliseconds >= 1000 / tps)
@@ -81,7 +86,7 @@ namespace TripOverTime.Main
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-
+                        engine.WinMenu();
                     }
                     else if (result == -1)
                     {
