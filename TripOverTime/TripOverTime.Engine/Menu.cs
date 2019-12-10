@@ -42,9 +42,9 @@ namespace TripOverTime.EngineNamespace
             _lines[1] = new Text("Settings", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("Quit", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
 
             _window.Display();
         }
@@ -91,7 +91,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }

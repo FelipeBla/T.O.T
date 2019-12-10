@@ -64,8 +64,11 @@ namespace TripOverTime.EngineNamespace
                 _ismoving = true;
 
                 _sprite.MonsterMoveAnimation();
+           
             }
+       
         }
+
 
         internal void MonsterDead()
         {

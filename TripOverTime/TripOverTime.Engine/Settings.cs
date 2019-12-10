@@ -187,7 +187,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black; //meilleure visibilité
                 }
                 _window.Draw(_lines[i]);
             }
@@ -254,7 +254,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }
@@ -321,7 +321,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }
@@ -387,7 +387,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }
