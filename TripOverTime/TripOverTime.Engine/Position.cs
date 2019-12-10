@@ -30,5 +30,19 @@ namespace TripOverTime.EngineNamespace
             get => _y;
             internal set => _y = value;
         }
+
+
+        // For TryGetValue
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Position)) return false;
+            return ((Position)obj).X == this.X && ((Position)obj).Y == this.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.X + this.Y).GetHashCode();
+        }
+
     }
 }

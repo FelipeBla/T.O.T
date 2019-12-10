@@ -1,29 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
     public class Game
     {
+        Engine _context;
         Player _player;
         List<Monster> _monsters;
         Map _map;
+        Stopwatch _timer;
 
-        internal Game()
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition)
         {
-        }
-
-        public void StartGame(string mapPath)
-        {
-            _player = new Player(this, "player", new Position(), new Life(), 1);
-            _monsters = new List<Monster>();
-            _map = new Map(mapPath);
+            _context = context;
+            _map = new Map(this, mapPath);
+            _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
+            _monsters = _map.GenerateMonsters();
+            _timer = new Stopwatch();
+            _timer.Start();
         }
 
         internal Map GetMapObject
         {
             get => _map;
+        }
+        internal Player GetPlayer
+        {
+            get => _player;
+        }
+        internal Engine GetEngine
+        {
+            get => _context;
+        }
+
+        internal long TimeElapsed
+        {
+            get => _timer.ElapsedMilliseconds;
+        }
+        internal List<Monster> GetMonsters
+        {
+            get => _monsters;
+            set => _monsters = value;
         }
     }
 }
