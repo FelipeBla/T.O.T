@@ -107,7 +107,7 @@ namespace TripOverTime.EngineNamespace
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 
-            background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
             List<Text> lines = new List<Text>();
