@@ -9,7 +9,7 @@ BLOCKS
 A AIR ..\..\..\..\Assets\air.png false
 G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
 1 DIRT ..\..\..\..\Assets\Ground\Snow\snowCenter.png true
-2 TRAP ..\..\..\..\Assets\Tiles\spikes.png true
+2 TRAP ..\..\..\..\Assets\Tiles\spikes.png true DANGEROUS
 3 END ..\..\..\..\Assets\Items\flagGreen_down.png false
 BLOCKSEND
 MONSTER

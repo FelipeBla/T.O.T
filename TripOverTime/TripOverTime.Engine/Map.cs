@@ -68,13 +68,21 @@ namespace TripOverTime.EngineNamespace
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
-            foreach (string s in blocks)
+            for (int i = 0; i < blocks.Length; i++)
             {
+                string s = (string)blocks[i];
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                if (str.Length > 4)
+                {
+                    //Console.WriteLine(str[4]);
+                    //if (str[4] == "DANGEROUS")
+                    //{
+                        _sprites[i].IsDangerous = true;
+                        Console.WriteLine(str[1] + " IS DANGEROUS");
+                    //}
+                }
             }
-
-            
 
             // Get map
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
