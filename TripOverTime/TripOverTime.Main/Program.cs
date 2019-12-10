@@ -10,7 +10,12 @@ namespace TripOverTime.Main
 {
     class Program
     {
-        
+        private static readonly EventHandler<KeyEventArgs> OnKeyPressedV;
+        SFML.Window.Keyboard.Key _jumpButton;
+        SFML.Window.Keyboard.Key _rightButton;
+        SFML.Window.Keyboard.Key _leftButton;
+        SFML.Window.Keyboard.Key _attackButton;
+ 
 
         static void Main(string[] args)
         {
@@ -26,6 +31,7 @@ namespace TripOverTime.Main
             Stopwatch spGame = new Stopwatch();
             float fps = Settings.NbFPS;
             float tps = 60;
+            int _jumpButton = 5;
 
             //Window & Engine start
             RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
@@ -175,30 +181,44 @@ namespace TripOverTime.Main
                     {
                         choose = 1;
                         chooseSettings = 0;
+                        int i = 1;
+                        bool IsPressed = false;
+                        int NbOfKeys = 35;
+
                         engine.GetSettings.StartSettingsKB();
                         do
                         {
                             chooseKB = engine.GetSettings.RunSettingsKB();
                         }
                         while (chooseKB == -3);
-                        if (chooseKB == 0) //30
+                        if (chooseKB == 0) //Jump
                         {
-                            Settings.NbFPS = 30;
+                            while(IsPressed = false)
+                            {
+                                while (i < NbOfKeys)
+                                {
+                                    if (Keyboard.IsKeyPressed(list[i]))
+                                    {
+                                        _jumpAction = list[i];
+                                    }
+                                    i++;
+                              }
+                            }
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
-                        else if (chooseKB == 1) //60
+                        else if (chooseKB == 1) //Left
                         {
-                            Settings.NbFPS = 60;
                             window.Close();
                             engine.Close = true;
+                            RunAgain();
                         }
-                        else if (chooseKB == -1) //120
+                        else if (chooseKB == -1) //Right
                         {
-                            Settings.NbFPS = 120;
                             window.Close();
                             engine.Close = true;
+                            RunAgain();
                         }
                         else if (chooseKB == -2)//back to main menu
                         {
@@ -218,6 +238,13 @@ namespace TripOverTime.Main
             }
 
             Console.WriteLine("End Game");
+
+        }
+
+        public void OnKeyPressed(object sender, SFML.Window.KeyEventArgs e)
+        {
+            _jumpButton = e.Code;
+            Console.WriteLine("wesh c bon");
         }
 
     }

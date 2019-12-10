@@ -26,6 +26,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
 
+
         internal Settings(RenderWindow window)
         {
             if (window == null) throw new ArgumentException("Window is null");
@@ -420,6 +421,7 @@ namespace TripOverTime.EngineNamespace
             get { return _NbFPS; }
             set { _NbFPS = value; }
         }
+
     }
 
 }
