@@ -185,11 +185,11 @@ namespace TripOverTime.Main
                         chooseSettings = 0;
                         int i = 1;
                         bool IsPressed = false;
-                        int NbOfKeys = 2;
+                        int NbOfKeys = 34;
 
                         Dictionary<int, SFML.Window.Keyboard.Key> _keyList = new Dictionary<int, SFML.Window.Keyboard.Key>();
                         // add key list to the dictionnary
-                        _keyList.Add(1, Keyboard.Key.Enter);
+                        _keyList.Add(1, Keyboard.Key.Numpad0);
                         _keyList.Add(2, Keyboard.Key.A);
                         _keyList.Add(3, Keyboard.Key.B);
                         _keyList.Add(4, Keyboard.Key.C);
@@ -234,15 +234,16 @@ namespace TripOverTime.Main
                         while (chooseKB == -3);
                         if (chooseKB == 0) //Jump
                         {
-                            while(IsPressed == false)
+                            IsPressed = false;
+                            while (IsPressed == false)
                             {
                                 i = 1;
                                 while (i < NbOfKeys)
                                 {
                                     if (Keyboard.IsKeyPressed(_keyList[i]))
                                     {
-                                        _jumpButton = _keyList[i];
-                                        if(_jumpButton == _keyList[i])
+                                        GUI.JumpAction = _keyList[i];
+                                        if(GUI.JumpAction == _keyList[i])
                                         {
                                             IsPressed = true;
                                         }
@@ -256,12 +257,44 @@ namespace TripOverTime.Main
                         }
                         else if (chooseKB == 1) //Left
                         {
+                            while (IsPressed == false)
+                            {
+                                i = 1;
+                                while (i < NbOfKeys)
+                                {
+                                    if (Keyboard.IsKeyPressed(_keyList[i]))
+                                    {
+                                        GUI.LeftAction = _keyList[i];
+                                        if (GUI.LeftAction == _keyList[i])
+                                        {
+                                            IsPressed = true;
+                                        }
+                                    }
+                                    i++;
+                                }
+                            }
                             window.Close();
                             engine.Close = true;
                             RunAgain();
                         }
                         else if (chooseKB == -1) //Right
                         {
+                            while (IsPressed == false)
+                            {
+                                i = 1;
+                                while (i < NbOfKeys)
+                                {
+                                    if (Keyboard.IsKeyPressed(_keyList[i]))
+                                    {
+                                        GUI.RightAction = _keyList[i];
+                                        if (GUI.RightAction == _keyList[i])
+                                        {
+                                            IsPressed = true;
+                                        }
+                                    }
+                                    i++;
+                                }
+                            }
                             window.Close();
                             engine.Close = true;
                             RunAgain();
