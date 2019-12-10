@@ -34,7 +34,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\blue_grass.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines

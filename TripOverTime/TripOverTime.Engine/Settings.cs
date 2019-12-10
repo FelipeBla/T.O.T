@@ -12,6 +12,9 @@ namespace TripOverTime.EngineNamespace
     {
         const ushort MAX_LINES = 4;
         const ushort MAX_LINES_KB = 4;
+        private static uint _XResolution = 800;
+        private static uint _YResolution = 600;
+        private static uint _NbFPS = 60;
 
         RenderWindow _window;
         ushort _selected;
@@ -22,6 +25,7 @@ namespace TripOverTime.EngineNamespace
         Text[] _linesKB;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
+
 
         internal Settings(RenderWindow window)
         {
@@ -44,7 +48,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -68,7 +72,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -92,7 +96,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -116,7 +120,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -400,6 +404,22 @@ namespace TripOverTime.EngineNamespace
             }
 
             return result;
+        }
+
+        public static uint XResolution
+        {
+            get { return _XResolution; }
+            set { _XResolution = value; }
+        }
+        public static uint YResolution
+        {
+            get { return _YResolution; }
+            set { _YResolution = value; }
+        }
+        public static uint NbFPS
+        {
+            get { return _NbFPS; }
+            set { _NbFPS = value; }
         }
 
     }

@@ -17,19 +17,14 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _hpBar3;
         private SFML.System.Vector2f _hpBarPosition;
-        SFML.Window.Keyboard.Key _LeftAction;
-        SFML.Window.Keyboard.Key _RightAction;
-        SFML.Window.Keyboard.Key _JumpAction;
-        SFML.Window.Keyboard.Key _AttackAction;
+        static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
+        static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
+        static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
+        static SFML.Window.Keyboard.Key _AttackAction = Keyboard.Key.Space;
 
 
         internal GUI(Engine context, RenderWindow window)
         {
-            _AttackAction = Keyboard.Key.Space;
-            _JumpAction = Keyboard.Key.Up;
-            _LeftAction = Keyboard.Key.Left;
-            _RightAction = Keyboard.Key.Right;
-
             _context = context;
             _window = window;
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
@@ -102,7 +97,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             // Set lifeBar
@@ -188,25 +183,25 @@ namespace TripOverTime.EngineNamespace
                 }
             }
         }
-        internal SFML.Window.Keyboard.Key RightAction
+        public static SFML.Window.Keyboard.Key RightAction
         {
             get { return _RightAction; }
             set { _RightAction = value; }
         }
 
-        internal SFML.Window.Keyboard.Key LeftAction
+        public static SFML.Window.Keyboard.Key LeftAction
         {
             get { return _LeftAction; }
             set { _LeftAction = value; }
         }
 
-        internal SFML.Window.Keyboard.Key JumpAction
+        public static SFML.Window.Keyboard.Key JumpAction
         {
             get { return _JumpAction; }
             set { _JumpAction = value; }
         }
 
-        internal SFML.Window.Keyboard.Key AttackAction
+        internal static SFML.Window.Keyboard.Key AttackAction
         {
             get { return _AttackAction; }
             set { _AttackAction = value; }
