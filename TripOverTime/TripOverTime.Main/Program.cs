@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using TripOverTime.EngineNamespace;
@@ -11,11 +12,13 @@ namespace TripOverTime.Main
     class Program
     {
         private static readonly EventHandler<KeyEventArgs> OnKeyPressedV;
-        SFML.Window.Keyboard.Key _jumpButton;
-        SFML.Window.Keyboard.Key _rightButton;
-        SFML.Window.Keyboard.Key _leftButton;
-        SFML.Window.Keyboard.Key _attackButton;
- 
+        static Dictionary<int, SFML.Window.Keyboard.Key> _keyList;
+        static SFML.Window.Keyboard.Key _jumpButton;
+        static SFML.Window.Keyboard.Key _rightButton;
+        static SFML.Window.Keyboard.Key _leftButton;
+        static SFML.Window.Keyboard.Key _attackButton;
+
+
 
         static void Main(string[] args)
         {
@@ -31,7 +34,6 @@ namespace TripOverTime.Main
             Stopwatch spGame = new Stopwatch();
             float fps = Settings.NbFPS;
             float tps = 60;
-            int _jumpButton = 5;
 
             //Window & Engine start
             RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
@@ -183,7 +185,46 @@ namespace TripOverTime.Main
                         chooseSettings = 0;
                         int i = 1;
                         bool IsPressed = false;
-                        int NbOfKeys = 35;
+                        int NbOfKeys = 2;
+
+                        Dictionary<int, SFML.Window.Keyboard.Key> _keyList = new Dictionary<int, SFML.Window.Keyboard.Key>();
+                        // add key list to the dictionnary
+                        _keyList.Add(1, Keyboard.Key.Enter);
+                        _keyList.Add(2, Keyboard.Key.A);
+                        _keyList.Add(3, Keyboard.Key.B);
+                        _keyList.Add(4, Keyboard.Key.C);
+                        _keyList.Add(5, Keyboard.Key.D);
+                        _keyList.Add(6, Keyboard.Key.E);
+                        _keyList.Add(7, Keyboard.Key.F);
+                        _keyList.Add(8, Keyboard.Key.G);
+                        _keyList.Add(9, Keyboard.Key.H);
+                        _keyList.Add(10, Keyboard.Key.I);
+                        _keyList.Add(11, Keyboard.Key.J);
+                        _keyList.Add(12, Keyboard.Key.K);
+                        _keyList.Add(13, Keyboard.Key.L);
+                        _keyList.Add(14, Keyboard.Key.M);
+                        _keyList.Add(15, Keyboard.Key.N);
+                        _keyList.Add(16, Keyboard.Key.O);
+                        _keyList.Add(17, Keyboard.Key.P);
+                        _keyList.Add(18, Keyboard.Key.Q);
+                        _keyList.Add(19, Keyboard.Key.R);
+                        _keyList.Add(20, Keyboard.Key.S);
+                        _keyList.Add(21, Keyboard.Key.T);
+                        _keyList.Add(22, Keyboard.Key.U);
+                        _keyList.Add(23, Keyboard.Key.V);
+                        _keyList.Add(24, Keyboard.Key.W);
+                        _keyList.Add(25, Keyboard.Key.X);
+                        _keyList.Add(26, Keyboard.Key.Y);
+                        _keyList.Add(27, Keyboard.Key.Z);
+                        _keyList.Add(28, Keyboard.Key.Left);
+                        _keyList.Add(29, Keyboard.Key.Right);
+                        _keyList.Add(30, Keyboard.Key.Up);
+                        _keyList.Add(31, Keyboard.Key.Down);
+                        _keyList.Add(32, Keyboard.Key.Num0);
+                        _keyList.Add(33, Keyboard.Key.Num1);
+                        _keyList.Add(34, Keyboard.Key.Num2);
+
+
 
                         engine.GetSettings.StartSettingsKB();
                         do
@@ -193,16 +234,21 @@ namespace TripOverTime.Main
                         while (chooseKB == -3);
                         if (chooseKB == 0) //Jump
                         {
-                            while(IsPressed = false)
+                            while(IsPressed == false)
                             {
+                                i = 1;
                                 while (i < NbOfKeys)
                                 {
-                                    if (Keyboard.IsKeyPressed(list[i]))
+                                    if (Keyboard.IsKeyPressed(_keyList[i]))
                                     {
-                                        _jumpAction = list[i];
+                                        _jumpButton = _keyList[i];
+                                        if(_jumpButton == _keyList[i])
+                                        {
+                                            IsPressed = true;
+                                        }
                                     }
                                     i++;
-                              }
+                                }
                             }
                             window.Close();
                             engine.Close = true;
