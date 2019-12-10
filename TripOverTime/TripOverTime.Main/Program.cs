@@ -37,12 +37,14 @@ namespace TripOverTime.Main
             //Menu
             while (!engine.Close) //GAMELOOP MASTER
             {
+                engine = new Engine(window); // Redemarre le jeu
                 short choose = -2;
                 short chooseSettings = -2;
                 short chooseResolution = -2;
                 short chooseFPS = -2;
                 short chooseKB = -2;
                 engine.GetMenu.StartMainMenu();
+
                 do
                 {
                     choose = engine.GetMenu.RunMainMenu();
@@ -79,6 +81,7 @@ namespace TripOverTime.Main
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
+
                     }
                     else if (result == -1)
                     {
