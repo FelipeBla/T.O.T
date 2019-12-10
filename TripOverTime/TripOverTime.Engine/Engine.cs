@@ -58,7 +58,15 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 _game.GetPlayer.IsJumping = false;
-                _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                {
+                    //DIE
+                    return -1;
+                }
+                else
+                {
+                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                }
             }
 
             //Gravity 4 monsters

@@ -41,7 +41,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
-            Console.WriteLine("Frog position: [ " + _position.X + " ; " + _position.Y + " ]");
+            //Console.WriteLine("Frog position: [ " + _position.X + " ; " + _position.Y + " ]");
             if (!_ismoving)
             {
                 Sprite s = null;

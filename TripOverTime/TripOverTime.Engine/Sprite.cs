@@ -13,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         string _name;
         string _imgPath;
         bool _isSolid;
+        bool _isDangerous;
         bool _isCheckpoint;
         bool _isEnd;
         bool _isMonster;
@@ -251,6 +252,12 @@ namespace TripOverTime.EngineNamespace
         internal string Id
         {
             get => _id;
+        }
+
+        internal bool IsDangerous
+        {
+            get => _isDangerous;
+            set => _isDangerous = value;
         }
         
     }
