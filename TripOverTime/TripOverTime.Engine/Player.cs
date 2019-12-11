@@ -12,7 +12,7 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_SPEED = 0.06f;
         const float GRAVITY_SPEED = 0.06f;
         const float JUMPING_LIMIT = 1.1f;
-        const float PPLAYER_MOVE = 0.15f;
+        const float PPLAYER_MOVE = 0.10f;
 
         readonly Game _context;
         readonly Checkpoint _checkpoint;
@@ -41,8 +41,8 @@ namespace TripOverTime.EngineNamespace
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             _orientation = "right";
 
-            pw = _sprite.GetSprite.TextureRect.Width;
-            ph = _sprite.GetSprite.TextureRect.Height;
+            pw = 128;
+            ph = 128;
 
             _monsterKillName = "void";
         }
@@ -103,7 +103,6 @@ namespace TripOverTime.EngineNamespace
             if (_orientation != "right")
             {
                 //Sprite to right
-                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect(0, 0, (int)PLAYER_WIDTH, (int)PLAYER_HEIGHT);
                 _orientation = "right";
             }
 
@@ -146,7 +145,6 @@ namespace TripOverTime.EngineNamespace
             if(_orientation != "left")
             {
                 //Sprite to left
-                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect((int)PLAYER_WIDTH, 0, (int)-PLAYER_WIDTH, (int)PLAYER_HEIGHT);
                 _orientation = "left";
             }
 
