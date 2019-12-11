@@ -27,7 +27,7 @@ namespace TripOverTime.EngineNamespace
         {
             get => _map;
         }
-        internal Player GetPlayer
+        public Player GetPlayer
         {
             get => _player;
         }

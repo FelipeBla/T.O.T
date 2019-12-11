@@ -98,6 +98,22 @@ namespace TripOverTime.Main
                     {
                         //DIE
                         Console.WriteLine("YOU DIE!");
+
+                        if (engine.GetGame.GetPlayer.KilledBy == "Trap")
+                        {
+                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                            {
+                                engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
+                                if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                                {
+                                    //GUI
+                                    engine.GetGUI.ShowMap();
+                                    spGui.Restart();
+                                }
+                            }
+                        }
+
+                        engine.DieMenu();
                     }
                     else
                     {

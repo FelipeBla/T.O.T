@@ -61,6 +61,7 @@ namespace TripOverTime.EngineNamespace
                 if (sToPositive.IsDangerous || sToNegative.IsDangerous)
                 {
                     //DIE
+                    _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
                 else
@@ -76,13 +77,13 @@ namespace TripOverTime.EngineNamespace
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
                 if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
-                    //Block under player isn't solid
+                    //Block under monster isn't solid
                     m.Gravity();
                 }
                 else
                 {
                     m.IsMoving = false;
-                    m.RoundY(); // Don't stuck player in ground
+                    m.RoundY(); // Don't stuck monster in ground
                 }
             }
 
@@ -133,6 +134,52 @@ namespace TripOverTime.EngineNamespace
             bool quit = false;
 
             while(!quit)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    quit = true;
+                System.Threading.Thread.Sleep(1);
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(_window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
+        }
+
+        public void DieMenu()
+        {
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("YOU DIIIIE !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 64));
+            lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 48));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+            lines.Add(new Text("Press ENTER to QUIT", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool quit = false;
+
+            while (!quit)
             {
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                     quit = true;

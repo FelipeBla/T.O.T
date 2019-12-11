@@ -14,9 +14,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         private SFML.System.Vector2f _moveTheMapOf;
         SFML.Graphics.Sprite _hpBar;
-        SFML.Graphics.Sprite _hpBar2;
-        SFML.Graphics.Sprite _hpBar3;
-        private SFML.System.Vector2f _hpBarPosition;
+        Texture _lifebarTexture;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
         static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
         static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
@@ -31,7 +29,6 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
             _hpBar = new SFML.Graphics.Sprite();
-            _hpBarPosition = new SFML.System.Vector2f(0, 0);
         }
 
 
@@ -58,16 +55,13 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
-            _window.Draw(_hpBar2);
-            _window.Draw(_hpBar3);
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 -65);
-                //Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
@@ -100,29 +94,13 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             // Set lifeBar
-            Texture lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
-            if (lifebarTexture == null) throw new Exception("Texture null!");
+            _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
+            if (_lifebarTexture == null) throw new Exception("Texture null!");
 
-            _hpBar = new SFML.Graphics.Sprite(lifebarTexture);
+            _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
             if (_hpBar == null) throw new Exception("Sprite null!");
-
-            _hpBar.Position = new SFML.System.Vector2f(0, 0);
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X/100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
-
-            //lifebar 2
-            _hpBar2 = new SFML.Graphics.Sprite(lifebarTexture);
-            if (_hpBar2 == null) throw new Exception("Sprite null!");
-
-            _hpBar2.Position = new SFML.System.Vector2f(100, 0);
-            _window.Draw(_hpBar2);
-
-            //lifebar 3
-            _hpBar3 = new SFML.Graphics.Sprite(lifebarTexture);
-            if (_hpBar3 == null) throw new Exception("Sprite null!");
-
-            _hpBar3.Position = new SFML.System.Vector2f(200, 0);
-            _window.Draw(_hpBar3);
-
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
@@ -136,19 +114,6 @@ namespace TripOverTime.EngineNamespace
 
         internal void Events()
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) // ATTACK
-            {
-                _context.GetGame.GetPlayer.IsAttack = true;
-                _context.GetGame.GetPlayer.Attack();
-                foreach (Monster m in _context.GetGame.GetMonsters)
-                {
-                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
-                    {
-                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
-                    }
-                }
-            }
-
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
                 //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
             }
@@ -166,8 +131,24 @@ namespace TripOverTime.EngineNamespace
             }
 
             if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
-            
+            {
+                _context.GetGame.GetPlayer.IsAttack = true;
+                _context.GetGame.GetPlayer.Attack();
+                foreach (Monster m in _context.GetGame.GetMonsters)
+                {
+                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
+                    {
+                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
+                    }
+                }
+            }
 
+            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !Keyboard.IsKeyPressed(_AttackAction))
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
+            }
+
+            // RIEN A FAIRE ICI
             foreach (Monster m in _context.GetGame.GetMonsters)
             {
                 if (!m.isAlive)

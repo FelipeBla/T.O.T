@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    class Player
+    public class Player
     {
         const string PLAYER_ID = "PLAYER420";
         float pw;
@@ -12,7 +12,7 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_SPEED = 0.06f;
         const float GRAVITY_SPEED = 0.06f;
         const float JUMPING_LIMIT = 1.1f;
-        const float PPLAYER_MOVE = 0.15f;
+        const float PPLAYER_MOVE = 0.10f;
 
         readonly Game _context;
         readonly Checkpoint _checkpoint;
@@ -26,6 +26,7 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         bool _isAttack;
+        String _monsterKillName;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -40,8 +41,10 @@ namespace TripOverTime.EngineNamespace
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             _orientation = "right";
 
-            pw = _sprite.GetSprite.TextureRect.Width;
-            ph = _sprite.GetSprite.TextureRect.Height;
+            pw = 128;
+            ph = 128;
+
+            _monsterKillName = "void";
         }
 
         internal void Jump()
@@ -100,7 +103,6 @@ namespace TripOverTime.EngineNamespace
             if (_orientation != "right")
             {
                 //Sprite to right
-                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect(0, 0, (int)PLAYER_WIDTH, (int)PLAYER_HEIGHT);
                 _orientation = "right";
             }
 
@@ -143,7 +145,6 @@ namespace TripOverTime.EngineNamespace
             if(_orientation != "left")
             {
                 //Sprite to left
-                _sprite.GetSprite.TextureRect = new SFML.Graphics.IntRect((int)PLAYER_WIDTH, 0, (int)-PLAYER_WIDTH, (int)PLAYER_HEIGHT);
                 _orientation = "left";
             }
 
@@ -179,6 +180,11 @@ namespace TripOverTime.EngineNamespace
             return moveTheMapOf;
         }
 
+        public string KilledBy
+        {
+            get => _monsterKillName;
+            set => _monsterKillName = value;
+        }
         internal bool IsJumping
         {
             get => _isJumping;
@@ -196,7 +202,7 @@ namespace TripOverTime.EngineNamespace
             get => _life.CurrentPoint > 0;
         }
 
-        internal Life GetLife
+        public Life GetLife
         {
             get => _life;
         }
