@@ -4,7 +4,6 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    //
     public class Life
     {
         readonly Game _context;

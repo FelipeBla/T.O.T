@@ -66,7 +66,7 @@ namespace TripOverTime.Main
                 if (choose == 0) //Lauch GAME
                 {
                     // Start a game
-                    engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Pink"); //map, player sprite
+                    engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Knight\AllViking"); //map, player sprite
                     engine.GetGUI.InitGame();
 
                     short result = 1;

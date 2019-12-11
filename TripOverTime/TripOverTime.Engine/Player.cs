@@ -9,9 +9,9 @@ namespace TripOverTime.EngineNamespace
         const string PLAYER_ID = "PLAYER420";
         float pw;
         float ph;
-        const float JUMPING_SPEED = 0.1f;
-        const float GRAVITY_SPEED = 0.1f;
-        const float JUMPING_LIMIT = 1.5f;
+        const float JUMPING_SPEED = 0.06f;
+        const float GRAVITY_SPEED = 0.06f;
+        const float JUMPING_LIMIT = 1.1f;
         const float PPLAYER_MOVE = 0.15f;
 
         readonly Game _context;
@@ -25,6 +25,7 @@ namespace TripOverTime.EngineNamespace
         bool _isJumping;
         Position _origin;
         string _orientation;
+        bool _isAttack;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -35,6 +36,7 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _attack = attack;
             _isJumping = false;
+            _isAttack = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             _orientation = "right";
 
@@ -61,12 +63,21 @@ namespace TripOverTime.EngineNamespace
             {
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
+                _sprite.JumpAnimation();
             }
             else // Fall
             {
                 _origin = null;
                 _realPosition.Y -= GRAVITY_SPEED;
                 _position.Y -= GRAVITY_SPEED;
+            }
+        }
+
+        internal void Attack()
+        {
+            if (_isAttack)
+            {
+                _sprite.AttackAnimation();
             }
         }
 
@@ -173,6 +184,13 @@ namespace TripOverTime.EngineNamespace
             get => _isJumping;
             set => _isJumping = value;
         }
+
+        internal bool IsAttack
+        {
+            get => _isAttack;
+            set => _isAttack = value;
+        }
+
         internal bool IsAlive
         {
             get => _life.CurrentPoint > 0;
@@ -218,7 +236,7 @@ namespace TripOverTime.EngineNamespace
             get => _orientation;
         }
 
-        internal ushort Attack
+        internal ushort GetAttack
         {
             get => _attack;
         }
