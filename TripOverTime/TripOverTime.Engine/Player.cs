@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    class Player
+    public class Player
     {
         const string PLAYER_ID = "PLAYER420";
         float pw;
@@ -182,7 +182,7 @@ namespace TripOverTime.EngineNamespace
             return moveTheMapOf;
         }
 
-        internal string KilledBy
+        public string KilledBy
         {
             get => _monsterKillName;
             set => _monsterKillName = value;
@@ -204,7 +204,7 @@ namespace TripOverTime.EngineNamespace
             get => _life.CurrentPoint > 0;
         }
 
-        internal Life GetLife
+        public Life GetLife
         {
             get => _life;
         }
