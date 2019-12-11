@@ -260,8 +260,9 @@ namespace TripOverTime.EngineNamespace
             {
 
                 string numberTexture = action + _incrementationAttack;
-                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
                 _sprite.Texture = _playerTexture[numberTexture];
+                _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
                 if (_incrementationAttack + 1 == nbrAction)
                 {
                     _context.GetGame.GetPlayer.IsAttack = false;
@@ -277,8 +278,9 @@ namespace TripOverTime.EngineNamespace
             else if (_animTimer.ElapsedMilliseconds >= 100) //left
             {
                 string numberTexture = action + _incrementationAttack;
-                _sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, -(int)_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
                 _sprite.Texture = _playerTexture[numberTexture];
+                _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
                 if (_incrementationAttack + 1 == nbrAction)
                 {
                     _context.GetGame.GetPlayer.IsAttack = false;

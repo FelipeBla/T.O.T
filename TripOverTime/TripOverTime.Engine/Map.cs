@@ -115,7 +115,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToInt32(str[4])));
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToInt32(str[4]), float.Parse(str[5]) ));
             }
 
             return monsters;

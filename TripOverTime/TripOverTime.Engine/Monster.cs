@@ -9,7 +9,6 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_SPEED = 0.1f;
         const float GRAVITY_SPEED = 0.1f;
         const float JUMPING_LIMIT = 1.5f;
-        const float MONSTER_MOVE = 0.10f;
         float pw;
         float ph;
 
@@ -24,8 +23,9 @@ namespace TripOverTime.EngineNamespace
         bool _ismoving;
         Position _origin;
         string _orientation;
+        float _monsterMove;
 
-        internal Monster(Game context, String name, Position position, Life life, int attack)
+        internal Monster(Game context, String name, Position position, Life life, int attack, float monsterMove)
         {
             _context = context;
             _name = name;
@@ -36,7 +36,7 @@ namespace TripOverTime.EngineNamespace
             _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, false, true);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
-
+            _monsterMove = monsterMove;
         }
 
         internal void MonsterMove()
@@ -49,16 +49,16 @@ namespace TripOverTime.EngineNamespace
                 _origin = new Position(_position.X, _position.Y);
                 if (_orientation == "left")
                 {
-                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - MONSTER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         if (!s.IsSolid)
-                            _position.X -= MONSTER_MOVE;
+                            _position.X -= _monsterMove;
                 }
                 else
                 {
-                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + MONSTER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                     {
                         if (!s.IsSolid)
-                            _position.X += MONSTER_MOVE;
+                            _position.X += _monsterMove;
                     }
                 }
                 _ismoving = true;
