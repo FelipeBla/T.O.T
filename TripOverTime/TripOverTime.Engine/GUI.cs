@@ -155,25 +155,25 @@ namespace TripOverTime.EngineNamespace
             }
 
         }
-        public static SFML.Window.Keyboard.Key RightAction
+        public SFML.Window.Keyboard.Key RightAction
         {
             get { return _RightAction; }
             set { _RightAction = value; }
         }
 
-        public static SFML.Window.Keyboard.Key LeftAction
+        public SFML.Window.Keyboard.Key LeftAction
         {
             get { return _LeftAction; }
             set { _LeftAction = value; }
         }
 
-        public static SFML.Window.Keyboard.Key JumpAction
+        public SFML.Window.Keyboard.Key JumpAction
         {
             get { return _JumpAction; }
             set { _JumpAction = value; }
         }
 
-        internal static SFML.Window.Keyboard.Key AttackAction
+        internal SFML.Window.Keyboard.Key AttackAction
         {
             get { return _AttackAction; }
             set { _AttackAction = value; }

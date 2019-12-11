@@ -23,7 +23,7 @@ namespace TripOverTime.EngineNamespace
         {
             _window = window;
             _menu = new Menu(window);
-            _settings = new Settings(window);
+            _settings = new Settings(this, window);
             _gui = new GUI(this, window);
             _timer = new Stopwatch();
             _timer.Start();
@@ -58,7 +58,7 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 _game.GetPlayer.IsJumping = false;
-                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
@@ -179,7 +179,7 @@ namespace TripOverTime.EngineNamespace
 
             // QUAND QUITTE LE MENU
             _menu = new Menu(_window);
-            _settings = new Settings(_window);
+            _settings = new Settings(this, _window);
             _gui = new GUI(this, _window);
             _timer = new Stopwatch();
             _timer.Start();
@@ -225,7 +225,7 @@ namespace TripOverTime.EngineNamespace
 
             // QUAND QUITTE LE MENU
             _menu = new Menu(_window);
-            _settings = new Settings(_window);
+            _settings = new Settings(this, _window);
             _gui = new GUI(this, _window);
             _timer = new Stopwatch();
             _timer.Start();
