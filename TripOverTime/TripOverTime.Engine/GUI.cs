@@ -147,25 +147,6 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
             }
-
-            // RIEN A FAIRE ICI
-            foreach (Monster m in _context.GetGame.GetMonsters)
-            {
-                if (!m.isAlive)
-                {
-                    m.MonsterDead();
-                }
-                else if (m.Position.X - 6 < _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 1 > _context.GetGame.GetPlayer.RealPosition.X) //left
-                {
-                    m.Orientation = "left";
-                    m.MonsterMove();
-                }
-                else if (m.Position.X + 6 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X + 1 < _context.GetGame.GetPlayer.RealPosition.X) //right
-                {
-                    m.Orientation = "right";
-                    m.MonsterMove();
-                }
-            }
         }
         public static SFML.Window.Keyboard.Key RightAction
         {

@@ -13,8 +13,8 @@ G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
 3 END ..\..\..\..\Assets\Items\flagGreen_down.png false
 BLOCKSEND
 MONSTER
-Golem1 3 3 50 1
-Golem2 20 3 50 1
+Golem1 3 3 50 1 0,05
+Golem2 20 3 50 1 0,05
 MONSTEREND
 MAP
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA

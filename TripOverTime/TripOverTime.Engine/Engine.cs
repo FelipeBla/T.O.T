@@ -70,6 +70,25 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
+            //Monsters move
+            foreach (Monster m in _game.GetMonsters)
+            {
+                if (!m.isAlive)
+                {
+                    m.MonsterDead();
+                }
+                else if (m.Position.X - 3 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
+                {
+                    m.Orientation = "left";
+                    m.MonsterMove();
+                }
+                else if (m.Position.X + 3 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
+                {
+                    m.Orientation = "right";
+                    m.MonsterMove();
+                }
+            }
+
             //Gravity 4 monsters
             foreach (Monster m in _game.GetMonsters)
             {
