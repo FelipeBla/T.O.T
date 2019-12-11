@@ -26,6 +26,7 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         bool _isAttack;
+        String _monsterKillName;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -42,6 +43,8 @@ namespace TripOverTime.EngineNamespace
 
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
+
+            _monsterKillName = "void";
         }
 
         internal void Jump()
@@ -179,6 +182,11 @@ namespace TripOverTime.EngineNamespace
             return moveTheMapOf;
         }
 
+        internal string KilledBy
+        {
+            get => _monsterKillName;
+            set => _monsterKillName = value;
+        }
         internal bool IsJumping
         {
             get => _isJumping;

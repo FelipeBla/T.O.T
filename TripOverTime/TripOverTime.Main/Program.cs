@@ -98,6 +98,7 @@ namespace TripOverTime.Main
                     {
                         //DIE
                         Console.WriteLine("YOU DIE!");
+                        engine.DieMenu();
                     }
                     else
                     {
