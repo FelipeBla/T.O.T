@@ -123,11 +123,9 @@ namespace TripOverTime.Main
                 else if (choose == 1) //Settings
                 {
                     choose = 1;
-                    engine.GetSettings.StartSettings();
-                    do
-                    {
-                        chooseSettings = engine.GetSettings.RunSettings();
-                    } while (chooseSettings == -2);
+                    engine.GetSettings.RunSettings();
+                    /*
+
                     if (chooseSettings == 0) //resolution
                     {
                         choose = 1;
@@ -331,13 +329,14 @@ namespace TripOverTime.Main
                     else if (chooseSettings == -2)//back to main menu
                     {
                         choose = -2;
-                    }
+                    }*/
                 }
                 else if (choose == -1)
                 {
                     window.Close();
                     engine.Close = true;
                 }
+               
             }
 
             Console.WriteLine("End Game");
@@ -349,6 +348,6 @@ namespace TripOverTime.Main
             _jumpButton = e.Code;
             Console.WriteLine("wesh c bon");
         }
-
+        
     }
 }

@@ -11,7 +11,7 @@ namespace TripOverTime.EngineNamespace
     public class Settings
     {
         const ushort MAX_LINES = 4;
-        const ushort MAX_LINES_KB = 4;
+        const ushort MAX_LINES_KB = 5;
         private static uint _XResolution = 800;
         private static uint _YResolution = 600;
         private static uint _NbFPS = 60;
@@ -25,12 +25,13 @@ namespace TripOverTime.EngineNamespace
         Text[] _linesKB;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
+        Engine _context;
 
-
-        internal Settings(RenderWindow window)
+        internal Settings(Engine engine, RenderWindow window)
         {
             if (window == null) throw new ArgumentException("Window is null");
 
+            _context = engine;
             _window = window;
             _selected = 0;
             _selectedResolution = 0;
@@ -57,10 +58,10 @@ namespace TripOverTime.EngineNamespace
             _lines[2] = new Text("Key Binding", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
-            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 4);
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
+            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
 
             _window.Display();
         }
@@ -81,10 +82,10 @@ namespace TripOverTime.EngineNamespace
             _lines[2] = new Text("1920 x 1080 ", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
-            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 4);
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
+            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
 
             _window.Display();
         }
@@ -105,10 +106,10 @@ namespace TripOverTime.EngineNamespace
             _lines[2] = new Text("120", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
-            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 4);
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
+            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
 
             _window.Display();
         }
@@ -124,286 +125,399 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             //Lines
-            _lines[0] = new Text("Jump", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[1] = new Text("Left", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[2] = new Text("Right", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[0] = new Text("Jump : " + _context.GetGUI.JumpAction, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[1] = new Text("Left : " + _context.GetGUI.LeftAction, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[2] = new Text("Right : " + _context.GetGUI.RightAction, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[3] = new Text("Attack : " + _context.GetGUI.AttackAction, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[4] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 3);
-            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2, (_window.Size.Y / 6) * 4);
+            for (int i = 0; i < MAX_LINES_KB; i++)
+            {
+                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+            }
 
             _window.Display();
         }
-        public short RunSettings()
+        public void RunSettings()
         {
-            //Events
-            short result = -2;
-            short tampon = 0;
-
-            Stopwatch TimerS = new Stopwatch();
-            TimerS.Start();
-            float tps = 60;
-            var timeToSleep = 80;
-            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
-                Thread.Sleep(timeToSleep);
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            bool returnMain = false;
+            do
             {
-                _window.Close();
-                result = -1;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
-            {
-                if (_selected == 2) result = -1;
-                else result = (short)_selected;
-                
-            }
-
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
-            {
-                tampon = 1;
-                _selected++;
-            }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
-            {
-                tampon = 2;
-                _selected--;
-            }
-
-
-            //Graphics
-            _window.Clear();
-            _window.Draw(_background);
-
-            for (int i = 0; i < MAX_LINES; i++)
-            {
-                if (i == _selected)
+                StartSettings();
+                //Events
+                ushort tampon = 0;
+                short choose = -3;
+                Thread.Sleep(100);
+                do
                 {
-                    _lines[i].Color = Color.Red;
-                }
-                else
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                    {
+                        choose = 3;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    {
+                        choose = (short)_selected;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
+                    {
+                        _selected++;
+                        tampon = 1;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
+                    {
+                        _selected--;
+                        tampon = 2;
+                    }
+
+                    //Graphics
+                    _window.Clear();
+                    _window.Draw(_background);
+
+                    for (int i = 0; i < MAX_LINES; i++)
+                    {
+                        if (i == _selected)
+                        {
+                            _lines[i].Color = Color.Red;
+                        }
+                        else
+                        {
+                            _lines[i].Color = Color.Black; //meilleure visibilité
+                        }
+                        _window.Draw(_lines[i]);
+                    }
+
+                    _window.Display();
+
+                    if (tampon == 1)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                    }
+                    else if (tampon == 2)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                    }
+
+                } while (choose == -3);
+
+                switch (choose)
                 {
-                    _lines[i].Color = Color.Black; //meilleure visibilité
+                    case 2:
+                        //keybinding
+                        StartSettingsKB();
+                        RunSettingsKB();
+                        break;
+                    case 0:
+                        //resolution
+                        StartSettingsResolution();
+                        RunSettingsResolution();
+                        break;
+                    case 1:
+                        //fps
+                        StartSettingsFPS();
+                        RunSettingsFPS();
+                        break;
+                    case 3:
+                        //quit
+                        returnMain = true;
+                        break;
                 }
-                _window.Draw(_lines[i]);
-            }
-
-            _window.Display();
-
-            if (tampon == 1)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-            }
-            else if (tampon == 2)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
-            }
-
-            return result;
+            } while (!returnMain);
         }
 
-        public short RunSettingsResolution()
+        public void RunSettingsResolution()
         {
-            Stopwatch TimerS = new Stopwatch();
-            TimerS.Start();
-            float tps = 60;
-            var timeToSleep = 80;
-            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
-                Thread.Sleep(timeToSleep);
-            //Events
-            short result = -3;
-            short tampon = 0;
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            short choose = -3;
+            ushort tampon = 0;
+            Thread.Sleep(100);
+            do
             {
-                _window.Close();
-                result = -1;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
-            {
-                if (_selectedResolution == 2) result = -1;
-                else result = (short)_selectedResolution;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedResolution < MAX_LINES - 1)
-            {
-                tampon = 1;
-                _selectedResolution++;
-            }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedResolution > 0)
-            {
-                tampon = 2;
-                _selectedResolution--;
-            }
-
-
-            //Graphics
-            _window.Clear();
-            _window.Draw(_background);
-
-            for (int i = 0; i < MAX_LINES; i++)
-            {
-                if (i == _selectedResolution)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 {
-                    _lines[i].Color = Color.Red;
+                    choose = 3;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) Thread.Sleep(1);
                 }
-                else
+
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                 {
-                    _lines[i].Color = Color.Black;
+                    choose = (short)_selectedResolution;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Enter)) Thread.Sleep(1);
                 }
-                _window.Draw(_lines[i]);
-            }
 
-            _window.Display();
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedResolution < MAX_LINES - 1)
+                {
+                    _selectedResolution++;
+                    tampon = 1;
+                }
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedResolution > 0)
+                {
+                    _selectedResolution--;
+                    tampon = 2;
+                }
 
-            if (tampon == 1)
+                //Graphics
+                _window.Clear();
+                _window.Draw(_background);
+
+                for (int i = 0; i < MAX_LINES; i++)
+                {
+                    if (i == _selectedResolution)
+                    {
+                        _lines[i].Color = Color.Red;
+                    }
+                    else
+                    {
+                        _lines[i].Color = Color.Black;
+                    }
+                    _window.Draw(_lines[i]);
+                }
+                _window.Display();
+
+                if (tampon == 1)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                }
+                else if (tampon == 2)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                }
+
+            } while (choose == -3);
+
+            switch (choose)
             {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-            }
-            else if (tampon == 2)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                case 2:
+                    //1920*1080
+                    _XResolution = 1920;
+                    _YResolution = 1080;
+                    restart();
+                    break;
+                case 0:
+                    //800*600
+                    _XResolution = 800;
+                    _YResolution = 600;
+                    restart();
+                    break;
+                case 1:
+                    //1280*720
+                    _XResolution = 1280;
+                    _YResolution = 720;
+                    restart();
+                    break;
+                case 3:
+                    //quit (return to settings main)
+
+                    break;
             }
 
-            return result;
         }
 
-        public short RunSettingsFPS()
+        public void RunSettingsFPS()
         {
-            Stopwatch TimerS = new Stopwatch();
-            TimerS.Start();
-            float tps = 60;
-            var timeToSleep = 80;
-            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
-                Thread.Sleep(timeToSleep);
-            //Events
-            short result = -3;
+            Thread.Sleep(100);
+            short choose = -3;
             short tampon = 0;
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            do
             {
-                _window.Close();
-                result = -1;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
-            {
-                if (_selectedFPS == 2) result = -1;
-                else result = (short)_selectedFPS;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedFPS < MAX_LINES - 1)
-            {
-                tampon = 1;
-                _selectedFPS++;
-            }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedFPS > 0)
-            {
-                tampon = 2;
-                _selectedFPS--;
-            }
-
-
-            //Graphics
-            _window.Clear();
-            _window.Draw(_background);
-
-            for (int i = 0; i < MAX_LINES; i++)
-            {
-                if (i == _selectedFPS)
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 {
-                    _lines[i].Color = Color.Red;
+                    choose = 3;
                 }
-                else
+
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                 {
-                    _lines[i].Color = Color.Black;
+                    choose = (short)_selectedFPS;
                 }
-                _window.Draw(_lines[i]);
-            }
 
-            _window.Display();
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedFPS < MAX_LINES - 1)
+                {
+                    tampon = 1;
+                    _selectedFPS++;
+                }
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedFPS > 0)
+                {
+                    tampon = 2;
+                    _selectedFPS--;
+                }
 
-            if (tampon == 1)
+
+                //Graphics
+                _window.Clear();
+                _window.Draw(_background);
+
+                for (int i = 0; i < MAX_LINES; i++)
+                {
+                    if (i == _selectedFPS)
+                    {
+                        _lines[i].Color = Color.Red;
+                    }
+                    else
+                    {
+                        _lines[i].Color = Color.Black;
+                    }
+                    _window.Draw(_lines[i]);
+                }
+
+                _window.Display();
+
+                if (tampon == 1)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                }
+                else if (tampon == 2)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                }
+            } while (choose == -3);
+
+            switch (choose)
             {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-            }
-            else if (tampon == 2)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                case 0:
+                    //30fps
+                    _NbFPS = 30;
+                    break;
+                case 1:
+                    //60fps
+                    _NbFPS = 60;
+                    break;
+                case 2:
+                    //120fps
+                    _NbFPS = 120;
+                    break;
+                case 3:
+                    //quit (return to settings main)
+
+                    break;
             }
 
-            return result;
+
         }
-        public short RunSettingsKB()
+        public void RunSettingsKB()
         {
-            Stopwatch TimerS = new Stopwatch();
-            TimerS.Start();
-            float tps = 60;
-            var timeToSleep = 80;
-            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
-                Thread.Sleep(timeToSleep);
-            //Events
-            short result = -3;
-            short tampon = 0;
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            short choose = -3;
+            do
             {
-                _window.Close();
-                result = -1;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
-            {
-                if (_selectedKB == 2) result = -1;
-                else result = (short)_selectedKB;
-            }
-
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES - 1)
-            {
-                tampon = 1;
-                _selectedKB++;
-            }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedKB > 0)
-            {
-                tampon = 2;
-                _selectedKB--;
-            }
-
-
-            //Graphics
-            _window.Clear();
-            _window.Draw(_background);
-
-            for (int i = 0; i < MAX_LINES; i++)
-            {
-                if (i == _selectedKB)
+                StartSettingsKB();
+                //Events
+                choose = -3;
+                short tampon = 0;
+                Thread.Sleep(100);
+                do
                 {
-                    _lines[i].Color = Color.Red;
-                }
-                else
+
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                    {
+                        choose = 4;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    {
+                        choose = (short)_selectedKB;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES_KB - 1)
+                    {
+                        tampon = 1;
+                        _selectedKB++;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedKB > 0)
+                    {
+                        tampon = 2;
+                        _selectedKB--;
+                    }
+
+                    //Graphics
+                    _window.Clear();
+                    _window.Draw(_background);
+
+                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    {
+                        if (i == _selectedKB)
+                        {
+                            _linesKB[i].Color = Color.Red;
+                        }
+                        else
+                        {
+                            _linesKB[i].Color = Color.Black;
+                        }
+                        _window.Draw(_linesKB[i]);
+                    }
+
+                    _window.Display();
+
+                    if (tampon == 1)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                    }
+                    else if (tampon == 2)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                    }
+                } while (choose == -3);
+
+                if (choose != 4)
                 {
-                    _lines[i].Color = Color.Black;
+                    _linesKB[choose].Color = Color.Blue;
+                    _window.Clear();
+                    _window.Draw(_background);
+                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    {
+                        _window.Draw(_linesKB[i]);
+                    }
+                    _window.Display();
+
+                    //Clear event buffer
+                    Thread.Sleep(100);
+                    _window.KeyReleased += (s, a) =>
+                    {
+                        Console.WriteLine("Clear " + a.Code);
+                    };
+
+                    _window.DispatchEvents();
+                    bool again = true;
+                    // Get Key
+                    _window.KeyPressed += (s, a) =>
+                    {
+                        Console.WriteLine("Key : " + a.Code);
+                        if (a.Code != Keyboard.Key.Enter)
+                        {
+                            switch (choose)
+                            {
+                                case 0:
+                                    //Jump
+                                    _context.GetGUI.JumpAction = a.Code;
+                                    break;
+                                case 1:
+                                    //Left
+                                    _context.GetGUI.LeftAction = a.Code;
+                                    break;
+                                case 2:
+                                    //Right
+                                    _context.GetGUI.RightAction = a.Code;
+                                    break;
+                                case 3:
+                                    //Attack
+                                    _context.GetGUI.AttackAction = a.Code;
+                                    break;
+                            }
+                            again = false;
+                        }
+                    };
+                    while (again) _window.WaitAndDispatchEvents();
                 }
-                _window.Draw(_lines[i]);
-            }
+                //Re-while
+            } while (choose != 4);
 
-            _window.Display();
+        }
 
-            if (tampon == 1)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-            }
-            else if (tampon == 2)
-            {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
-            }
+        private void restart() //apply changes
+        {
 
-            return result;
         }
 
         public static uint XResolution
