@@ -70,7 +70,14 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
-            //Monsters move
+            if(!_game.GetPlayer.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer.KilledBy = "Monster";
+                return -1;
+            }
+
+            //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
                 if (!m.isAlive)
@@ -86,6 +93,17 @@ namespace TripOverTime.EngineNamespace
                 {
                     m.Orientation = "right";
                     m.MonsterMove();
+                }
+
+
+                if (m.Position.X +2 > _game.GetPlayer.RealPosition.X && m.Position.X -2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
+                {
+                    if (_timer.ElapsedMilliseconds >= 1300 && m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive)
+                    {
+                        _game.GetPlayer.GetLife.DecreasedPoint(m.GetAttack);
+                        _timer.Restart();
+                    }
+                        m.MonsterAttack();
                 }
             }
 

@@ -23,6 +23,7 @@ namespace TripOverTime.EngineNamespace
         int _incrementationWalk;
         int _monsterWalk;
         int _monsterDead;
+        int _monsterAttack;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
@@ -46,7 +47,7 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
-            _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
+            _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
 
             if (_name == "CHECKPOINT")
             {
@@ -256,13 +257,21 @@ namespace TripOverTime.EngineNamespace
         {
             int nbrAction = 5;
             string action = "attack";
-            if (_context.GetGame.GetPlayer.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+            if (_animTimer.ElapsedMilliseconds >= 100)
             {
 
                 string numberTexture = action + _incrementationAttack;
                 _sprite.Texture = _playerTexture[numberTexture];
-                _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
                 if (_incrementationAttack + 1 == nbrAction)
                 {
                     _context.GetGame.GetPlayer.IsAttack = false;
@@ -275,26 +284,6 @@ namespace TripOverTime.EngineNamespace
                 _animTimer.Restart();
 
             }
-            else if (_animTimer.ElapsedMilliseconds >= 100) //left
-            {
-                string numberTexture = action + _incrementationAttack;
-                _sprite.Texture = _playerTexture[numberTexture];
-                _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
-                _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                if (_incrementationAttack + 1 == nbrAction)
-                {
-                    _context.GetGame.GetPlayer.IsAttack = false;
-                    _incrementationAttack = 1;
-                }
-                else
-                {
-                    _incrementationAttack++;
-                }
-                _animTimer.Restart();
-
-
-            }
-            
         }
 
         internal void MonsterMoveAnimation()
@@ -342,6 +331,38 @@ namespace TripOverTime.EngineNamespace
                     }
                     
                 }
+            }
+        }
+
+        internal void MonsterAttackAnimation()
+        {
+            int nbrAction = 13;
+            string action = "attack";
+            if (_animTimer.ElapsedMilliseconds >= 100)
+            {
+
+                string numberTexture = action + _monsterAttack;
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+                if (_monsterAttack + 1 == nbrAction)
+                {
+                        _monsterAttack = 1;
+                }
+                else
+                {
+                    _monsterAttack++;
+                }
+                _animTimer.Restart();
+
             }
         }
 

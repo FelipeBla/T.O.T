@@ -18,14 +18,14 @@ namespace TripOverTime.EngineNamespace
         Position _position;
         Life _life;
         bool _isAlive;
-        int _attack;
+        ushort _attack;
         Sprite _sprite;
         bool _ismoving;
         Position _origin;
         string _orientation;
         float _monsterMove;
 
-        internal Monster(Game context, String name, Position position, Life life, int attack, float monsterMove)
+        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove)
         {
             _context = context;
             _name = name;
@@ -67,6 +67,11 @@ namespace TripOverTime.EngineNamespace
            
             }
        
+        }
+
+        internal void MonsterAttack()
+        {
+            _sprite.MonsterAttackAnimation();
         }
 
 
@@ -131,7 +136,7 @@ namespace TripOverTime.EngineNamespace
             }
             set { _isAlive = value; }
         }
-        internal int attack
+        internal ushort GetAttack
         {
             get { return _attack; }
             set { _attack = value; }

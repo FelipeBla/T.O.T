@@ -136,17 +136,24 @@ namespace TripOverTime.EngineNamespace
                 _context.GetGame.GetPlayer.Attack();
                 foreach (Monster m in _context.GetGame.GetMonsters)
                 {
-                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
+                    if ((m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X < _context.GetGame.GetPlayer.RealPosition.X && _context.GetGame.GetPlayer.Orientation == "left") || ( m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X && m.Position.X > _context.GetGame.GetPlayer.RealPosition.X && _context.GetGame.GetPlayer.Orientation == "right"))
                     {
                         m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
                     }
                 }
             }
 
-            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !Keyboard.IsKeyPressed(_AttackAction))
+            if (_context.GetGame.GetPlayer.IsAttack)
+            {
+                _context.GetGame.GetPlayer.Attack();
+            }
+
+
+            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !_context.GetGame.GetPlayer.IsAttack)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
             }
+
         }
         public static SFML.Window.Keyboard.Key RightAction
         {
