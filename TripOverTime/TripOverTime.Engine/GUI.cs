@@ -62,7 +62,6 @@ namespace TripOverTime.EngineNamespace
             if (_context.GetGame.GetPlayer.IsAlive)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 -65);
-                //Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
@@ -115,19 +114,6 @@ namespace TripOverTime.EngineNamespace
 
         internal void Events()
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Space)) // ATTACK
-            {
-                _context.GetGame.GetPlayer.IsAttack = true;
-                _context.GetGame.GetPlayer.Attack();
-                foreach (Monster m in _context.GetGame.GetMonsters)
-                {
-                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
-                    {
-                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
-                    }
-                }
-            }
-
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
                 //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
             }
@@ -145,8 +131,24 @@ namespace TripOverTime.EngineNamespace
             }
 
             if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
-            
+            {
+                _context.GetGame.GetPlayer.IsAttack = true;
+                _context.GetGame.GetPlayer.Attack();
+                foreach (Monster m in _context.GetGame.GetMonsters)
+                {
+                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
+                    {
+                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
+                    }
+                }
+            }
 
+            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !Keyboard.IsKeyPressed(_AttackAction))
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
+            }
+
+            // RIEN A FAIRE ICI
             foreach (Monster m in _context.GetGame.GetMonsters)
             {
                 if (!m.isAlive)

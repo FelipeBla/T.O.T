@@ -77,13 +77,13 @@ namespace TripOverTime.EngineNamespace
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
                 if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
-                    //Block under player isn't solid
+                    //Block under monster isn't solid
                     m.Gravity();
                 }
                 else
                 {
                     m.IsMoving = false;
-                    m.RoundY(); // Don't stuck player in ground
+                    m.RoundY(); // Don't stuck monster in ground
                 }
             }
 

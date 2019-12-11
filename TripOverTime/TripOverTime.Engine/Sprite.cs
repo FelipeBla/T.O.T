@@ -116,6 +116,16 @@ namespace TripOverTime.EngineNamespace
             if (_sprite == null) throw new Exception("Sprite null!");
         }
 
+        internal void DefaultAnimation()
+        {
+            if (_context.GetGame.GetPlayer.Orientation == "right")
+                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+            else
+                _sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
+
+            _sprite.Texture = _playerTexture["stand"];
+        }
+
         internal void WalkAnimation()
         {
             if (!_context.GetGame.GetPlayer.IsJumping)
