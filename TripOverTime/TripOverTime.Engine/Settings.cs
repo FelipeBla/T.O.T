@@ -26,6 +26,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         Engine _context;
+        bool _applyNeed;
 
         internal Settings(Engine engine, RenderWindow window)
         {
@@ -138,9 +139,10 @@ namespace TripOverTime.EngineNamespace
 
             _window.Display();
         }
-        public void RunSettings()
+        public bool RunSettings()
         {
             bool returnMain = false;
+            _applyNeed = false;
             do
             {
                 StartSettings();
@@ -224,6 +226,8 @@ namespace TripOverTime.EngineNamespace
                         break;
                 }
             } while (!returnMain);
+
+            return _applyNeed;
         }
 
         public void RunSettingsResolution()
@@ -517,7 +521,7 @@ namespace TripOverTime.EngineNamespace
 
         private void restart() //apply changes
         {
-
+            _applyNeed = true;
         }
 
         public static uint XResolution
