@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TripOverTime.EngineNamespace
@@ -10,15 +11,16 @@ namespace TripOverTime.EngineNamespace
         Player _player;
         List<Monster> _monsters;
         Map _map;
+        Stopwatch _timer;
 
-        internal Game(string mapPath, string playerPath, Position startPosition)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition)
         {
+            _context = context;
             _map = new Map(this, mapPath);
             _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
-            _monsters = new List<Monster>();
-            _monsters.Add(new Monster(this, "Golem1", new Position(20, 5), new Life(50, 1), 1));
-            _monsters.Add(new Monster(this, "Golem2", new Position(5, 5), new Life(50, 1), 1));
-
+            _monsters = _map.GenerateMonsters();
+            _timer = new Stopwatch();
+            _timer.Start();
         }
 
         internal Map GetMapObject
@@ -34,9 +36,14 @@ namespace TripOverTime.EngineNamespace
             get => _context;
         }
 
+        internal long TimeElapsed
+        {
+            get => _timer.ElapsedMilliseconds;
+        }
         internal List<Monster> GetMonsters
         {
             get => _monsters;
+            set => _monsters = value;
         }
     }
 }

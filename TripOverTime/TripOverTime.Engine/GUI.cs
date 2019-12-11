@@ -17,6 +17,11 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _hpBar3;
         private SFML.System.Vector2f _hpBarPosition;
+        static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
+        static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
+        static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
+        static SFML.Window.Keyboard.Key _AttackAction = Keyboard.Key.Space;
+
 
         internal GUI(Engine context, RenderWindow window)
         {
@@ -62,6 +67,7 @@ namespace TripOverTime.EngineNamespace
             if (_context.GetGame.GetPlayer.IsAlive)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 -65);
+                //Console.WriteLine("Jumping: " + _context.GetGame.GetPlayer.IsJumping);
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
@@ -90,7 +96,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(backgroundTexture);
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             // Set lifeBar
@@ -144,22 +150,22 @@ namespace TripOverTime.EngineNamespace
             }
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
-                _context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
-
+                //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) {
+            if (Keyboard.IsKeyPressed(_RightAction)) {
                 _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) {
+            if (Keyboard.IsKeyPressed(_LeftAction)) {
                 _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) {
+            if (Keyboard.IsKeyPressed(_JumpAction)) {
                 if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
                 {
                     _context.GetGame.GetPlayer.Jump();
                 }
             }
 
+            if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
             
 
             foreach (Monster m in _context.GetGame.GetMonsters)
@@ -179,6 +185,29 @@ namespace TripOverTime.EngineNamespace
                     m.MonsterMove();
                 }
             }
+        }
+        public static SFML.Window.Keyboard.Key RightAction
+        {
+            get { return _RightAction; }
+            set { _RightAction = value; }
+        }
+
+        public static SFML.Window.Keyboard.Key LeftAction
+        {
+            get { return _LeftAction; }
+            set { _LeftAction = value; }
+        }
+
+        public static SFML.Window.Keyboard.Key JumpAction
+        {
+            get { return _JumpAction; }
+            set { _JumpAction = value; }
+        }
+
+        internal static SFML.Window.Keyboard.Key AttackAction
+        {
+            get { return _AttackAction; }
+            set { _AttackAction = value; }
         }
     }
 }

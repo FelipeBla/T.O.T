@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using SFML;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -10,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         Stopwatch _timer;
         Checkpoint _checkpoint;
 
+        SFML.Graphics.RenderWindow _window;
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
         Settings _settings;
@@ -17,6 +21,7 @@ namespace TripOverTime.EngineNamespace
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
+            _window = window;
             _menu = new Menu(window);
             _settings = new Settings(window);
             _gui = new GUI(this, window);
@@ -26,21 +31,21 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, string playerPath)
         {
-            _game = new Game(mapPath, playerPath, new Position(0, 3)); //0, 3
+            _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns>True if player is alive</returns>
-        public bool GameTick()
+        public short GameTick()
         {
             if (_game == null) throw new Exception("Game not started!");
 
             //Events
             _gui.Events();
 
-            //Gravity
+            //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
@@ -49,21 +54,22 @@ namespace TripOverTime.EngineNamespace
             {
                 //Block under player isn't solid
                 _game.GetPlayer.Gravity();
-
             }
             else
             {
                 _game.GetPlayer.IsJumping = false;
-                _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                {
+                    //DIE
+                    return -1;
+                }
+                else
+                {
+                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                }
             }
 
-            // Attack
-            if (_game.GetPlayer.IsAttack)
-            {
-                _game.GetPlayer.Attack();
-            }
-
-            //Gravity
+            //Gravity 4 monsters
             foreach (Monster m in _game.GetMonsters)
             {
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
@@ -82,7 +88,64 @@ namespace TripOverTime.EngineNamespace
 
             // Recalibrate float
             _game.GetPlayer.RoundX();
-            return _game.GetPlayer.IsAlive;
+            // WIN !!!
+            Position end = _game.GetMapObject.GetEndPosition;
+            if (end.X <= _game.GetPlayer.RealPosition.X)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 0;
+            }
+
+            // Dead return -1;
+
+            return 1;
+        }
+
+        public void WinMenu()
+        {
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("YOU WIN !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 64));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 48));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+            lines.Add(new Text("Press ENTER to QUIT", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width)/2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool quit = false;
+
+            while(!quit)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    quit = true;
+                System.Threading.Thread.Sleep(1);
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(_window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
         }
 
         public Menu GetMenu

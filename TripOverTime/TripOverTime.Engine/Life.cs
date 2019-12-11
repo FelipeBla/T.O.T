@@ -19,7 +19,7 @@ namespace TripOverTime.EngineNamespace
         {
         }
 
-        public Life(ushort maxPoint, ushort minPoint)
+        public Life(ushort maxPoint, ushort minPoint = 1)
         {
             _maxPoint = maxPoint;
             _minPoint = minPoint;
@@ -87,7 +87,8 @@ namespace TripOverTime.EngineNamespace
             if (damage < 0 ) return;
             if (damage >= _currentPoint) 
             { 
-                _currentPoint = 0; 
+                _currentPoint = 0;
+                Console.WriteLine("The player is dead.");
             }
             else
             {
@@ -95,9 +96,15 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        public void BonusPoint(ushort bonus)
+        public ushort BonusPoint(ushort bonus)
         {
             _currentPoint += Convert.ToUInt16(Math.Max(Convert.ToInt32(bonus), 0));
+            int valeur = bonus;
+            if (valeur + CurrentPoint > 1000)
+                return 0;
+            return _maxPoint;
+
         }
     }
+
 }

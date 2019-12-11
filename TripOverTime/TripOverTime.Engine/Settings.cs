@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -11,6 +12,9 @@ namespace TripOverTime.EngineNamespace
     {
         const ushort MAX_LINES = 4;
         const ushort MAX_LINES_KB = 4;
+        private static uint _XResolution = 800;
+        private static uint _YResolution = 600;
+        private static uint _NbFPS = 60;
 
         RenderWindow _window;
         ushort _selected;
@@ -22,14 +26,19 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
 
+
         internal Settings(RenderWindow window)
-            {
-             if (window == null) throw new ArgumentException("Window is null");
+        {
+            if (window == null) throw new ArgumentException("Window is null");
 
             _window = window;
             _selected = 0;
+            _selectedResolution = 0;
+            _selectedFPS = 0;
+            _selectedKB = 0;
             _lines = new Text[MAX_LINES];
             _linesKB = new Text[MAX_LINES_KB];
+
         }
 
         public void StartSettings()
@@ -39,7 +48,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -63,7 +72,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -87,7 +96,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -111,7 +120,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (_background == null) throw new Exception("Sprite null!");
 
-            _background.Position = new SFML.System.Vector2f(0, -(float)_window.Size.Y / 2);
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -133,6 +142,13 @@ namespace TripOverTime.EngineNamespace
             short result = -2;
             short tampon = 0;
 
+            Stopwatch TimerS = new Stopwatch();
+            TimerS.Start();
+            float tps = 60;
+            var timeToSleep = 80;
+            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
+                Thread.Sleep(timeToSleep);
+
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
             {
                 _window.Close();
@@ -143,7 +159,9 @@ namespace TripOverTime.EngineNamespace
             {
                 if (_selected == 2) result = -1;
                 else result = (short)_selected;
+                
             }
+
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
             {
@@ -169,7 +187,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black; //meilleure visibilité
                 }
                 _window.Draw(_lines[i]);
             }
@@ -190,8 +208,14 @@ namespace TripOverTime.EngineNamespace
 
         public short RunSettingsResolution()
         {
+            Stopwatch TimerS = new Stopwatch();
+            TimerS.Start();
+            float tps = 60;
+            var timeToSleep = 80;
+            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
+                Thread.Sleep(timeToSleep);
             //Events
-            short result = -2;
+            short result = -3;
             short tampon = 0;
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
@@ -224,13 +248,13 @@ namespace TripOverTime.EngineNamespace
 
             for (int i = 0; i < MAX_LINES; i++)
             {
-                if (i == _selected)
+                if (i == _selectedResolution)
                 {
                     _lines[i].Color = Color.Red;
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }
@@ -251,8 +275,14 @@ namespace TripOverTime.EngineNamespace
 
         public short RunSettingsFPS()
         {
+            Stopwatch TimerS = new Stopwatch();
+            TimerS.Start();
+            float tps = 60;
+            var timeToSleep = 80;
+            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
+                Thread.Sleep(timeToSleep);
             //Events
-            short result = -2;
+            short result = -3;
             short tampon = 0;
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
@@ -263,16 +293,16 @@ namespace TripOverTime.EngineNamespace
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
-                if (_selected == 2) result = -1;
+                if (_selectedFPS == 2) result = -1;
                 else result = (short)_selectedFPS;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedFPS < MAX_LINES - 1)
             {
                 tampon = 1;
                 _selectedFPS++;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedFPS > 0)
             {
                 tampon = 2;
                 _selectedFPS--;
@@ -291,7 +321,7 @@ namespace TripOverTime.EngineNamespace
                 }
                 else
                 {
-                    _lines[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
                 _window.Draw(_lines[i]);
             }
@@ -311,8 +341,14 @@ namespace TripOverTime.EngineNamespace
         }
         public short RunSettingsKB()
         {
+            Stopwatch TimerS = new Stopwatch();
+            TimerS.Start();
+            float tps = 60;
+            var timeToSleep = 80;
+            if (TimerS.Elapsed.TotalMilliseconds < timeToSleep)
+                Thread.Sleep(timeToSleep);
             //Events
-            short result = -2;
+            short result = -3;
             short tampon = 0;
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
@@ -327,7 +363,7 @@ namespace TripOverTime.EngineNamespace
                 else result = (short)_selectedKB;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES_KB - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES - 1)
             {
                 tampon = 1;
                 _selectedKB++;
@@ -343,17 +379,17 @@ namespace TripOverTime.EngineNamespace
             _window.Clear();
             _window.Draw(_background);
 
-            for (int i = 0; i < MAX_LINES_KB; i++)
+            for (int i = 0; i < MAX_LINES; i++)
             {
                 if (i == _selectedKB)
                 {
-                    _linesKB[i].Color = Color.Red;
+                    _lines[i].Color = Color.Red;
                 }
                 else
                 {
-                    _linesKB[i].Color = Color.White;
+                    _lines[i].Color = Color.Black;
                 }
-                _window.Draw(_linesKB[i]);
+                _window.Draw(_lines[i]);
             }
 
             _window.Display();
@@ -368,6 +404,22 @@ namespace TripOverTime.EngineNamespace
             }
 
             return result;
+        }
+
+        public static uint XResolution
+        {
+            get { return _XResolution; }
+            set { _XResolution = value; }
+        }
+        public static uint YResolution
+        {
+            get { return _YResolution; }
+            set { _YResolution = value; }
+        }
+        public static uint NbFPS
+        {
+            get { return _NbFPS; }
+            set { _NbFPS = value; }
         }
 
     }
