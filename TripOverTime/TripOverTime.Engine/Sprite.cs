@@ -334,12 +334,19 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        internal void MonsterAttackAnimation()
+        internal void MonsterAttackAnimation(int nbrAction, string action)
         {
-            int nbrAction = 13;
-            string action = "attack";
             if (_animTimer.ElapsedMilliseconds >= 100)
             {
+
+                if (_monsterAttack == nbrAction)
+                {
+                    _monsterAttack = 1;
+                }
+                else
+                {
+                    _monsterAttack++;
+                }
 
                 string numberTexture = action + _monsterAttack;
                 _sprite.Texture = _playerTexture[numberTexture];
@@ -348,18 +355,10 @@ namespace TripOverTime.EngineNamespace
                     _sprite.Origin = new SFML.System.Vector2f(0, 0);
                     _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
                 }
-                else
+                else //Left
                 {
                     _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
                     _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                }
-                if (_monsterAttack + 1 == nbrAction)
-                {
-                        _monsterAttack = 1;
-                }
-                else
-                {
-                    _monsterAttack++;
                 }
                 _animTimer.Restart();
 

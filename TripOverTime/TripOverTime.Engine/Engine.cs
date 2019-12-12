@@ -84,26 +84,20 @@ namespace TripOverTime.EngineNamespace
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 3 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
                 {
                     m.Orientation = "left";
                     m.MonsterMove();
                 }
-                else if (m.Position.X + 3 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
+                else if (m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
                 {
                     m.Orientation = "right";
                     m.MonsterMove();
                 }
 
-
-                if (m.Position.X +2 > _game.GetPlayer.RealPosition.X && m.Position.X -2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
+                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
                 {
-                    if (_timer.ElapsedMilliseconds >= 1300 && m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive)
-                    {
-                        _game.GetPlayer.GetLife.DecreasedPoint(m.GetAttack);
-                        _timer.Restart();
-                    }
-                        m.MonsterAttack();
+                    m.MonsterAttack();
                 }
             }
 

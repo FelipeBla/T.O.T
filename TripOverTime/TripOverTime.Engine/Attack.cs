@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+namespace TripOverTime.EngineNamespace
+{
+    internal class Attack
+    {
+        Game _context;
+        Monster _monster;
+        ushort _attack;
+        Stopwatch _timer;
+        int _spetialAttack;
+
+        internal Attack(Game context, Monster monster, ushort attack)
+        {
+            _context = context;
+            _monster = monster;
+            _attack = attack;
+            _timer = new Stopwatch();
+            _timer.Start();
+            _spetialAttack = 0;
+        }
+
+        internal void AttackMonster()
+        {
+            if (_spetialAttack < 2)
+            {
+                SlidingAttack();
+                if (_timer.ElapsedMilliseconds >= 700)
+                {
+                    _spetialAttack++;
+                    _timer.Restart();
+                }
+            }
+            else
+            {
+                NormalAttack();
+            }
+
+            if (_timer.ElapsedMilliseconds >= 1300 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+            {
+                _context.GetPlayer.GetLife.DecreasedPoint(_attack);
+                _timer.Restart();
+            }
+        }
+        internal void NormalAttack()
+        {
+            _monster.GetMonsterSprite.MonsterAttackAnimation(12, "attack");
+        }
+
+        internal void SlidingAttack()
+        {
+            _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding");
+        }
+
+        internal ushort GetAttack
+        {
+            get => _attack;
+            set => _attack = value;
+        }
+        internal int SpecialAttack
+        {
+            get => _spetialAttack;
+            set => _spetialAttack = value;
+        }
+    }
+}

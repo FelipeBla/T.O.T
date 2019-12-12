@@ -18,7 +18,7 @@ namespace TripOverTime.EngineNamespace
         Position _position;
         Life _life;
         bool _isAlive;
-        ushort _attack;
+        Attack _attack;
         Sprite _sprite;
         bool _ismoving;
         Position _origin;
@@ -32,7 +32,7 @@ namespace TripOverTime.EngineNamespace
             _position = position;
             _life = life;
             _isAlive = true;
-            _attack = attack;
+            _attack = new Attack(context, this, attack);
             _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, false, true);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
@@ -61,8 +61,8 @@ namespace TripOverTime.EngineNamespace
                             _position.X += _monsterMove;
                     }
                 }
-                _ismoving = true;
 
+                _ismoving = true;
                 _sprite.MonsterMoveAnimation();
            
             }
@@ -71,7 +71,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterAttack()
         {
-            _sprite.MonsterAttackAnimation();
+            _attack.AttackMonster();
         }
 
 
@@ -136,7 +136,7 @@ namespace TripOverTime.EngineNamespace
             }
             set { _isAlive = value; }
         }
-        internal ushort GetAttack
+        internal Attack GetAttack
         {
             get { return _attack; }
             set { _attack = value; }
