@@ -16,6 +16,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.RenderWindow _window;
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
+        Game _game2; // for multiplayer
         Settings _settings;
         GUI _gui;
 
@@ -33,6 +34,12 @@ namespace TripOverTime.EngineNamespace
         {
             _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
         }
+        public void StartGameM(string mapPath, string playerPath)
+        {
+            _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
+            _game2 = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
+        }
+
 
         /// <summary>
         /// 
