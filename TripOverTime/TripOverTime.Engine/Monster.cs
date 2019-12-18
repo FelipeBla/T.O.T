@@ -106,7 +106,7 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _context; }
         }
-        private String name
+        internal String Name
         {
             get { return _name; }
         }

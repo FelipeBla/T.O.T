@@ -80,18 +80,21 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
+                if ( m.Position.X > _game.GetPlayer.RealPosition.X) //left
+                {
+                    m.Orientation = "left";
+                }
+                else //right
+                {
+                    m.Orientation = "right";
+                }
+
                 if (!m.isAlive)
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
                 {
-                    m.Orientation = "left";
-                    m.MonsterMove();
-                }
-                else if (m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
-                {
-                    m.Orientation = "right";
                     m.MonsterMove();
                 }
 

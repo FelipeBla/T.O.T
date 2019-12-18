@@ -24,7 +24,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void AttackMonster()
         {
-            if (_spetialAttack < 2)
+            if (_spetialAttack < 2 & (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
             {
                 SlidingAttack();
                 if (_timer.ElapsedMilliseconds >= 700)
@@ -38,7 +38,7 @@ namespace TripOverTime.EngineNamespace
                 NormalAttack();
             }
 
-            if (_timer.ElapsedMilliseconds >= 1300 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+            if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
             {
                 _context.GetPlayer.GetLife.DecreasedPoint(_attack);
                 _timer.Restart();
