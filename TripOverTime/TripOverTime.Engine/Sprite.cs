@@ -352,7 +352,7 @@ namespace TripOverTime.EngineNamespace
                 int nbrAction = 15;
                 string action = "dead";
 
-                if (m.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 80)//Left
+                if (m.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Left
                 {
 
                     string numberTexture = action + _monsterDead;
@@ -368,7 +368,7 @@ namespace TripOverTime.EngineNamespace
                     _animTimer.Restart();
 
                 }
-                else if (_animTimer.ElapsedMilliseconds >= 80) // Right
+                else if (_animTimer.ElapsedMilliseconds >= 40) // Right
                 {
 
                     string numberTexture = action + _monsterDead;
