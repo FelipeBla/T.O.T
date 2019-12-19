@@ -63,7 +63,7 @@ namespace TripOverTime.EngineNamespace
                 }
 
                 _ismoving = true;
-                _sprite.MonsterMoveAnimation();
+                _sprite.MonsterMoveAnimation(this);
            
             }
        
@@ -77,7 +77,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterDead()
         {
-            _sprite.MonsterDeadAnimation();
+            _sprite.MonsterDeadAnimation(this);
         }
         internal void Gravity()
         {

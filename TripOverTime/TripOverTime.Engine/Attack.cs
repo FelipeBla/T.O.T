@@ -24,7 +24,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void AttackMonster()
         {
-            if (_spetialAttack < 2 & (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
+            if (_spetialAttack < 2 && (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
             {
                 SlidingAttack();
                 if (_timer.ElapsedMilliseconds >= 700)
@@ -46,23 +46,18 @@ namespace TripOverTime.EngineNamespace
         }
         internal void NormalAttack()
         {
-            _monster.GetMonsterSprite.MonsterAttackAnimation(12, "attack");
+            _monster.GetMonsterSprite.MonsterAttackAnimation(12, "attack", _monster);
         }
 
         internal void SlidingAttack()
         {
-            _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding");
+            _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding", _monster);
         }
 
         internal ushort GetAttack
         {
             get => _attack;
             set => _attack = value;
-        }
-        internal int SpecialAttack
-        {
-            get => _spetialAttack;
-            set => _spetialAttack = value;
         }
     }
 }
