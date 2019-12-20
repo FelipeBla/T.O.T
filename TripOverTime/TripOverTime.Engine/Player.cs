@@ -27,6 +27,7 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         bool _isAttack;
+        bool _isHurt;
         String _monsterKillName;
         Stopwatch _attackTimer;
         int _attackSpeed;
@@ -90,8 +91,6 @@ namespace TripOverTime.EngineNamespace
         {
             if (_isAttack)
             {
-                _sprite.AttackAnimation();
-
                 //Evite le spam d'attaque
                 if (_attackTimer.ElapsedMilliseconds >= 1000/_attackSpeed)
                 {
@@ -125,7 +124,7 @@ namespace TripOverTime.EngineNamespace
                         monsterToAttack.life.DecreasedPoint(_attack);
                     }
                 }
-            }
+                _sprite.AttackAnimation(5,"attack", 100);            }
         }
 
         internal void RoundY()
@@ -308,6 +307,12 @@ namespace TripOverTime.EngineNamespace
         internal float PLAYER_MOVE
         {
             get => PPLAYER_MOVE;
+        }
+
+        internal bool HurtPlayer
+        {
+            get => _isHurt;
+            set => _isHurt = value;
         }
     }
 }
