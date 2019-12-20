@@ -1,6 +1,9 @@
 BACKGROUNDPATH
 ..\..\..\..\Assets\Backgrounds\game_background_1.png
 BACKGROUNDPATHEND
+PLAYER
+..\..\..\..\Assets\Players\Rogue\AllRogue 0 3 10 5
+PLAYEREND
 LIMIT
 0 1
 39 5

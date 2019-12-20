@@ -66,7 +66,7 @@ namespace TripOverTime.Main
                         window.Close();
                     }
                     // Start a game
-                    engine.StartGame(chooseMap, @"..\..\..\..\Assets\Players\Variable sizes\Rogue\AllRogue"); //map, player sprite
+                    engine.StartGame(chooseMap); //map, player sprite
                     engine.GetGUI.InitGame();
 
                     short result = 1;
