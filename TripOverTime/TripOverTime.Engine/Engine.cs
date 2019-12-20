@@ -72,22 +72,37 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
-            //Monsters move
+            if(!_game.GetPlayer.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer.KilledBy = "Monster";
+                return -1;
+            }
+
+            //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
+                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                {
+                    m.Orientation = "left";
+                }
+                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                {
+                    m.Orientation = "right";
+                }
+
                 if (!m.isAlive)
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 3 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
                 {
-                    m.Orientation = "left";
                     m.MonsterMove();
                 }
-                else if (m.Position.X + 3 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
+
+                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
                 {
-                    m.Orientation = "right";
-                    m.MonsterMove();
+                    m.MonsterAttack();
                 }
             }
 
