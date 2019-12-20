@@ -10,7 +10,9 @@ namespace TripOverTime.EngineNamespace
     {
         Engine _context;
         RenderWindow _window;
+        RenderWindow _window2;
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed;
+        Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed2;
         SFML.Graphics.Sprite _background;
         private SFML.System.Vector2f _moveTheMapOf;
         SFML.Graphics.Sprite _hpBar;
@@ -26,6 +28,7 @@ namespace TripOverTime.EngineNamespace
             _context = context;
             _window = window;
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
+            _spritesDisplayed2 = new Dictionary<SFML.System.Vector2f, Sprite>();
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
             _hpBar = new SFML.Graphics.Sprite();
@@ -37,9 +40,8 @@ namespace TripOverTime.EngineNamespace
             LoadMap();
         }
 
-        public void InitGameM()
+        public void InitGameM() //Multiplayer version
         {
-            LoadMap();
             LoadMapM();
         }
 
@@ -83,6 +85,46 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
 
         }
+        public void ShowMapM()
+        {
+            if (!_window.IsOpen) _context.Close = true;
+
+            _window.Clear();
+
+            // Background
+            _window.Draw(_background);
+
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed2)
+            {
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
+            }
+
+            // Lifebar
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _window.Draw(_hpBar);
+
+            // Player
+            if (_context.GetGame.GetPlayer.IsAlive)
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
+            }
+
+            // Monsters
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(m.GetMonsterSprite.GetSprite);
+            }
+
+            // Display
+            _window.Display();
+
+        }
 
         private void LoadMap()
         {
@@ -117,7 +159,6 @@ namespace TripOverTime.EngineNamespace
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
         }
-
         private void LoadMapM()
         {
             if (!_window.IsOpen) throw new Exception("Window is not open!");
@@ -148,7 +189,7 @@ namespace TripOverTime.EngineNamespace
             {
                 s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
-                _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
+                _spritesDisplayed2.Add(s.Value.GetSprite.Position, s.Value);
             }
         }
         internal void Events()
