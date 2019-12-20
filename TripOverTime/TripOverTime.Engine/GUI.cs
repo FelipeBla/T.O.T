@@ -55,7 +55,7 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / _context.GetGame.GetPlayer.GetLife.GetMaxPoint()) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
 
             // Player
