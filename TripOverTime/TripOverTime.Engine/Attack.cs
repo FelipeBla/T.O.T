@@ -42,7 +42,6 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetPlayer.GetLife.DecreasedPoint(_attack);
                 _context.GetPlayer.HurtPlayer = true;
-                Console.WriteLine(_context.GetPlayer.GetLife.GetCurrentPoint());
                 HurtPlayer();
                 _timer.Restart();
             }
