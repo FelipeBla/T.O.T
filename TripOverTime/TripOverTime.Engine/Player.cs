@@ -26,6 +26,7 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         bool _isAttack;
+        bool _isHurt;
         String _monsterKillName;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
@@ -80,7 +81,7 @@ namespace TripOverTime.EngineNamespace
         {
             if (_isAttack)
             {
-                _sprite.AttackAnimation();
+                _sprite.AttackAnimation(5,"attack", 100);
             }
         }
 
@@ -264,6 +265,12 @@ namespace TripOverTime.EngineNamespace
         internal float PLAYER_MOVE
         {
             get => PPLAYER_MOVE;
+        }
+
+        internal bool HurtPlayer
+        {
+            get => _isHurt;
+            set => _isHurt = value;
         }
     }
 }

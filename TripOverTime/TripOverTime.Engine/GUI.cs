@@ -151,8 +151,16 @@ namespace TripOverTime.EngineNamespace
                 _context.GetGame.GetPlayer.Attack();
             }
 
+            if (_context.GetGame.GetPlayer.HurtPlayer)
+            {
+                foreach(Monster monster in _context.GetGame.GetMonsters)
+                {
+                    monster.GetAttack.HurtPlayer();
+                }
+            }
 
-            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !_context.GetGame.GetPlayer.IsAttack)
+
+            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !_context.GetGame.GetPlayer.IsAttack && !_context.GetGame.GetPlayer.HurtPlayer)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
             }

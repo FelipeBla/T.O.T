@@ -41,6 +41,9 @@ namespace TripOverTime.EngineNamespace
             if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
             {
                 _context.GetPlayer.GetLife.DecreasedPoint(_attack);
+                _context.GetPlayer.HurtPlayer = true;
+                Console.WriteLine(_context.GetPlayer.GetLife.GetCurrentPoint());
+                HurtPlayer();
                 _timer.Restart();
             }
         }
@@ -52,6 +55,11 @@ namespace TripOverTime.EngineNamespace
         internal void SlidingAttack()
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding", _monster);
+        }
+
+        internal void HurtPlayer()
+        {
+            _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
         }
 
         internal ushort GetAttack

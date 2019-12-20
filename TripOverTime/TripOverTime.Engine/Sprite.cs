@@ -24,6 +24,7 @@ namespace TripOverTime.EngineNamespace
         int _monsterWalk;
         int _monsterDead;
         int _monsterAttack;
+        int _playerAnimation;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
@@ -47,7 +48,7 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
-            _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
+            _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
 
             if (_name == "CHECKPOINT")
             {
@@ -253,12 +254,54 @@ namespace TripOverTime.EngineNamespace
             
         }
 
-        internal void AttackAnimation()
+
+        internal void PlayerAnimation(int nbrAction, string action, int time)
         {
-            int nbrAction = 5;
-            string action = "attack";
-            if (_animTimer.ElapsedMilliseconds >= 100)
+            if (_animTimer.ElapsedMilliseconds >= time)
             {
+
+                if (_playerAnimation == nbrAction)
+                {
+                    _playerAnimation = 1;
+
+                    if (_context.GetGame.GetPlayer.HurtPlayer) { _context.GetGame.GetPlayer.HurtPlayer = false; }
+                }
+                else
+                {
+                    _playerAnimation++;
+                }
+
+                string numberTexture = action + _playerAnimation;
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (_context.GetGame.GetPlayer.Orientation == "left")//Left
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+                _animTimer.Restart();
+
+            }
+        }
+        internal void AttackAnimation(int nbrAction, string action, int time)
+        {
+            if (_animTimer.ElapsedMilliseconds >= time)
+            {
+
+                if (_incrementationAttack == nbrAction)
+                {
+                    _incrementationAttack = 1;
+
+                    if (_context.GetGame.GetPlayer.IsAttack) { _context.GetGame.GetPlayer.IsAttack = false; }
+                }
+                else
+                {
+                    _incrementationAttack++;
+                }
 
                 string numberTexture = action + _incrementationAttack;
                 _sprite.Texture = _playerTexture[numberTexture];
@@ -267,19 +310,10 @@ namespace TripOverTime.EngineNamespace
                     _sprite.Origin = new SFML.System.Vector2f(0, 0);
                     _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
                 }
-                else
+                else if (_context.GetGame.GetPlayer.Orientation == "left")//Left
                 {
                     _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
                     _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                }
-                if (_incrementationAttack + 1 == nbrAction)
-                {
-                    _context.GetGame.GetPlayer.IsAttack = false;
-                    _incrementationAttack = 1;
-                }
-                else
-                {
-                    _incrementationAttack++;
                 }
                 _animTimer.Restart();
 
