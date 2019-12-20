@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SFML.Window;
 using SFML.Graphics;
+using SFML.System;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -14,11 +15,13 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         private SFML.System.Vector2f _moveTheMapOf;
         SFML.Graphics.Sprite _hpBar;
+        SFML.Graphics.Sprite _rect1;
         Texture _lifebarTexture;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
         static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
         static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
         static SFML.Window.Keyboard.Key _AttackAction = Keyboard.Key.Space;
+
 
 
         internal GUI(Engine context, RenderWindow window)
@@ -29,6 +32,7 @@ namespace TripOverTime.EngineNamespace
             _background = new SFML.Graphics.Sprite();
             _moveTheMapOf = new SFML.System.Vector2f(0, 0);
             _hpBar = new SFML.Graphics.Sprite();
+            _rect1 = new SFML.Graphics.Sprite();
         }
 
 
@@ -42,8 +46,13 @@ namespace TripOverTime.EngineNamespace
             if (!_window.IsOpen) _context.Close = true;
 
             _window.Clear();
-
-            // Background
+            //view player 1
+            View view1 = new View(new Vector2f(400, 300), new Vector2f(800, 600));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 0.5f);
+            view1.Size = new Vector2f(800, 300);
+            _window.SetView(view1);
+            Vector2f PositionScreen1 = new Vector2f(400, 300);
+            // Background Player 1
             _window.Draw(_background);
 
             // Load map
@@ -53,7 +62,7 @@ namespace TripOverTime.EngineNamespace
                 s.Value.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(s.Value.GetSprite);
             }
-
+             
             // Lifebar
             _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
@@ -70,6 +79,43 @@ namespace TripOverTime.EngineNamespace
             {
                 m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 -40);
                 m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;                
+                _window.Draw(m.GetMonsterSprite.GetSprite);
+            }
+
+            //view player 2
+            View view2 = new View(new Vector2f(400, 300), new Vector2f(800, 600));
+            view2.Viewport = new FloatRect(0, 0.5f, 1f, 0.5f);
+            view2.Size = new Vector2f(800, 300);
+            Vector2f PositionScreen2 = new Vector2f(400, 300);
+            _window.SetView(view2);
+
+
+            // Background Player 2
+            _window.Draw(_background);
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
+            {
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
+            }
+
+            // Lifebar
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _window.Draw(_hpBar);
+
+            // Player
+            if (_context.GetGame.GetPlayer.IsAlive)
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
+            }
+
+            // Monsters
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 

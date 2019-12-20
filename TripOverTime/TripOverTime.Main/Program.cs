@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using TripOverTime.EngineNamespace;
 
+
 namespace TripOverTime.Main
 {
     class Program
@@ -27,6 +28,7 @@ namespace TripOverTime.Main
             RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
             window.SetVerticalSyncEnabled(true);
             Engine engine = new Engine(window);
+            
 
             //Menu
             while (!engine.Close) //GAMELOOP MASTER
