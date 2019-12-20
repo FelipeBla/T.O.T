@@ -124,7 +124,8 @@ namespace TripOverTime.EngineNamespace
                         monsterToAttack.life.DecreasedPoint(_attack);
                     }
                 }
-                _sprite.AttackAnimation(5,"attack", 100);            }
+                _sprite.AttackAnimation(4,"attack", 100);
+            }
         }
 
         internal void RoundY()
