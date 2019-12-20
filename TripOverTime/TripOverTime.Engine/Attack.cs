@@ -10,7 +10,7 @@ namespace TripOverTime.EngineNamespace
         Monster _monster;
         ushort _attack;
         Stopwatch _timer;
-        int _spetialAttack;
+        int _specialAttack;
 
         internal Attack(Game context, Monster monster, ushort attack)
         {
@@ -19,17 +19,17 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
-            _spetialAttack = 0;
+            _specialAttack = 0;
         }
 
         internal void AttackMonster()
         {
-            if (_spetialAttack < 2 && (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
+            if (_specialAttack < 2 && (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
             {
                 SlidingAttack();
                 if (_timer.ElapsedMilliseconds >= 700)
                 {
-                    _spetialAttack++;
+                    _specialAttack++;
                     _timer.Restart();
                 }
             }
@@ -58,7 +58,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void HurtPlayer()
         {
-            _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
+            _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 40);
         }
 
         internal ushort GetAttack
