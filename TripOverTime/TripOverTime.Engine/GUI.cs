@@ -47,9 +47,9 @@ namespace TripOverTime.EngineNamespace
 
             _window.Clear();
             //view player 1
-            View view1 = new View(new Vector2f(400, 300), new Vector2f(800, 600));
+            View view1 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
             view1.Viewport = new FloatRect(0f, 0f, 1f, 0.5f);
-            view1.Size = new Vector2f(800, 300);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution * 9 / 10);
             _window.SetView(view1);
             Vector2f PositionScreen1 = new Vector2f(400, 300);
             // Background Player 1
@@ -64,7 +64,7 @@ namespace TripOverTime.EngineNamespace
             }
              
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, -22), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
 
             // Player
@@ -83,9 +83,9 @@ namespace TripOverTime.EngineNamespace
             }
 
             //view player 2
-            View view2 = new View(new Vector2f(400, 300), new Vector2f(800, 600));
-            view2.Viewport = new FloatRect(0, 0.5f, 1f, 0.5f);
-            view2.Size = new Vector2f(800, 300);
+            View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view2.Viewport = new FloatRect(0f, 0.5f, 1f, 0.5f);
+            view2.Size = new Vector2f(Settings.XResolution, Settings.YResolution * 9 / 10);
             Vector2f PositionScreen2 = new Vector2f(400, 300);
             _window.SetView(view2);
 
@@ -101,7 +101,7 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, -22), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
 
             // Player
