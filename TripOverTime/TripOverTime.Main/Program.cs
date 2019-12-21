@@ -92,9 +92,10 @@ namespace TripOverTime.Main
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-                        engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Knight\AllViking"); //map, player sprite
+                        engine.StartGame(@"..\..\..\..\Maps\Vikings.totmap"); //map, player sprite
                         engine.GetGUI.InitGame();
                     }
+
                     else if (result == -1)
                     {
                         //DIE
