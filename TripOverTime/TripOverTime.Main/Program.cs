@@ -48,8 +48,25 @@ namespace TripOverTime.Main
 
                 if (choose == 0) //Lauch GAME
                 {
+                    // Choose Map
+                    string chooseMap = "null";
+                    engine.GetMenu.InitMapMenu();
+                    do
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            chooseMap = engine.GetMenu.ChooseMapMenu();
+                            spGame.Restart();
+                        }
+                    } while (chooseMap == "null");
+                    Console.WriteLine(chooseMap);
+                    if (chooseMap == "quit")
+                    {
+                        RunAgain();
+                        window.Close();
+                    }
                     // Start a game
-                    engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Knight\AllViking"); //map, player sprite
+                    engine.StartGame(chooseMap); //map, player sprite
                     engine.GetGUI.InitGame();
 
                     short result = 1;
@@ -109,6 +126,7 @@ namespace TripOverTime.Main
                     if(engine.GetSettings.RunSettings()) // if true need to apply
                     {
                         RunAgain();
+                        window.Close();
                     }
                 }
                 else if (choose == -1)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using SFML;
 using SFML.Graphics;
 using SFML.Window;
@@ -29,9 +30,19 @@ namespace TripOverTime.EngineNamespace
             _timer.Start();
         }
 
-        public void StartGame(string mapPath, string playerPath)
+        public void StartGame(string mapPath)
         {
-            _game = new Game(this, mapPath, playerPath, new Position(0, 3)); //0, 3
+            //Verify if it's a map file
+            if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get player
+            // path x y life atk
+            string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
+
+            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
         }
 
         /// <summary>
@@ -45,6 +56,8 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
+            Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
@@ -70,22 +83,37 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
-            //Monsters move
+            if(!_game.GetPlayer.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer.KilledBy = "Monster";
+                return -1;
+            }
+
+            //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
+                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                {
+                    m.Orientation = "left";
+                }
+                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                {
+                    m.Orientation = "right";
+                }
+
                 if (!m.isAlive)
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 3 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X) //left
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
                 {
-                    m.Orientation = "left";
                     m.MonsterMove();
                 }
-                else if (m.Position.X + 3 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X) //right
+
+                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
                 {
-                    m.Orientation = "right";
-                    m.MonsterMove();
+                    m.MonsterAttack();
                 }
             }
 
@@ -212,6 +240,13 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
             _game = null;
+        }
+
+        private string StringBetweenString(string original, string str1, string str2)
+        {
+            int firstStringPosition = original.IndexOf(str1);
+            int secondStringPosition = original.IndexOf(str2);
+            return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
         public Menu GetMenu

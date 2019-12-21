@@ -55,7 +55,7 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / _context.GetGame.GetPlayer.GetLife.GetMaxPoint()) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
 
             // Player
@@ -97,10 +97,13 @@ namespace TripOverTime.EngineNamespace
             _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
             if (_lifebarTexture == null) throw new Exception("Texture null!");
 
+
             _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
             if (_hpBar == null) throw new Exception("Sprite null!");
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X/100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
+            
+            
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
@@ -134,19 +137,27 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetGame.GetPlayer.IsAttack = true;
                 _context.GetGame.GetPlayer.Attack();
-                foreach (Monster m in _context.GetGame.GetMonsters)
+            }
+
+            if (_context.GetGame.GetPlayer.IsAttack)
+            {
+                _context.GetGame.GetPlayer.Attack();
+            }
+
+            if (_context.GetGame.GetPlayer.HurtPlayer)
+            {
+                foreach(Monster monster in _context.GetGame.GetMonsters)
                 {
-                    if (m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X)
-                    {
-                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
-                    }
+                    monster.GetAttack.HurtPlayer();
                 }
             }
 
-            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !Keyboard.IsKeyPressed(_AttackAction))
+
+            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !_context.GetGame.GetPlayer.IsAttack && !_context.GetGame.GetPlayer.HurtPlayer)
             {
                 _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
             }
+
         }
         public SFML.Window.Keyboard.Key RightAction
         {
