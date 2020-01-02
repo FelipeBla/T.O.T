@@ -12,8 +12,9 @@ BLOCKS
 A AIR ..\..\..\..\Assets\air.png false
 G GRASS ..\..\..\..\Assets\Ground\Jungle\PNG\jungle_pack_05.png true
 1 DIRT ..\..\..\..\Assets\Ground\Jungle\PNG\jungle_pack_35.png true
-2 TRAP ..\..\..\..\Assets\Tiles\spikes.png true DANGEROUS
-3 END ..\..\..\..\Assets\Items\flagGreen_down.png false
+2 TRAP ..\..\..\..\Assets\Tiles\jungle_pack_52.png true DANGEROUS
+3 TRAP ..\..\..\..\Assets\Tiles\jungle_pack_54.png true DANGEROUS
+4 END ..\..\..\..\Assets\Items\flagGreen_down.png false
 BLOCKSEND
 MONSTER
 Golem1 3 3 10 1 0,03
@@ -23,7 +24,7 @@ MONSTEREND
 MAP
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAGG1GGAAGAAAAAAAAAAAAAAAAAAAAAAAAA3A
+AAAAAGG1GGAAGAAAAAAAAAAAAAAAAAAAAAAAAA4A
 GGGGG11111221GGGGGGGGGGGGGGGGGGGGGGGGGGG
-1111111111111111111111111111111111111111
+1111111111331111111111111111111111111111
 MAPEND
