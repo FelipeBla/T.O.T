@@ -2,7 +2,7 @@ BACKGROUNDPATH
 ..\..\..\..\Assets\Backgrounds\Cartoon_Forest_BG_03.png
 BACKGROUNDPATHEND
 PLAYER
-..\..\..\..\Assets\Players\Knight\AllViking 0 3 10 5
+..\..\..\..\Assets\Players\Rogue\AllJungle 0 3 10 5
 PLAYEREND
 LIMIT
 0 1
