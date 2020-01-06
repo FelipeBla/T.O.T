@@ -12,7 +12,7 @@ namespace TripOverTime.EngineNamespace
         float ph;
         const float JUMPING_SPEED = 0.06f;
         const float GRAVITY_SPEED = 0.06f;
-        const float JUMPING_LIMIT = 1.1f;
+        const float JUMPING_LIMIT = 1.3f;
         const float PPLAYER_MOVE = 0.10f;
 
         readonly Game _context;
@@ -62,7 +62,7 @@ namespace TripOverTime.EngineNamespace
         {
             if (!_isJumping)
             {
-                _origin = new Position(_position.X, _position.Y);
+                _origin = new Position(_realPosition.X, _realPosition.Y);
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
                 _isJumping = true;
@@ -73,7 +73,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void Gravity()
         {
-            if(_isJumping && _origin != null && _position.Y <= _origin.Y + JUMPING_LIMIT) // Jump
+            if(_isJumping && _origin != null && _realPosition.Y <= _origin.Y + JUMPING_LIMIT) // Jump
             {
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
