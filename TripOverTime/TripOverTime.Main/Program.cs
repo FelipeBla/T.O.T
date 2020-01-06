@@ -10,12 +10,12 @@ namespace TripOverTime.Main
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args) //fonction principale 
         {
             RunAgain();
         }
 
-        private static void RunAgain()
+        private static void RunAgain() //fonction du jeu
         {
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
@@ -92,8 +92,10 @@ namespace TripOverTime.Main
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-                        engine.WinMenu();
+                        engine.StartGame(@"..\..\..\..\Maps\Vikings.totmap"); //map, player sprite
+                        engine.GetGUI.InitGame();
                     }
+
                     else if (result == -1)
                     {
                         //DIE
