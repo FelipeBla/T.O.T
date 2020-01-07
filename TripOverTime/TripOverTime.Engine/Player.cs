@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TripOverTime.EngineNamespace
@@ -28,6 +29,9 @@ namespace TripOverTime.EngineNamespace
         bool _isAttack;
         bool _isHurt;
         String _monsterKillName;
+        Stopwatch _attackTimer;
+        int _attackSpeed;
+        float _attackRange;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -41,6 +45,12 @@ namespace TripOverTime.EngineNamespace
             _isAttack = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             _orientation = "right";
+
+            _attackSpeed = 1;
+            _attackRange = 1.0f; // En block
+
+            _attackTimer = new Stopwatch();
+            _attackTimer.Start();
 
             pw = 128;
             ph = 128;
@@ -81,8 +91,40 @@ namespace TripOverTime.EngineNamespace
         {
             if (_isAttack)
             {
-                _sprite.AttackAnimation(5,"attack", 100);
-            }
+                //Evite le spam d'attaque
+                if (_attackTimer.ElapsedMilliseconds >= 1000/_attackSpeed)
+                {
+                    _attackTimer.Restart();
+                    //Attack
+                    Monster monsterToAttack = null;
+                    //check orientation
+                    if (_orientation == "right")
+                    {
+                        //try get monster with position
+                        foreach (Monster m in _context.GetMonsters)
+                        {
+                            if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y)
+                                monsterToAttack = m;
+                        }
+                    }
+                    else
+                    {
+                        //try get monster with position
+                        foreach (Monster m in _context.GetMonsters)
+                        {
+                            if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y)
+                                monsterToAttack = m;
+                        }
+                    }
+
+                    // Si il y a un monstre
+                    if (monsterToAttack != null)
+                    {
+                        //Attack
+                        monsterToAttack.life.DecreasedPoint(_attack);
+                    }
+                }
+                _sprite.AttackAnimation(5,"attack", 100);            }
         }
 
         internal void RoundY()

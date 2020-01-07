@@ -45,6 +45,8 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
+            Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;

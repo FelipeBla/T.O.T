@@ -137,13 +137,6 @@ namespace TripOverTime.EngineNamespace
             {
                 _context.GetGame.GetPlayer.IsAttack = true;
                 _context.GetGame.GetPlayer.Attack();
-                foreach (Monster m in _context.GetGame.GetMonsters)
-                {
-                    if ((m.Position.X + 2 > _context.GetGame.GetPlayer.RealPosition.X && m.Position.X < _context.GetGame.GetPlayer.RealPosition.X && _context.GetGame.GetPlayer.Orientation == "left") || ( m.Position.X - 2 < _context.GetGame.GetPlayer.RealPosition.X && m.Position.X > _context.GetGame.GetPlayer.RealPosition.X && _context.GetGame.GetPlayer.Orientation == "right"))
-                    {
-                        m.life.DecreasedPoint(_context.GetGame.GetPlayer.GetAttack);
-                    }
-                }
             }
 
             if (_context.GetGame.GetPlayer.IsAttack)

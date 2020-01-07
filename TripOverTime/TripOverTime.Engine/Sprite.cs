@@ -324,10 +324,9 @@ namespace TripOverTime.EngineNamespace
         {
             if (monster.IsMoving)
             {
-
                 int nbrAction = 25;
                 string action = "walk";
-                if (monster.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+                if (monster.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
                 {
 
                     string numberTexture = action + _monsterWalk;
@@ -344,7 +343,7 @@ namespace TripOverTime.EngineNamespace
                     _animTimer.Restart();
 
                 }
-                else if (_animTimer.ElapsedMilliseconds >= 100) //left
+                else if (_animTimer.ElapsedMilliseconds >= 40) //left
                 {
                     string numberTexture = action + _monsterWalk;
                     _sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, -(int)_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
