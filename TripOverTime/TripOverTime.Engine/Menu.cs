@@ -18,6 +18,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         string[] _maps;
+        Font _font;
 
 
         internal Menu(RenderWindow window)
@@ -26,6 +27,7 @@ namespace TripOverTime.EngineNamespace
 
             _window = window;
             _selected = 0;
+            _font = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _lines = new Text[MAX_LINES];
         }
 
@@ -40,9 +42,9 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             //Lines
-            _lines[0] = new Text("Start", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[1] = new Text("Settings", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[2] = new Text("Quit", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[0] = new Text("Start", _font, _charSize);
+            _lines[1] = new Text("Settings", _font, _charSize);
+            _lines[2] = new Text("Quit", _font, _charSize);
 
             _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
@@ -130,7 +132,7 @@ namespace TripOverTime.EngineNamespace
             //Lines
             for (int i = 0; i < _maps.Length; i++)
             {
-                _lines[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+                _lines[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), _font, _charSize);
             }
 
             for (int i = 0; i < _lines.Length; i++)
