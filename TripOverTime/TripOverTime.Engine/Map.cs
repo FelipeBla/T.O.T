@@ -10,7 +10,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         List<Sprite> _sprites;
         string _backgroundPath;
-        string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\hudHeart_full.png";
+        string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
