@@ -24,7 +24,7 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
-            _mapPath = context.MapPath;
+            _mapPath = @"..\..\..\..\Maps\attackMonster.totmap";
 
             //Verify if it's a map file
             if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
