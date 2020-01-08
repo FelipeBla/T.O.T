@@ -369,7 +369,7 @@ namespace TripOverTime.EngineNamespace
             if (_animTimer.ElapsedMilliseconds >= 60)
             {
 
-                if (_monsterAttack == nbrAction)
+                if (_monsterAttack >= nbrAction)
                 {
                     _monsterAttack = 1;
                 }

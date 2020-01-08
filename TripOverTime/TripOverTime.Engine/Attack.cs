@@ -1,6 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Diagnostics;
+
+
 
 namespace TripOverTime.EngineNamespace
 {
@@ -10,7 +13,9 @@ namespace TripOverTime.EngineNamespace
         Monster _monster;
         ushort _attack;
         Stopwatch _timer;
-        int _spetialAttack;
+        string[] _schemaAttack;
+        int _incrementationAttack;
+        string _mapPath;
 
         internal Attack(Game context, Monster monster, ushort attack)
         {
@@ -19,32 +24,51 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
-            _spetialAttack = 0;
+            _mapPath = context.MapPath;
+
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            string text = File.ReadAllText(_mapPath);
+            // Open map file
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+            _schemaAttack = StringBetweenString(text, _monster.Name + "UP", _monster.Name + "END").Split("\n");
+            _incrementationAttack = 0;
         }
 
         internal void AttackMonster()
         {
-            if (_spetialAttack < 2 && (_monster.Name == "Golem1" || _monster.Name == "Golem2"))
+            if (_incrementationAttack == _schemaAttack[0].Length -1 )
             {
+                _incrementationAttack = 0;
+            }
+
+            Console.WriteLine(_schemaAttack[0][_incrementationAttack]);
+            if (_schemaAttack[0][_incrementationAttack] == 'S')
+            { 
                 SlidingAttack();
                 if (_timer.ElapsedMilliseconds >= 700)
                 {
-                    _spetialAttack++;
+                    _context.GetPlayer.GetLife.DecreasedPoint(_attack);
+                    _context.GetPlayer.HurtPlayer = true;
+                    HurtPlayer();
+                    _incrementationAttack++;
                     _timer.Restart();
                 }
             }
-            else
+            else if (_schemaAttack[0][_incrementationAttack] == 'A')
             {
                 NormalAttack();
+
+                if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+                {
+                    _context.GetPlayer.GetLife.DecreasedPoint(_attack);
+                    _context.GetPlayer.HurtPlayer = true;
+                    HurtPlayer();
+                    _incrementationAttack++;
+                    _timer.Restart();
+                }
             }
 
-            if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
-            {
-                _context.GetPlayer.GetLife.DecreasedPoint(_attack);
-                _context.GetPlayer.HurtPlayer = true;
-                HurtPlayer();
-                _timer.Restart();
-            }
         }
         internal void NormalAttack()
         {
@@ -59,6 +83,13 @@ namespace TripOverTime.EngineNamespace
         internal void HurtPlayer()
         {
             _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
+        }
+
+        private string StringBetweenString(string original, string str1, string str2)
+        {
+            int firstStringPosition = original.IndexOf(str1);
+            int secondStringPosition = original.IndexOf(str2);
+            return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
         internal ushort GetAttack
