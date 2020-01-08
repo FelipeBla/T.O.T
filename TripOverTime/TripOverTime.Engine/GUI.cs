@@ -55,8 +55,12 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / _context.GetGame.GetPlayer.GetLife.GetMaxPoint()) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             _window.Draw(_hpBar);
+            // HP Text
+            Text hp = new Text(Convert.ToString(_context.GetGame.GetPlayer.GetLife.CurrentPoint), _context.GetFont, 28);
+            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
+            _window.Draw(hp);
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
@@ -96,7 +100,6 @@ namespace TripOverTime.EngineNamespace
             // Set lifeBar
             _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
             if (_lifebarTexture == null) throw new Exception("Texture null!");
-
 
             _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
             if (_hpBar == null) throw new Exception("Sprite null!");

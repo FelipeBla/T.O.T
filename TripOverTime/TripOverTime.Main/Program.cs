@@ -92,8 +92,7 @@ namespace TripOverTime.Main
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-                        engine.StartGame(@"..\..\..\..\Maps\Vikings.totmap"); //map, player sprite
-                        engine.GetGUI.InitGame();
+                        engine.WinMenu();
                     }
 
                     else if (result == -1)
