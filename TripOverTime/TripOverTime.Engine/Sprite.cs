@@ -120,19 +120,22 @@ namespace TripOverTime.EngineNamespace
 
         internal void DefaultAnimation()
         {
-            if (_context.GetGame.GetPlayer.Orientation == "right")
+            if(!_context.GetGame.GetPlayer.IsJumping)
             {
-                _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                if (_context.GetGame.GetPlayer.Orientation == "right")
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                }
+                else
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture["stand"].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
+                }
+                _sprite.Texture = _playerTexture["stand"];
             }
-            else
-            {
-                _sprite.Origin = new SFML.System.Vector2f(_playerTexture["stand"].Size.X/2, 0);
-                _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                //_sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
-            }
-            _sprite.Texture = _playerTexture["stand"];
         }
 
         internal void WalkAnimation()
@@ -206,7 +209,6 @@ namespace TripOverTime.EngineNamespace
                         _sprite.Texture = _playerTexture["jump5"];
                         _sprite.Origin = new SFML.System.Vector2f(0, 0);
                         _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                        _context.GetGame.GetPlayer.IsJumping = false;
                     }
                     else
                     {
@@ -239,7 +241,6 @@ namespace TripOverTime.EngineNamespace
                         _sprite.Texture = _playerTexture["jump5"];
                         _sprite.Origin = new SFML.System.Vector2f(_playerTexture["jump5"].Size.X / 2, 0);
                         _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                        _context.GetGame.GetPlayer.IsJumping = false;
                     }
                     else
                     {

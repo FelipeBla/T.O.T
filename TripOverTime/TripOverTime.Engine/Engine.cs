@@ -19,6 +19,7 @@ namespace TripOverTime.EngineNamespace
         Game _game; // Contient Map, Player, Monster
         Settings _settings;
         GUI _gui;
+        Font _globalFont;
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
@@ -26,6 +27,7 @@ namespace TripOverTime.EngineNamespace
             _menu = new Menu(window);
             _settings = new Settings(this, window);
             _gui = new GUI(this, window);
+            _globalFont = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _timer = new Stopwatch();
             _timer.Start();
         }
@@ -56,8 +58,8 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
-            Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
-            Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
+            //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            //Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
@@ -160,10 +162,10 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU WIN !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 64));
-            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 48));
-            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
-            lines.Add(new Text("Press ENTER to QUIT", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+            lines.Add(new Text("YOU WIN !", _globalFont, 64));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
+            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
             lines[1].Color = Color.Yellow;
@@ -206,10 +208,10 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU DIIIIE !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 64));
-            lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 48));
-            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
-            lines.Add(new Text("Press ENTER to QUIT", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), 32));
+            lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
+            lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
+            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
             lines[1].Color = Color.Yellow;
@@ -279,6 +281,11 @@ namespace TripOverTime.EngineNamespace
         public Checkpoint GetCheckpoint
         {
             get => _checkpoint;
+        }
+
+        public Font GetFont
+        {
+            get => _globalFont;
         }
     }
 }
