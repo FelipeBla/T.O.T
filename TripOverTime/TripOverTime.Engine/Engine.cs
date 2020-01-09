@@ -57,6 +57,8 @@ namespace TripOverTime.EngineNamespace
 
             //Events
             _gui.Events();
+            _gui.Events2();
+
 
             //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
             //Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");

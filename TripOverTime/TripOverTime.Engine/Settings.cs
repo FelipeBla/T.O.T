@@ -10,7 +10,7 @@ namespace TripOverTime.EngineNamespace
 {
     public class Settings
     {
-        const ushort MAX_LINES = 4;
+        const ushort MAX_LINES = 5;
         const ushort MAX_LINES_KB = 5;
         const ushort MAX_LINES_MULTIPLAYER = 3;
         private static uint _XResolution = 800;
@@ -60,13 +60,15 @@ namespace TripOverTime.EngineNamespace
             //Lines
             _lines[0] = new Text("Resolution", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("FPS", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[2] = new Text("Key Binding", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[2] = new Text("Key Binding Player 1", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[3] = new Text("Key Binding Player 2", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[4] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
             _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
             _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
             _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
+            _lines[4].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 5);
 
             _window.Display();
         }
@@ -164,6 +166,31 @@ namespace TripOverTime.EngineNamespace
 
             _window.Display();
         }
+
+        public void StartSettingsKB2()
+        {
+            //Background
+            // Set background
+            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(_background);
+
+            //Lines
+            _linesKB[0] = new Text("Jump : " + _context.GetGUI.JumpAction2, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[1] = new Text("Left : " + _context.GetGUI.LeftAction2, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[2] = new Text("Right : " + _context.GetGUI.RightAction2, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[3] = new Text("Attack : " + _context.GetGUI.AttackAction2, new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _linesKB[4] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+
+            for (int i = 0; i < MAX_LINES_KB; i++)
+            {
+                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+            }
+
+            _window.Display();
+        }
         public bool RunSettings()
         {
             bool returnMain = false;
@@ -230,11 +257,7 @@ namespace TripOverTime.EngineNamespace
 
                 switch (choose)
                 {
-                    case 2:
-                        //keybinding
-                        StartSettingsKB();
-                        RunSettingsKB();
-                        break;
+
                     case 0:
                         //resolution
                         StartSettingsResolution();
@@ -245,7 +268,17 @@ namespace TripOverTime.EngineNamespace
                         StartSettingsFPS();
                         RunSettingsFPS();
                         break;
+                    case 2:
+                        //keybinding player 2
+                        StartSettingsKB();
+                        RunSettingsKB();
+                        break;
                     case 3:
+                        //keybinding player 2
+                        StartSettingsKB2();
+                        RunSettingsKB2();
+                        break;
+                    case 4:
                         //quit
                         returnMain = true;
                         break;
@@ -611,6 +644,124 @@ namespace TripOverTime.EngineNamespace
                                 case 3:
                                     //Attack
                                     _context.GetGUI.AttackAction = a.Code;
+                                    break;
+                            }
+                            again = false;
+                        }
+                    };
+                    while (again) _window.WaitAndDispatchEvents();
+                }
+                //Re-while
+            } while (choose != 4);
+
+        }
+
+        public void RunSettingsKB2()
+        {
+            short choose = -3;
+            do
+            {
+                StartSettingsKB2();
+                //Events
+                choose = -3;
+                short tampon = 0;
+                Thread.Sleep(100);
+                do
+                {
+
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                    {
+                        choose = 4;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                    {
+                        choose = (short)_selectedKB;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedKB < MAX_LINES_KB - 1)
+                    {
+                        tampon = 1;
+                        _selectedKB++;
+                    }
+                    else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedKB > 0)
+                    {
+                        tampon = 2;
+                        _selectedKB--;
+                    }
+
+                    //Graphics
+                    _window.Clear();
+                    _window.Draw(_background);
+
+                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    {
+                        if (i == _selectedKB)
+                        {
+                            _linesKB[i].Color = Color.Red;
+                        }
+                        else
+                        {
+                            _linesKB[i].Color = Color.Black;
+                        }
+                        _window.Draw(_linesKB[i]);
+                    }
+
+                    _window.Display();
+
+                    if (tampon == 1)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                    }
+                    else if (tampon == 2)
+                    {
+                        tampon = 0;
+                        while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                    }
+                } while (choose == -3);
+
+                if (choose != 4)
+                {
+                    _linesKB[choose].Color = Color.Blue;
+                    _window.Clear();
+                    _window.Draw(_background);
+                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    {
+                        _window.Draw(_linesKB[i]);
+                    }
+                    _window.Display();
+
+                    //Clear event buffer
+                    Thread.Sleep(100);
+                    _window.KeyReleased += (s, a) =>
+                    {
+                        Console.WriteLine("Clear " + a.Code);
+                    };
+
+                    _window.DispatchEvents();
+                    bool again = true;
+                    // Get Key
+                    _window.KeyPressed += (s, a) =>
+                    {
+                        Console.WriteLine("Key : " + a.Code);
+                        if (a.Code != Keyboard.Key.Enter)
+                        {
+                            switch (choose)
+                            {
+                                case 0:
+                                    //Jump
+                                    _context.GetGUI.JumpAction2 = a.Code;
+                                    break;
+                                case 1:
+                                    //Left
+                                    _context.GetGUI.LeftAction2 = a.Code;
+                                    break;
+                                case 2:
+                                    //Right
+                                    _context.GetGUI.RightAction2 = a.Code;
+                                    break;
+                                case 3:
+                                    //Attack
+                                    _context.GetGUI.AttackAction2 = a.Code;
                                     break;
                             }
                             again = false;
