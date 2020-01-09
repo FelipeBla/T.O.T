@@ -41,7 +41,7 @@ namespace TripOverTime.EngineNamespace
             LoadMap();
         }
 
-        public void ShowMap()
+        public void ShowMapMultiplayer()
         {
             if (!_window.IsOpen) _context.Close = true;
 
@@ -52,6 +52,7 @@ namespace TripOverTime.EngineNamespace
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution * 9 / 10);
             _window.SetView(view1);
             Vector2f PositionScreen1 = new Vector2f(400, 300);
+
             // Background Player 1
             _window.Draw(_background);
 
@@ -101,6 +102,45 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, -22), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer2.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer2.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _window.Draw(_hpBar);
+
+            // Player
+            if (_context.GetGame.GetPlayer2.IsAlive)
+            {
+                _context.GetGame.GetPlayer2.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer2.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer2.Position.Y * -128 - 65);
+                _window.Draw(_context.GetGame.GetPlayer2.GetPlayerSprite.GetSprite);
+            }
+
+            // Monsters
+            foreach (Monster m in _context.GetGame.GetMonsters)
+            {
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(m.GetMonsterSprite.GetSprite);
+            }
+
+            // Display
+            _window.Display();
+
+        }
+        public void ShowMap()
+        {
+            if (!_window.IsOpen) _context.Close = true;
+
+            _window.Clear();
+            // Background Player 1
+            _window.Draw(_background);
+
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
+            {
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
+            }
+
+            // Lifebar
             _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, -22), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
 
@@ -123,7 +163,6 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
 
         }
-
         private void LoadMap()
         {
             if (!_window.IsOpen) throw new Exception("Window is not open!");

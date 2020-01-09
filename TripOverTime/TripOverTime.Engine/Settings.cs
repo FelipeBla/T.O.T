@@ -12,9 +12,11 @@ namespace TripOverTime.EngineNamespace
     {
         const ushort MAX_LINES = 4;
         const ushort MAX_LINES_KB = 5;
+        const ushort MAX_LINES_MULTIPLAYER = 3;
         private static uint _XResolution = 800;
         private static uint _YResolution = 600;
         private static uint _NbFPS = 60;
+        private static int _MultiplayerOrNot = 0;
 
         RenderWindow _window;
         ushort _selected;
@@ -23,6 +25,7 @@ namespace TripOverTime.EngineNamespace
         ushort _selectedKB;
         Text[] _lines;
         Text[] _linesKB;
+        Text[] _linesMultiplayer;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         Engine _context;
@@ -40,6 +43,7 @@ namespace TripOverTime.EngineNamespace
             _selectedKB = 0;
             _lines = new Text[MAX_LINES];
             _linesKB = new Text[MAX_LINES_KB];
+            _linesMultiplayer = new Text[MAX_LINES_MULTIPLAYER];
 
         }
 
@@ -63,6 +67,27 @@ namespace TripOverTime.EngineNamespace
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
             _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
             _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
+
+            _window.Display();
+        }
+        public void StartSettingsMultiplayer()
+        {
+            //Background
+            // Set background
+            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(_background);
+
+            //Lines
+            _lines[0] = new Text("1 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[1] = new Text("2 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[2] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+
+            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
+            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
+            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
 
             _window.Display();
         }
@@ -401,6 +426,85 @@ namespace TripOverTime.EngineNamespace
 
 
         }
+
+        public void RunSettingsMultiplayer()
+        {
+            Thread.Sleep(100);
+            short choose = -2;
+            short tampon = 0;
+            do
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    choose = 3;
+                }
+
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                {
+                    choose = (short)_selectedFPS;
+                }
+
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedFPS < MAX_LINES - 1)
+                {
+                    tampon = 1;
+                    _selectedFPS++;
+                }
+                else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedFPS > 0)
+                {
+                    tampon = 2;
+                    _selectedFPS--;
+                }
+
+
+                //Graphics
+                _window.Clear();
+                _window.Draw(_background);
+
+                for (int i = 0; i < MAX_LINES; i++)
+                {
+                    if (i == _selectedFPS)
+                    {
+                        _linesMultiplayer[i].Color = Color.Red;
+                    }
+                    else
+                    {
+                        _linesMultiplayer[i].Color = Color.Black;
+                    }
+                    _window.Draw(_lines[i]);
+                }
+
+                _window.Display();
+
+                if (tampon == 1)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                }
+                else if (tampon == 2)
+                {
+                    tampon = 0;
+                    while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                }
+            } while (choose == -3);
+
+            switch (choose)
+            {
+                case 0:
+                    //30fps
+                    _MultiplayerOrNot = 1;
+                    break;
+                case 1:
+                    //60fps
+                    _MultiplayerOrNot = 2;
+                    break;
+                case 2:
+                    //quit (return to settings main)
+
+                    break;
+            }
+
+
+        }
         public void RunSettingsKB()
         {
             short choose = -3;
@@ -539,7 +643,11 @@ namespace TripOverTime.EngineNamespace
             get { return _NbFPS; }
             set { _NbFPS = value; }
         }
-
+        public static int MultiplayerOrNot
+        {
+            get { return _MultiplayerOrNot; }
+            set { _MultiplayerOrNot = value; }
+        }
     }
 
 }

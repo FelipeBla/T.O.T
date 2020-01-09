@@ -105,14 +105,71 @@ namespace TripOverTime.Main
                         throw new Exception("WTF?!");
                     }
                 }
-                else if (choose == 1) //Settings
+                else if (choose == 1)
+                {
+                    // Start a game
+                    engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Knight\AllViking"); //map, player sprite
+                    engine.GetGUI.InitGame();
+
+                    short result = 1;
+                    // GameLoop
+                    spGui.Start();
+                    while (result == 1)
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            // GameTick
+                            result = engine.GameTick();
+                            spGame.Restart();
+                        }
+
+                        if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                        {
+                            //GUI
+                            engine.GetGUI.ShowMapMultiplayer();
+                            spGui.Restart();
+                        }
+                    }
+                    if (result == 0)
+                    {
+                        //WIN
+                        Console.WriteLine("YOU WIN!");
+                        engine.WinMenu();
+                    }
+                    else if (result == -1)
+                    {
+                        //DIE
+                        Console.WriteLine("YOU DIE!");
+
+                        if (engine.GetGame.GetPlayer.KilledBy == "Trap")
+                        {
+                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                            {
+                                engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
+                                if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                                {
+                                    //GUI
+                                    engine.GetGUI.ShowMapMultiplayer();
+                                    spGui.Restart();
+                                }
+                            }
+                        }
+
+                        engine.DieMenu();
+                    }
+                    else
+                    {
+                        throw new Exception("WTF?!");
+                    }
+                }
+                else if (choose == -1) //Settings
                 {
                     if(engine.GetSettings.RunSettings()) // if true need to apply
                     {
                         RunAgain();
                     }
                 }
-                else if (choose == -1)
+                else if (choose == -2)
                 {
                     window.Close();
                     engine.Close = true;
