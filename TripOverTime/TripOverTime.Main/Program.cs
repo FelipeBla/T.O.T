@@ -125,8 +125,24 @@ namespace TripOverTime.Main
                 }
                 else if (choose == 1)
                 {
+                    string chooseMap = "null";
+                    engine.GetMenu.InitMapMenu();
+                    do
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            chooseMap = engine.GetMenu.ChooseMapMenu();
+                            spGame.Restart();
+                        }
+                    } while (chooseMap == "null");
+                    Console.WriteLine(chooseMap);
+                    if (chooseMap == "quit")
+                    {
+                        RunAgain();
+                        window.Close();
+                    }
                     // Start a game
-                    engine.StartGame(@"..\..\..\..\Maps\test1.totmap"); //map, player sprite
+                    engine.StartGame(chooseMap); //map, player sprite
                     engine.GetGUI.InitGame();
 
                     short result = 1;
