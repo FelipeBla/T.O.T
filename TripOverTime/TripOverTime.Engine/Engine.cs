@@ -57,7 +57,6 @@ namespace TripOverTime.EngineNamespace
 
             //Events
             _gui.Events();
-            _gui.Events2();
 
 
             //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
