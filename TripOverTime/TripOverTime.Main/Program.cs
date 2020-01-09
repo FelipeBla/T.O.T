@@ -126,7 +126,7 @@ namespace TripOverTime.Main
                 else if (choose == 1)
                 {
                     // Start a game
-                    engine.StartGame(@"..\..\..\..\Maps\test2.totmap", @"..\..\..\..\Assets\Players\Variable sizes\Knight\AllViking"); //map, player sprite
+                    engine.StartGame(@"..\..\..\..\Maps\test1.totmap"); //map, player sprite
                     engine.GetGUI.InitGame();
 
                     short result = 1;

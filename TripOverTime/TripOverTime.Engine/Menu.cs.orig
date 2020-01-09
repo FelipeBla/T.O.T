@@ -42,10 +42,16 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             //Lines
-            _lines[0] = new Text("1 Player", _font, _charSize);
-            _lines[1] = new Text("2 Player", _font, _charSize);
-            _lines[2] = new Text("Settings", _font, _charSize);
-            _lines[3] = new Text("Quit", _font, _charSize);
+<<<<<<< HEAD
+            _lines[0] = new Text("1 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[1] = new Text("2 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[2] = new Text("Settings", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[3] = new Text("Quit", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+=======
+            _lines[0] = new Text("Start", _font, _charSize);
+            _lines[1] = new Text("Settings", _font, _charSize);
+            _lines[2] = new Text("Quit", _font, _charSize);
+>>>>>>> master
 
             _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
