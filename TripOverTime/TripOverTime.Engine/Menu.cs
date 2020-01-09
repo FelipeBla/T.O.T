@@ -58,25 +58,26 @@ namespace TripOverTime.EngineNamespace
             //Events
             short result = -2;
             short tampon = 0;
+            Joystick.Update();
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 1)))
             {
                 _window.Close();
                 result = -1;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
             {
                 if (_selected == 2) result = -1;
                 else result = (short)_selected;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) && _selected < MAX_LINES - 1)
             {
                 tampon = 1;
                 _selected++;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) && _selected > 0)
             {
                 tampon = 2;
                 _selected--;
@@ -105,10 +106,12 @@ namespace TripOverTime.EngineNamespace
             if (tampon == 1)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) Joystick.Update();
             }
             else if (tampon == 2)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) Joystick.Update();
             }
 
             return result;
@@ -150,23 +153,24 @@ namespace TripOverTime.EngineNamespace
             //Events
             string result = "null";
             short tampon = 0;
+            Joystick.Update();
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 1)))
             {
                 result = "quit";
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
             {
                 result = _maps[_selected];
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) && _selected < MAX_LINES - 1)
             {
                 tampon = 1;
                 _selected++;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) && _selected > 0)
             {
                 tampon = 2;
                 _selected--;
@@ -195,10 +199,12 @@ namespace TripOverTime.EngineNamespace
             if (tampon == 1)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) Joystick.Update();
             }
             else if (tampon == 2)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) Joystick.Update();
             }
 
             return result;

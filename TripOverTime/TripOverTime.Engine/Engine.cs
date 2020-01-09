@@ -165,7 +165,7 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("YOU WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
-            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
             lines[1].Color = Color.Yellow;
@@ -184,7 +184,8 @@ namespace TripOverTime.EngineNamespace
 
             while(!quit)
             {
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                Joystick.Update();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
                     quit = true;
                 System.Threading.Thread.Sleep(1);
             }
@@ -211,7 +212,7 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
             lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
-            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
             lines[1].Color = Color.Yellow;
@@ -230,7 +231,8 @@ namespace TripOverTime.EngineNamespace
 
             while (!quit)
             {
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                Joystick.Update();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
                     quit = true;
                 System.Threading.Thread.Sleep(1);
             }

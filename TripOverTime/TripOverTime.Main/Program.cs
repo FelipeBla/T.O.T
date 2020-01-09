@@ -15,7 +15,7 @@ namespace TripOverTime.Main
             RunAgain();
         }
 
-        private static void RunAgain() //fonction du jeu
+        private static bool RunAgain() //fonction du jeu
         {
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
@@ -62,8 +62,8 @@ namespace TripOverTime.Main
                     Console.WriteLine(chooseMap);
                     if (chooseMap == "quit")
                     {
-                        RunAgain();
                         window.Close();
+                        RunAgain();
                     }
                     // Start a game
                     engine.StartGame(chooseMap); //map, player sprite
@@ -125,18 +125,20 @@ namespace TripOverTime.Main
                 {
                     if(engine.GetSettings.RunSettings()) // if true need to apply
                     {
-                        RunAgain();
                         window.Close();
+                        RunAgain();
                     }
                 }
                 else if (choose == -1)
                 {
                     window.Close();
                     engine.Close = true;
+                    return false;
                 }
                
             }
 
+            return true;
             Console.WriteLine("End Game");
 
         }        
