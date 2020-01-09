@@ -24,10 +24,10 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
-            _mapPath = @"..\..\..\..\Maps\attackMonster.totmap";
+            _mapPath = @"..\..\..\..\Maps\attackMonster.totMonster";
 
             //Verify if it's a map file
-            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            if (!_mapPath.EndsWith(".totMonster")) throw new ArgumentException("The map file is not correct (.totMonster)");
             string text = File.ReadAllText(_mapPath);
             // Open map file
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");

@@ -6,20 +6,16 @@ namespace TripOverTime.EngineNamespace
 {
     public class Life
     {
-        readonly Game _context;
-        Monster _monster;
-        Player _player;
         readonly ushort _maxPoint;
         readonly ushort _minPoint;
         ushort _currentPoint;
-        ushort _damage;
 
         public Life()
             : this(1000, 0)
         {
         }
 
-        public Life(ushort maxPoint, ushort minPoint = 1)
+        public Life(ushort maxPoint, ushort minPoint = 0)
         {
             _maxPoint = maxPoint;
             _minPoint = minPoint;
@@ -30,6 +26,16 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _currentPoint; }
             internal set => _currentPoint = value;
+        }
+
+        public ushort MaxPoint
+        {
+            get => _maxPoint;
+        }
+
+        public float PerCent
+        {
+            get => (float)_currentPoint / (float)_maxPoint;
         }
 
         public bool IsFull
