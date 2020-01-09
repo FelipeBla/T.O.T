@@ -23,6 +23,8 @@ namespace TripOverTime.EngineNamespace
         int _incrementationWalk;
         int _monsterWalk;
         int _monsterDead;
+        int _monsterAttack;
+        int _playerAnimation;
         Texture _texture; //img
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
@@ -46,7 +48,7 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
-            _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
+            _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
 
             if (_name == "CHECKPOINT")
             {
@@ -118,19 +120,22 @@ namespace TripOverTime.EngineNamespace
 
         internal void DefaultAnimation()
         {
-            if (_context.GetGame.GetPlayer.Orientation == "right")
+            if(!_context.GetGame.GetPlayer.IsJumping)
             {
-                _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                if (_context.GetGame.GetPlayer.Orientation == "right")
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                }
+                else
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture["stand"].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
+                }
+                _sprite.Texture = _playerTexture["stand"];
             }
-            else
-            {
-                _sprite.Origin = new SFML.System.Vector2f(_playerTexture["stand"].Size.X/2, 0);
-                _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                //_sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
-            }
-            _sprite.Texture = _playerTexture["stand"];
         }
 
         internal void WalkAnimation()
@@ -204,7 +209,6 @@ namespace TripOverTime.EngineNamespace
                         _sprite.Texture = _playerTexture["jump5"];
                         _sprite.Origin = new SFML.System.Vector2f(0, 0);
                         _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                        _context.GetGame.GetPlayer.IsJumping = false;
                     }
                     else
                     {
@@ -237,7 +241,6 @@ namespace TripOverTime.EngineNamespace
                         _sprite.Texture = _playerTexture["jump5"];
                         _sprite.Origin = new SFML.System.Vector2f(_playerTexture["jump5"].Size.X / 2, 0);
                         _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                        _context.GetGame.GetPlayer.IsJumping = false;
                     }
                     else
                     {
@@ -252,139 +255,164 @@ namespace TripOverTime.EngineNamespace
             
         }
 
-        internal void AttackAnimation()
+
+        internal void PlayerAnimation(int nbrAction, string action, int time)
         {
-            int nbrAction = 5;
-            string action = "attack";
-            if (_context.GetGame.GetPlayer.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+            if (_animTimer.ElapsedMilliseconds >= time)
             {
 
-                string numberTexture = action + _incrementationAttack;
-                _sprite.Texture = _playerTexture[numberTexture];
-                _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                if (_incrementationAttack + 1 == nbrAction)
+                if (_playerAnimation == nbrAction)
                 {
-                    _context.GetGame.GetPlayer.IsAttack = false;
+                    _playerAnimation = 1;
+
+                    if (_context.GetGame.GetPlayer.HurtPlayer) { _context.GetGame.GetPlayer.HurtPlayer = false; }
+                }
+                else
+                {
+                    _playerAnimation++;
+                }
+
+                string numberTexture = action + _playerAnimation;
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (_context.GetGame.GetPlayer.Orientation == "left")//Left
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+                _animTimer.Restart();
+
+            }
+        }
+        internal void AttackAnimation(int nbrAction, string action, int time)
+        {
+            if (_animTimer.ElapsedMilliseconds >= time)
+            {
+
+                if (_incrementationAttack == nbrAction)
+                {
                     _incrementationAttack = 1;
+
+                    if (_context.GetGame.GetPlayer.IsAttack) { _context.GetGame.GetPlayer.IsAttack = false; }
                 }
                 else
                 {
                     _incrementationAttack++;
                 }
+
+                string numberTexture = action + _incrementationAttack;
+                _sprite.Texture = _playerTexture[numberTexture];
+                if (_context.GetGame.GetPlayer.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (_context.GetGame.GetPlayer.Orientation == "left")//Left
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
                 _animTimer.Restart();
 
             }
-            else if (_animTimer.ElapsedMilliseconds >= 100) //left
+        }
+
+        internal void MonsterMoveAnimation(Monster monster)
+        {
+            if (monster.IsMoving)
             {
-                string numberTexture = action + _incrementationAttack;
-                _sprite.Texture = _playerTexture[numberTexture];
-                _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
-                _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                if (_incrementationAttack + 1 == nbrAction)
+                int nbrAction = 25;
+                string action = "walk";
+                if (monster.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
                 {
-                    _context.GetGame.GetPlayer.IsAttack = false;
-                    _incrementationAttack = 1;
+
+                    string numberTexture = action + _monsterWalk;
+                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_monsterTexture[numberTexture].Size);
+                    _sprite.Texture = _monsterTexture[numberTexture];
+                    if (_monsterWalk + 1 == nbrAction)
+                    {
+                        _monsterWalk = 1;
+                    }
+                    else
+                    {
+                        _monsterWalk++;
+                    }
+                    _animTimer.Restart();
+
+                }
+                else if (_animTimer.ElapsedMilliseconds >= 40) //left
+                {
+                    string numberTexture = action + _monsterWalk;
+                    _sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                    _sprite.Texture = _monsterTexture[numberTexture];
+                    if (_monsterWalk + 1 == nbrAction)
+                    {
+                        _monsterWalk = 1;
+                    }
+                    else
+                    {
+                        _monsterWalk++;
+                    }
+                    _animTimer.Restart();
+
+
+                }
+
+            }
+        }
+
+        internal void MonsterAttackAnimation(int nbrAction, string action, Monster monster)
+        {
+            if (_animTimer.ElapsedMilliseconds >= 50)
+            {
+
+                if (_monsterAttack == nbrAction)
+                {
+                    _monsterAttack = 1;
                 }
                 else
                 {
-                    _incrementationAttack++;
+                    _monsterAttack++;
+                }
+
+                string numberTexture = action + _monsterAttack;
+                _sprite.Texture = _monsterTexture[numberTexture];
+                if (monster.Orientation == "left") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (monster.Orientation == "right")//Left
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_monsterTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
                 }
                 _animTimer.Restart();
 
-
-            }
-            
-        }
-
-        internal void MonsterMoveAnimation()
-        { 
-            foreach (Monster m in _context.GetGame.GetMonsters)
-            {
-                if (m.IsMoving)
-                {
-
-                    int nbrAction = 25;
-                    string action = "walk";
-                    if (m.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
-                    {
-
-                        string numberTexture = action + _monsterWalk;
-                        _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
-                        _sprite.Texture = _playerTexture[numberTexture];
-                        if (_monsterWalk + 1 == nbrAction)
-                        {
-                            _monsterWalk = 1;
-                        }
-                        else
-                        {
-                            _monsterWalk++;
-                        }
-                        _animTimer.Restart();
-
-                    }
-                    else if (_animTimer.ElapsedMilliseconds >= 100) //left
-                    {
-                        string numberTexture = action + _monsterWalk;
-                        _sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, -(int)_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
-                        _sprite.Texture = _playerTexture[numberTexture];
-                        if (_monsterWalk + 1 == nbrAction)
-                        {
-                            _monsterWalk = 1;
-                        }
-                        else
-                        {
-                            _monsterWalk++;
-                        }
-                        _animTimer.Restart();
-
-
-                    }
-                    
-                }
             }
         }
 
-        internal void MonsterDeadAnimation()
+        internal void MonsterDeadAnimation(Monster m)
         {
-            foreach (Monster m in _context.GetGame.GetMonsters)
-            {
                 int nbrAction = 15;
                 string action = "dead";
 
-                if (m.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Left
+            if (_animTimer.ElapsedMilliseconds >= 40)
+            {
+
+                string numberTexture = action + _monsterDead;
+                _sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                _sprite.Texture = _monsterTexture[numberTexture];
+                if (_monsterDead != nbrAction)
                 {
-
-                    string numberTexture = action + _monsterDead;
-                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
-                    _sprite.Texture = _playerTexture[numberTexture];
-                    if (_monsterDead == nbrAction)
-                    {
-                    }
-                    else
-                    {
-                        _monsterDead++;
-                    }
-                    _animTimer.Restart();
-
+                    _monsterDead++;
                 }
-                else if (_animTimer.ElapsedMilliseconds >= 40) // Right
-                {
+                _animTimer.Restart();
 
-                    string numberTexture = action + _monsterDead;
-                    _sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, -(int)_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
-                    _sprite.Texture = _playerTexture[numberTexture];
-                    if (_monsterDead == nbrAction)
-                    {
-
-                    }
-                    else
-                    {
-                        _monsterDead++;
-                    }
-                    _animTimer.Restart();
-
-                }
             }
         }
 

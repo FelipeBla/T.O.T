@@ -18,22 +18,22 @@ namespace TripOverTime.EngineNamespace
         Position _position;
         Life _life;
         bool _isAlive;
-        int _attack;
+        Attack _attack;
         Sprite _sprite;
         bool _ismoving;
         Position _origin;
         string _orientation;
         float _monsterMove;
 
-        internal Monster(Game context, String name, Position position, Life life, int attack, float monsterMove)
+        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove)
         {
             _context = context;
             _name = name;
             _position = position;
             _life = life;
             _isAlive = true;
-            _attack = attack;
-            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, false, true);
+            _attack = new Attack(context, this, attack);
+            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
@@ -61,18 +61,23 @@ namespace TripOverTime.EngineNamespace
                             _position.X += _monsterMove;
                     }
                 }
-                _ismoving = true;
 
-                _sprite.MonsterMoveAnimation();
+                _ismoving = true;
+                _sprite.MonsterMoveAnimation(this);
            
             }
        
         }
 
+        internal void MonsterAttack()
+        {
+            _attack.AttackMonster();
+        }
+
 
         internal void MonsterDead()
         {
-            _sprite.MonsterDeadAnimation();
+            _sprite.MonsterDeadAnimation(this);
         }
         internal void Gravity()
         {
@@ -101,7 +106,7 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _context; }
         }
-        private String name
+        internal String Name
         {
             get { return _name; }
         }
@@ -131,7 +136,7 @@ namespace TripOverTime.EngineNamespace
             }
             set { _isAlive = value; }
         }
-        internal int attack
+        internal Attack GetAttack
         {
             get { return _attack; }
             set { _attack = value; }

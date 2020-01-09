@@ -65,8 +65,12 @@ namespace TripOverTime.EngineNamespace
             }
              
             // Lifebar
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, -22), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             _window.Draw(_hpBar);
+            // HP Text
+            Text hp = new Text(Convert.ToString(_context.GetGame.GetPlayer.GetLife.CurrentPoint), _context.GetFont, 28);
+            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
+            _window.Draw(hp);
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
@@ -184,8 +188,10 @@ namespace TripOverTime.EngineNamespace
 
             _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
             if (_hpBar == null) throw new Exception("Sprite null!");
-            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X/100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
+            
+            
 
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
@@ -199,33 +205,94 @@ namespace TripOverTime.EngineNamespace
 
         internal void Events()
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) {
-                //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
-            }
-            if (Keyboard.IsKeyPressed(_RightAction)) {
-                _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
-            }
-            if (Keyboard.IsKeyPressed(_LeftAction)) {
-                _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
-            }
-            if (Keyboard.IsKeyPressed(_JumpAction)) {
-                if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
-                {
-                    _context.GetGame.GetPlayer.Jump();
-                }
-            }
-
-            if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
+            //Graphics
+            if (_context.GetGame.GetPlayer.IsAttack)
             {
-                _context.GetGame.GetPlayer.IsAttack = true;
                 _context.GetGame.GetPlayer.Attack();
             }
 
-            if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !Keyboard.IsKeyPressed(_AttackAction))
+            if (_context.GetGame.GetPlayer.HurtPlayer)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
+                foreach (Monster monster in _context.GetGame.GetMonsters)
+                {
+                    monster.GetAttack.HurtPlayer();
+                }
+            }
+
+            // Manette
+            Joystick.Update();
+            if (Joystick.IsConnected(0)) //Controller connected
+            {
+                // Actions
+                for (uint i = 0; i < Joystick.GetButtonCount(0); i++) //Test tous les btn
+                {
+                    if (Joystick.IsButtonPressed(0, i))
+                    {
+                        switch (i)
+                        {
+                            case 0: //A - Jump
+                                if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
+                                {
+                                    _context.GetGame.GetPlayer.Jump();
+                                }
+                                break;
+                            case 1: //B - Attack
+                                _context.GetGame.GetPlayer.IsAttack = true;
+                                _context.GetGame.GetPlayer.Attack();
+                                break;
+                        }
+                    }
+                }
+                // Moves
+                if (Joystick.GetAxisPosition(0, Joystick.Axis.X) >= 80) // Droite
+                {
+                    _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
+                }
+                else if (Joystick.GetAxisPosition(0, Joystick.Axis.X) <= -80) // Gauche
+                {
+                    _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
+                }
+                else if (_context.GetGame.GetPlayer.IsOnTheGround && !_context.GetGame.GetPlayer.IsAttack)
+                {
+                    _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
+                }
+            }
+            else
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    //_context.GetGame.GetPlayer.GetLife.CurrentPoint = 0; // TEMPORARYYYYYYYYYYYYYYYYYY
+                }
+                else if (Keyboard.IsKeyPressed(_RightAction))
+                {
+                    _moveTheMapOf += _context.GetGame.GetPlayer.MoveRight((float)_window.Size.X);
+                }
+                else if (Keyboard.IsKeyPressed(_LeftAction))
+                {
+                    _moveTheMapOf -= _context.GetGame.GetPlayer.MoveLeft((float)_window.Size.X);
+                }
+
+                if (Keyboard.IsKeyPressed(_JumpAction))
+                {
+                    if (_context.GetGame.GetPlayer.RealPosition.Y < _context.GetGame.GetMapObject.GetLimitMax.Y && _context.GetGame.GetPlayer.IsOnTheGround)
+                    {
+                        _context.GetGame.GetPlayer.Jump();
+                    }
+                }
+
+                if (Keyboard.IsKeyPressed(_AttackAction)) // ATTACK
+                {
+                    _context.GetGame.GetPlayer.IsAttack = true;
+                    _context.GetGame.GetPlayer.Attack();
+                }
+
+                if (!Keyboard.IsKeyPressed(_LeftAction) && !Keyboard.IsKeyPressed(_RightAction) && !Keyboard.IsKeyPressed(_JumpAction) && !_context.GetGame.GetPlayer.IsAttack && !_context.GetGame.GetPlayer.HurtPlayer)
+                {
+                    _context.GetGame.GetPlayer.GetPlayerSprite.DefaultAnimation();
+                }
             }
         }
+
         public SFML.Window.Keyboard.Key RightAction
         {
             get { return _RightAction; }

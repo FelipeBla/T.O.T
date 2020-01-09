@@ -15,11 +15,11 @@ namespace TripOverTime.EngineNamespace
         Map _map;
         Stopwatch _timer;
 
-        internal Game(Engine context, string mapPath, string playerPath, Position startPosition)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, ushort lifePoint, ushort atk)
         {
             _context = context;
             _map = new Map(this, mapPath);
-            _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
+            _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
             _player2 = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
             _monsters = _map.GenerateMonsters();
             _monsters2 = _map.GenerateMonsters();
