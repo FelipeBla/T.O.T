@@ -153,6 +153,108 @@ namespace TripOverTime.EngineNamespace
             return 1;
         }
 
+        public short GameTick2()
+        {
+            if (_game == null) throw new Exception("Game not started!");
+
+            //Events
+            _gui.Events2();
+
+
+            //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            //Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
+            //Gravity 4 player
+            Sprite sToPositive = null;
+            Sprite sToNegative = null;
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+            {
+                //Block under player isn't solid
+                _game.GetPlayer.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                {
+                    //DIE
+                    _game.GetPlayer.KilledBy = "Trap";
+                    return -1;
+                }
+                else
+                {
+                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                }
+            }
+
+            if (!_game.GetPlayer.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer.KilledBy = "Monster";
+                return -1;
+            }
+
+            //Monsters move + Attack
+            foreach (Monster m in _game.GetMonsters)
+            {
+                if (m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                {
+                    m.Orientation = "left";
+                }
+                else if (m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                {
+                    m.Orientation = "right";
+                }
+
+                if (!m.isAlive)
+                {
+                    m.MonsterDead();
+                }
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                {
+                    m.MonsterMove();
+                }
+
+                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
+                {
+                    m.MonsterAttack();
+                }
+            }
+
+            //Gravity 4 monsters
+            foreach (Monster m in _game.GetMonsters)
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+                {
+                    //Block under monster isn't solid
+                    m.Gravity();
+                }
+                else
+                {
+                    m.IsMoving = false;
+                    m.RoundY(); // Don't stuck monster in ground
+                }
+            }
+
+            // Recalibrate float
+            _game.GetPlayer.RoundX();
+            // WIN !!!
+            Position end = _game.GetMapObject.GetEndPosition;
+            if (end.X <= _game.GetPlayer.RealPosition.X)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 0;
+            }
+
+            // Dead return -1;
+
+            return 1;
+        }
+
         public void WinMenu()
         {
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));

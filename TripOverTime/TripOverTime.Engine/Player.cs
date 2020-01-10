@@ -20,6 +20,7 @@ namespace TripOverTime.EngineNamespace
         readonly String _name;
         Position _position; // Graphical position
         Position _realPosition;
+        Position _realPosition2;
         Life _life;
         ushort _attack;
         Sprite _sprite;
@@ -39,6 +40,7 @@ namespace TripOverTime.EngineNamespace
             _name = name;
             _position = position;
             _realPosition = new Position(_position.X, _position.Y);
+            _realPosition2 = new Position(_position.X, _position.Y);
             _life = life;
             _attack = attack;
             _isJumping = false;
@@ -264,6 +266,12 @@ namespace TripOverTime.EngineNamespace
         {
             get => _realPosition;
             set { _realPosition = value; }
+        }
+
+        internal Position RealPosition2
+        {
+            get => _realPosition2;
+            set { _realPosition2 = value; }
         }
 
         internal bool IsOnTheGround
