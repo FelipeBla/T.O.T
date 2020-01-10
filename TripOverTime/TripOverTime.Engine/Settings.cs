@@ -12,8 +12,8 @@ namespace TripOverTime.EngineNamespace
     {
         const ushort MAX_LINES = 4;
         const ushort MAX_LINES_KB = 5;
-        private static uint _XResolution = 800;
-        private static uint _YResolution = 600;
+        private static uint _XResolution = 1920;
+        private static uint _YResolution = 1080;
         private static uint _NbFPS = 60;
 
         RenderWindow _window;

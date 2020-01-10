@@ -10,12 +10,12 @@ namespace TripOverTime.Main
 {
     class Program
     {
-        static void Main(string[] args) //fonction principale 
+        static void Main(string[] args) //fonction principale
         {
-            RunAgain();
+            RunAgain(false);
         }
 
-        private static bool RunAgain() //fonction du jeu
+        private static bool RunAgain(bool fullscreen = false) //fonction du jeu
         {
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
@@ -24,7 +24,16 @@ namespace TripOverTime.Main
             float tps = 60;
 
             //Window & Engine start
-            RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
+            RenderWindow window = null;
+            if (fullscreen)
+            {
+                window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T", Styles.Fullscreen);
+            }
+            else
+            {
+                window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
+            }
+
             window.SetVerticalSyncEnabled(true);
             Engine engine = new Engine(window);
 
