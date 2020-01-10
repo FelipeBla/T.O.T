@@ -10,7 +10,7 @@ namespace TripOverTime.EngineNamespace
 {
     public class Menu
     {
-        const ushort MAX_LINES = 3;
+        const ushort MAX_LINES = 4;
 
         RenderWindow _window;
         ushort _selected;
@@ -42,13 +42,15 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             //Lines
-            _lines[0] = new Text("Start", _font, _charSize);
-            _lines[1] = new Text("Settings", _font, _charSize);
-            _lines[2] = new Text("Quit", _font, _charSize);
+            _lines[0] = new Text("1 Player", _font, _charSize);
+            _lines[1] = new Text("2 Player", _font, _charSize);
+            _lines[2] = new Text("Settings", _font, _charSize);
+            _lines[3] = new Text("Quit", _font, _charSize);
 
             _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
             _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
+            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
 
             _window.Display();
         }
