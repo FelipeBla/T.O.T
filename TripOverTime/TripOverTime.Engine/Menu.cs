@@ -11,10 +11,12 @@ namespace TripOverTime.EngineNamespace
     public class Menu
     {
         const ushort MAX_LINES = 4;
+        const ushort MAX_LINES2 = 3;
 
         RenderWindow _window;
         ushort _selected;
         Text[] _lines;
+        Text[] _lines2;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         string[] _maps;
@@ -29,6 +31,7 @@ namespace TripOverTime.EngineNamespace
             _selected = 0;
             _font = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _lines = new Text[MAX_LINES];
+            _lines2 = new Text[MAX_LINES2];
         }
 
         public void StartMainMenu()
@@ -60,26 +63,26 @@ namespace TripOverTime.EngineNamespace
             //Events
             short result = -2;
             short tampon = 0;
-            Joystick.Update();
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 1)))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
             {
                 _window.Close();
                 result = -1;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
                 if (_selected == 2) result = -1;
+                else if (_selected == 3) result = -5;
                 else result = (short)_selected;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
             {
                 tampon = 1;
                 _selected++;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) && _selected > 0)
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
             {
                 tampon = 2;
                 _selected--;
@@ -108,12 +111,10 @@ namespace TripOverTime.EngineNamespace
             if (tampon == 1)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) Joystick.Update();
             }
             else if (tampon == 2)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
-                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) Joystick.Update();
             }
 
             return result;
@@ -137,12 +138,12 @@ namespace TripOverTime.EngineNamespace
             //Lines
             for (int i = 0; i < _maps.Length; i++)
             {
-                _lines[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), _font, _charSize);
+                _lines2[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), _font, _charSize);
             }
 
-            for (int i = 0; i < _lines.Length; i++)
+            for (int i = 0; i < _lines2.Length; i++)
             {
-                _lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                _lines2[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines2[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
             }
 
             _window.Display();
@@ -155,24 +156,23 @@ namespace TripOverTime.EngineNamespace
             //Events
             string result = "null";
             short tampon = 0;
-            Joystick.Update();
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 1)))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
             {
                 result = "quit";
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
                 result = _maps[_selected];
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES2 - 1)
             {
                 tampon = 1;
                 _selected++;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) && _selected > 0)
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
             {
                 tampon = 2;
                 _selected--;
@@ -183,17 +183,17 @@ namespace TripOverTime.EngineNamespace
             _window.Clear();
             _window.Draw(_background);
 
-            for (int i = 0; i < MAX_LINES; i++)
+            for (int i = 0; i < MAX_LINES2; i++)
             {
                 if (i == _selected)
                 {
-                    _lines[i].Color = Color.Red;
+                    _lines2[i].Color = Color.Red;
                 }
                 else
                 {
-                    _lines[i].Color = Color.Black;
+                    _lines2[i].Color = Color.Black;
                 }
-                _window.Draw(_lines[i]);
+                _window.Draw(_lines2[i]);
             }
 
             _window.Display();
@@ -201,12 +201,10 @@ namespace TripOverTime.EngineNamespace
             if (tampon == 1)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) Joystick.Update();
             }
             else if (tampon == 2)
             {
                 while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
-                while (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) > 0) Joystick.Update();
             }
 
             return result;

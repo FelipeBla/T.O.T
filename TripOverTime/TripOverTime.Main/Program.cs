@@ -204,8 +204,9 @@ namespace TripOverTime.Main
                         RunAgain();
                     }
                 }
-                else if (choose == -2)
+                else if (choose == -5)
                 {
+                    Console.WriteLine("Wesh alors");
                     window.Close();
                     engine.Close = true;
                     return false;
