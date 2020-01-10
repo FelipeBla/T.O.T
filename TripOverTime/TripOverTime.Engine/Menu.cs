@@ -72,6 +72,8 @@ namespace TripOverTime.EngineNamespace
             {
                 if (_selected == 2) result = -1;
                 else result = (short)_selected;
+
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Enter)) ; //tampon
             }
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Down) || (Joystick.IsConnected(0) && Joystick.GetAxisPosition(0, Joystick.Axis.PovY) < 0) && _selected < MAX_LINES - 1)
