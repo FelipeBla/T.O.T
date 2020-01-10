@@ -75,6 +75,8 @@ namespace TripOverTime.EngineNamespace
                 if (_selected == 2) result = -1;
                 else if (_selected == 3) result = -5;
                 else result = (short)_selected;
+
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Enter)) ; //tampon
             }
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)

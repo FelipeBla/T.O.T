@@ -13,8 +13,8 @@ namespace TripOverTime.EngineNamespace
         const ushort MAX_LINES = 5;
         const ushort MAX_LINES_KB = 5;
         const ushort MAX_LINES_MULTIPLAYER = 3;
-        private static uint _XResolution = 800;
-        private static uint _YResolution = 600;
+        private static uint _XResolution = 1920;
+        private static uint _YResolution = 1080;
         private static uint _NbFPS = 60;
         private static int _MultiplayerOrNot = 0;
 
