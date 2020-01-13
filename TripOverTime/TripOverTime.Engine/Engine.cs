@@ -109,7 +109,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1.2 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1.2 < _game.GetPlayer.RealPosition.X)
                 {
                     m.MonsterMove();
                 }

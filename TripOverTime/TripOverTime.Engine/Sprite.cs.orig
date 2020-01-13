@@ -507,7 +507,20 @@ namespace TripOverTime.EngineNamespace
 
                 string numberTexture = action + _monsterAttack;
                 _sprite.Texture = _monsterTexture[numberTexture];
+<<<<<<< HEAD
+                if (monster.Orientation == "right") //Right
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (monster.Orientation == "left")//Left
+                {
+                    _sprite.Origin = new SFML.System.Vector2f(_monsterTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+=======
                 
+>>>>>>> master
                 _animTimer.Restart();
 
             }
