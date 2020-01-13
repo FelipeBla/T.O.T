@@ -9,34 +9,45 @@ namespace TripOverTime.EngineNamespace
     {
         Engine _context;
         Player _player;
+<<<<<<< HEAD
+        Boss _boss;
+=======
+        Player _player2;
+>>>>>>> master
         List<Monster> _monsters;
+        List<Monster> _monsters2;
         Map _map;
         Stopwatch _timer;
+        string _mapPath;
 
-        internal Game(Engine context, string mapPath, string playerPath, Position startPosition)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, ushort lifePoint, ushort atk)
         {
+            _mapPath = mapPath;
             _context = context;
             _map = new Map(this, mapPath);
-            _player = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
-<<<<<<< HEAD
-            _monsters = new List<Monster>();
-            _monsters.Add(new Monster(this, "Golem1", new Position(20, 5), new Life(50, 1), 1));
-            _monsters.Add(new Monster(this, "Golem2", new Position(5, 5), new Life(50, 1), 1));
-
-=======
+            _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+            _player2 = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
             _monsters = _map.GenerateMonsters();
+<<<<<<< HEAD
+            _boss = _map.GenerateBoss();
+=======
+            _monsters2 = _map.GenerateMonsters();
+>>>>>>> master
             _timer = new Stopwatch();
             _timer.Start();
->>>>>>> master
         }
 
         internal Map GetMapObject
         {
             get => _map;
         }
-        internal Player GetPlayer
+        public Player GetPlayer
         {
             get => _player;
+        }
+        public Player GetPlayer2
+        {
+            get => _player2;
         }
         internal Engine GetEngine
         {
@@ -51,6 +62,20 @@ namespace TripOverTime.EngineNamespace
         {
             get => _monsters;
             set => _monsters = value;
+        }
+<<<<<<< HEAD
+
+        internal Boss GetBoss
+        {
+            get => _boss;
+        }
+        internal string MapPath
+=======
+        internal List<Monster> GetMonsters2
+>>>>>>> master
+        {
+            get => _monsters2;
+            set => _monsters2 = value;
         }
     }
 }

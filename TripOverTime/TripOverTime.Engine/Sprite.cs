@@ -34,6 +34,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _monsterTexture;
         Dictionary<string, Texture> _bossTexture;
         SFML.Graphics.Sprite _sprite;
+        SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer;
 
         internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
@@ -143,6 +144,9 @@ namespace TripOverTime.EngineNamespace
 
             _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
             if (_sprite == null) throw new Exception("Sprite null!");
+
+            _sprite2 = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
+            if (_sprite2 == null) throw new Exception("Sprite2 null!");
         }
 
         internal void DefaultAnimation()
@@ -352,7 +356,7 @@ namespace TripOverTime.EngineNamespace
         {
             if (boss.IsMoving)
             {
-                int nbrAction = 23;
+                int nbrAction = 24;
                 string action = "walk (";
                 if (boss.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
                 {
@@ -446,8 +450,7 @@ namespace TripOverTime.EngineNamespace
         {
             if (monster.IsMoving)
             {
-                Console.WriteLine("Le boss bouge");
-                int nbrAction = 25;
+                int nbrAction = 24;
                 string action = "walk";
                 if (monster.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
                 {
@@ -455,8 +458,7 @@ namespace TripOverTime.EngineNamespace
                     string numberTexture = action + _monsterWalk;
                     _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_monsterTexture[numberTexture].Size);
                     _sprite.Texture = _monsterTexture[numberTexture];
-                    Console.WriteLine("Le boss bouge2");
-                    if (_monsterWalk + 1 == nbrAction)
+                    if (_monsterWalk >= nbrAction)
                     {
                         _monsterWalk = 1;
                     }
@@ -469,11 +471,10 @@ namespace TripOverTime.EngineNamespace
                 }
                 else if (_animTimer.ElapsedMilliseconds >= 40) //left
                 {
-                    Console.WriteLine("Le boss bouge3");
                     string numberTexture = action + _monsterWalk;
                     _sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
                     _sprite.Texture = _monsterTexture[numberTexture];
-                    if (_monsterWalk + 1 == nbrAction)
+                    if (_monsterWalk >= nbrAction)
                     {
                         _monsterWalk = 1;
                     }
@@ -550,9 +551,15 @@ namespace TripOverTime.EngineNamespace
             get => _sprite;
         }
 
+        internal SFML.Graphics.Sprite GetSprite2
+        {
+            get => _sprite2;
+        }
+
         internal bool IsSolid
         {
             get => _isSolid;
+            set => _isSolid = value;
         }
 
         internal bool IsEnd
