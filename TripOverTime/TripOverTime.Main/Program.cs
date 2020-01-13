@@ -13,7 +13,7 @@ namespace TripOverTime.Main
     {
         static void Main(string[] args) //fonction principale
         {
-            RunAgain();
+            RunAgain(true);
         }
 
         private static bool RunAgain(bool fullscreen = false) //fonction du jeu
