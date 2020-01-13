@@ -78,7 +78,7 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Boss
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 40);
+            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 -120);
             _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
             _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
             Console.WriteLine("BossPos: " + _context.GetGame.GetBoss.Position.X + ";" + _context.GetGame.GetBoss.Position.Y);
