@@ -160,21 +160,38 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 Sprite s = null;
+                bool blocked = false;
+
                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X + PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
-                    if (s.IsSolid) ;
-                    // If player centered on screen, move the map now and not the player
-                    else if (_sprite.GetSprite.Position.X < width / 2)
+                    foreach (Monster m in _context.GetMonsters) //Monster block?
                     {
-                        // Player move
-                        _position.X += PLAYER_MOVE;
-                        _realPosition.X += PLAYER_MOVE;
+                        if (m.Position.Y == _realPosition.Y) //Meme niveau Y
+                        {
+                            if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) + 1)
+                            {
+                                //Blocked by monster
+                                Console.WriteLine("MONSTTERRRRRRRR");
+                                blocked = true;
+                            }
+                        }
                     }
-                    else
+                    if (!blocked)
                     {
-                        //Map move
-                        moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
-                        _realPosition.X += PLAYER_MOVE;
+                        if (s.IsSolid) ;
+                        // If player centered on screen, move the map now and not the player
+                        else if (_sprite.GetSprite.Position.X < width / 2)
+                        {
+                            // Player move
+                            _position.X += PLAYER_MOVE;
+                            _realPosition.X += PLAYER_MOVE;
+                        }
+                        else
+                        {
+                            //Map move
+                            moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
+                            _realPosition.X += PLAYER_MOVE;
+                        }
                     }
                 }
             }
@@ -202,21 +219,39 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 Sprite s = null;
+                bool blocked = false;
+
                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X - PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
-                    if (s.IsSolid) ;
-                    // If player left on screen, move the map now and not the player
-                    else if (_sprite.GetSprite.Position.X > width / 5)
+                    foreach(Monster m in _context.GetMonsters) //Monster block?
                     {
-                        // Player move
-                        _position.X -= PLAYER_MOVE; //0.25f
-                        _realPosition.X -= PLAYER_MOVE;
+                        if (m.Position.Y == _realPosition.Y) //Meme niveau Y
+                        {
+                            if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) - 1)
+                            {
+                                //Blocked by monster
+                                Console.WriteLine("MONSTTERRRRRRRR");
+                                blocked = true;
+                            }
+                        }
                     }
-                    else
+
+                    if (!blocked)
                     {
-                        //Map move
-                        moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
-                        _realPosition.X -= PLAYER_MOVE;
+                        if (s.IsSolid) ;
+                        // If player left on screen, move the map now and not the player
+                        else if (_sprite.GetSprite.Position.X > width / 5)
+                        {
+                            // Player move
+                            _position.X -= PLAYER_MOVE; //0.25f
+                            _realPosition.X -= PLAYER_MOVE;
+                        }
+                        else
+                        {
+                            //Map move
+                            moveTheMapOf = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE), 0);
+                            _realPosition.X -= PLAYER_MOVE;
+                        }
                     }
                 }
             }
