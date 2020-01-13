@@ -462,6 +462,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _game;
         }
+        public Game GetGame2
+        {
+            get => _game2;
+        }
         public Settings GetSettings
         {
             get => _settings;
