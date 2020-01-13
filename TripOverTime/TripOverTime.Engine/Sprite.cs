@@ -438,6 +438,7 @@ namespace TripOverTime.EngineNamespace
         internal bool IsSolid
         {
             get => _isSolid;
+            set => _isSolid = value;
         }
 
         internal bool IsEnd
