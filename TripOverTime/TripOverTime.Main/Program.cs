@@ -13,10 +13,10 @@ namespace TripOverTime.Main
     {
         static void Main(string[] args) //fonction principale
         {
-            RunAgain(false);
+            RunAgain();
         }
 
-        private static bool RunAgain(bool fullscreen = false) //fonction du jeu
+        private static bool RunAgain() //fonction du jeu
         {
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
@@ -26,7 +26,8 @@ namespace TripOverTime.Main
 
             //Window & Engine start
             RenderWindow window = null;
-            if (fullscreen)
+
+            if (Settings.Fullscreen)
             {
                 window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T", Styles.Fullscreen);
             }
@@ -40,7 +41,7 @@ namespace TripOverTime.Main
             
 
             //Menu
-            while (!engine.Close) //GAMELOOP MASTER
+            while (!engine.Close && window.IsOpen) //GAMELOOP MASTER
             {
                 System.Threading.Thread.Sleep(200); // Evite certains bug
                 short choose = -2;
