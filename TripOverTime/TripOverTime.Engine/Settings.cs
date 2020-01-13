@@ -307,15 +307,6 @@ namespace TripOverTime.EngineNamespace
             Thread.Sleep(100);
             do
             {
-                if (_fullscreen)
-                {
-                    _lines[3].Color = Color.Green;
-                }
-                else
-                {
-                    _lines[3].Color = Color.Red;
-                }
-
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 {
                     choose = 4;
@@ -345,7 +336,18 @@ namespace TripOverTime.EngineNamespace
 
                 for (int i = 0; i < MAX_LINES; i++)
                 {
-                    if (i == _selectedResolution)
+                    if (i == 3)
+                    {
+                        if (_fullscreen)
+                        {
+                            _lines[3].Color = Color.Green;
+                        }
+                        else
+                        {
+                            _lines[3].Color = Color.Red;
+                        }
+                    }
+                    else if (i == _selectedResolution)
                     {
                         _lines[i].Color = Color.Red;
                     }
