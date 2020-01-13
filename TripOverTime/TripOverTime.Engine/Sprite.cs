@@ -29,6 +29,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
         SFML.Graphics.Sprite _sprite;
+        SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer;
 
         internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false)
@@ -116,6 +117,9 @@ namespace TripOverTime.EngineNamespace
 
             _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
             if (_sprite == null) throw new Exception("Sprite null!");
+
+            _sprite2 = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
+            if (_sprite2 == null) throw new Exception("Sprite2 null!");
         }
 
         internal void DefaultAnimation()
@@ -424,6 +428,11 @@ namespace TripOverTime.EngineNamespace
         internal SFML.Graphics.Sprite GetSprite
         {
             get => _sprite;
+        }
+
+        internal SFML.Graphics.Sprite GetSprite2
+        {
+            get => _sprite2;
         }
 
         internal bool IsSolid

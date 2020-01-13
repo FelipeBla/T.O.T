@@ -9,7 +9,9 @@ namespace TripOverTime.EngineNamespace
     {
         Engine _context;
         Player _player;
+        Player _player2;
         List<Monster> _monsters;
+        List<Monster> _monsters2;
         Map _map;
         Stopwatch _timer;
         string _mapPath;
@@ -20,7 +22,9 @@ namespace TripOverTime.EngineNamespace
             _context = context;
             _map = new Map(this, mapPath);
             _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+            _player2 = new Player(this, "player", startPosition, new Life(100, 1), 5, playerPath);
             _monsters = _map.GenerateMonsters();
+            _monsters2 = _map.GenerateMonsters();
             _timer = new Stopwatch();
             _timer.Start();
         }
@@ -32,6 +36,10 @@ namespace TripOverTime.EngineNamespace
         public Player GetPlayer
         {
             get => _player;
+        }
+        public Player GetPlayer2
+        {
+            get => _player2;
         }
         internal Engine GetEngine
         {
@@ -47,9 +55,10 @@ namespace TripOverTime.EngineNamespace
             get => _monsters;
             set => _monsters = value;
         }
-        internal string MapPath
+        internal List<Monster> GetMonsters2
         {
-            get => _mapPath;
+            get => _monsters2;
+            set => _monsters2 = value;
         }
     }
 }

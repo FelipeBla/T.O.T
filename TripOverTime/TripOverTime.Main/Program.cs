@@ -6,16 +6,17 @@ using System.Diagnostics;
 using System.Reflection;
 using TripOverTime.EngineNamespace;
 
+
 namespace TripOverTime.Main
 {
     class Program
     {
-        static void Main(string[] args) //fonction principale 
+        static void Main(string[] args) //fonction principale
         {
-            RunAgain();
+            RunAgain(true);
         }
 
-        private static bool RunAgain() //fonction du jeu
+        private static bool RunAgain(bool fullscreen = false) //fonction du jeu
         {
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
@@ -24,9 +25,19 @@ namespace TripOverTime.Main
             float tps = 60;
 
             //Window & Engine start
-            RenderWindow window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
+            RenderWindow window = null;
+            if (fullscreen)
+            {
+                window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T", Styles.Fullscreen);
+            }
+            else
+            {
+                window = new RenderWindow(new VideoMode(Settings.XResolution, Settings.YResolution), "T.O.T");
+            }
+
             window.SetVerticalSyncEnabled(true);
             Engine engine = new Engine(window);
+            
 
             //Menu
             while (!engine.Close) //GAMELOOP MASTER
@@ -121,7 +132,80 @@ namespace TripOverTime.Main
                         throw new Exception("WTF?!");
                     }
                 }
-                else if (choose == 1) //Settings
+                else if (choose == 1)
+                {
+                    string chooseMap = "null";
+                    engine.GetMenu.InitMapMenu();
+                    do
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            chooseMap = engine.GetMenu.ChooseMapMenu();
+                            spGame.Restart();
+                        }
+                    } while (chooseMap == "null");
+                    Console.WriteLine(chooseMap);
+                    if (chooseMap == "quit")
+                    {
+                        RunAgain();
+                        window.Close();
+                    }
+                    // Start a game
+                    engine.StartGame(chooseMap); //map, player sprite
+                    engine.GetGUI.InitGame();
+
+                    short result = 1;
+                    // GameLoop
+                    spGui.Start();
+                    while (result == 1)
+                    {
+                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        {
+                            // GameTick
+                            result = engine.GameTick();
+                            spGame.Restart();
+                        }
+
+                        if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                        {
+                            //GUI
+                            engine.GetGUI.ShowMapMultiplayer();
+                            spGui.Restart();
+                        }
+                    }
+                    if (result == 0)
+                    {
+                        //WIN
+                        Console.WriteLine("YOU WIN!");
+                        engine.WinMenu();
+                    }
+                    else if (result == -1)
+                    {
+                        //DIE
+                        Console.WriteLine("YOU DIE!");
+
+                        if (engine.GetGame.GetPlayer.KilledBy == "Trap")
+                        {
+                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                            {
+                                engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
+                                if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                                {
+                                    //GUI
+                                    engine.GetGUI.ShowMapMultiplayer();
+                                    spGui.Restart();
+                                }
+                            }
+                        }
+
+                        engine.DieMenu();
+                    }
+                    else
+                    {
+                        throw new Exception("WTF?!");
+                    }
+                }
+                else if (choose == -1) //Settings
                 {
                     if(engine.GetSettings.RunSettings()) // if true need to apply
                     {
@@ -129,8 +213,9 @@ namespace TripOverTime.Main
                         RunAgain();
                     }
                 }
-                else if (choose == -1)
+                else if (choose == -5)
                 {
+                    Console.WriteLine("Wesh alors");
                     window.Close();
                     engine.Close = true;
                     return false;
