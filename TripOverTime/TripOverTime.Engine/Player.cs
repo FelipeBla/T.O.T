@@ -43,7 +43,7 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _isAttack = false;
-            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
             _orientation = "right";
 
             _attackSpeed = 1;

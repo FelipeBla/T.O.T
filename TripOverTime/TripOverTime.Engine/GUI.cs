@@ -151,7 +151,7 @@ namespace TripOverTime.EngineNamespace
             {
                 foreach(Monster monster in _context.GetGame.GetMonsters)
                 {
-                    monster.GetAttack.HurtPlayer();
+                    monster.GetAttack.HurtPlayerAnimation();
                 }
             }
 

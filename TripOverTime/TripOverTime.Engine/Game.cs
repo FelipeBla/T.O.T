@@ -9,6 +9,7 @@ namespace TripOverTime.EngineNamespace
     {
         Engine _context;
         Player _player;
+        Boss _boss;
         List<Monster> _monsters;
         Map _map;
         Stopwatch _timer;
@@ -21,6 +22,7 @@ namespace TripOverTime.EngineNamespace
             _map = new Map(this, mapPath);
             _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
             _monsters = _map.GenerateMonsters();
+            _boss = _map.GenerateBoss();
             _timer = new Stopwatch();
             _timer.Start();
         }
@@ -46,6 +48,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _monsters;
             set => _monsters = value;
+        }
+
+        internal Boss GetBoss
+        {
+            get => _boss;
         }
         internal string MapPath
         {

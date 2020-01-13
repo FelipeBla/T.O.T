@@ -11,16 +11,22 @@ namespace TripOverTime.EngineNamespace
     {
         Game _context;
         Monster _monster;
+        Boss _boss;
         ushort _attack;
         Stopwatch _timer;
         string[] _schemaAttack;
         int _incrementationAttack;
         string _mapPath;
 
+        internal Attack(Game context, Boss boss, ushort attack)
+            :this (context, null, boss, attack) { }
         internal Attack(Game context, Monster monster, ushort attack)
+            : this(context, monster, null, attack) { }
+        internal Attack(Game context, Monster monster, Boss boss, ushort attack)
         {
             _context = context;
             _monster = monster;
+            _boss = boss;
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
@@ -31,7 +37,14 @@ namespace TripOverTime.EngineNamespace
             string text = File.ReadAllText(_mapPath);
             // Open map file
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
-            _schemaAttack = StringBetweenString(text, _monster.Name + "UP", _monster.Name + "END").Split("\n");
+            if (_monster != null)
+            {
+                _schemaAttack = StringBetweenString(text, _monster.Name + "UP", _monster.Name + "END").Split("\n");
+            }
+            else
+            {
+                _schemaAttack = StringBetweenString(text, _boss.Name + "UP", _boss.Name + "END").Split("\n");
+            }
             _incrementationAttack = 0;
         }
 
@@ -42,14 +55,11 @@ namespace TripOverTime.EngineNamespace
                 _incrementationAttack = 0;
             }
 
-            Console.WriteLine(_schemaAttack[0][_incrementationAttack]);
             if (_schemaAttack[0][_incrementationAttack] == 'S')
             { 
                 SlidingAttack();
-                if (_timer.ElapsedMilliseconds >= 700)
+                if (_timer.ElapsedMilliseconds >= 700 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y && _monster.IsAlive)
                 {
-                    _context.GetPlayer.GetLife.DecreasedPoint(_attack);
-                    _context.GetPlayer.HurtPlayer = true;
                     HurtPlayer();
                     _incrementationAttack++;
                     _timer.Restart();
@@ -59,10 +69,8 @@ namespace TripOverTime.EngineNamespace
             {
                 NormalAttack();
 
-                if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+                if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y && _monster.IsAlive)
                 {
-                    _context.GetPlayer.GetLife.DecreasedPoint(_attack);
-                    _context.GetPlayer.HurtPlayer = true;
                     HurtPlayer();
                     _incrementationAttack++;
                     _timer.Restart();
@@ -70,6 +78,11 @@ namespace TripOverTime.EngineNamespace
             }
 
         }
+
+        internal void AttackBoss()
+        { }
+
+
         internal void NormalAttack()
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(12, "attack", _monster);
@@ -79,8 +92,14 @@ namespace TripOverTime.EngineNamespace
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding", _monster);
         }
+        internal void HurtPlayer ()
+        {
+            _context.GetPlayer.GetLife.DecreasedPoint(_attack);
+            _context.GetPlayer.HurtPlayer = true;
+            HurtPlayerAnimation();
+        }
 
-        internal void HurtPlayer()
+        internal void HurtPlayerAnimation()
         {
             _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
         }

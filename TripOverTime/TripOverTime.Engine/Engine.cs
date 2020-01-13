@@ -95,16 +95,16 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.IsAlive) //left
                 {
                     m.Orientation = "left";
                 }
-                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.IsAlive) //right
                 {
                     m.Orientation = "right";
                 }
 
-                if (!m.isAlive)
+                if (!m.IsAlive)
                 {
                     m.MonsterDead();
                 }
@@ -113,7 +113,7 @@ namespace TripOverTime.EngineNamespace
                     m.MonsterMove();
                 }
 
-                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
+                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.IsAlive) //attack
                 {
                     m.MonsterAttack();
                 }
@@ -135,6 +135,39 @@ namespace TripOverTime.EngineNamespace
                     m.RoundY(); // Don't stuck monster in ground
                 }
             }
+
+            if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X && _game.GetBoss.IsAlive) //left
+            {
+                _game.GetBoss.Orientation = "left";
+            }
+            else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X && _game.GetBoss.IsAlive) //right
+            {
+                _game.GetBoss.Orientation = "right";
+            }
+
+            if (!_game.GetBoss.IsAlive)
+            {
+                _game.GetBoss.BossDead();
+            }
+            else if (_game.GetBoss.Position.X - 4 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 4 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+            {
+                _game.GetBoss.BossMove();
+            }
+
+
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+            {
+                //Block under monster isn't solid
+                _game.GetBoss.Gravity();
+            }
+            else
+            {
+                _game.GetBoss.IsMoving = false;
+                _game.GetBoss.RoundY(); // Don't stuck monster in ground
+            }
+
 
             // Recalibrate float
             _game.GetPlayer.RoundX();
