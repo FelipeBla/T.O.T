@@ -1,5 +1,5 @@
 BACKGROUNDPATH
-..\..\..\..\Assets\Backgrounds\game_background_1.png
+..\..\..\..\Assets\Backgrounds\20957702.jpg
 BACKGROUNDPATHEND
 PLAYER
 ..\..\..\..\Assets\Players\Knight\AllViking 0 3 10 5
@@ -18,7 +18,7 @@ G STONE ..\..\..\..\Assets\Ground\Stone\stoneMid.png true
 BLOCKSEND
 MONSTER
 ReaperMan1 3 3 10 1 0,03
-ReaperMan2 20 3 15 1 0,04
+ReaperMan2 15 3 15 1 0,04
 Angel1 30 3 25 1 0,05
 MONSTEREND
 MAP
