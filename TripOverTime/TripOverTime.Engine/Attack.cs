@@ -38,7 +38,7 @@ namespace TripOverTime.EngineNamespace
                 NormalAttack();
             }
 
-            if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+            if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y &&_monster.isAlive)
             {
                 _context.GetPlayer.GetLife.DecreasedPoint(_attack);
                 _context.GetPlayer.HurtPlayer = true;

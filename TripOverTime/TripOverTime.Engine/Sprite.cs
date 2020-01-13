@@ -335,7 +335,7 @@ namespace TripOverTime.EngineNamespace
                 {
 
                     string numberTexture = action + _monsterWalk;
-                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_monsterTexture[numberTexture].Size);
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_monsterTexture[numberTexture].Size);
                     _sprite.Texture = _monsterTexture[numberTexture];
                     if (_monsterWalk + 1 == nbrAction)
                     {
@@ -345,13 +345,14 @@ namespace TripOverTime.EngineNamespace
                     {
                         _monsterWalk++;
                     }
+
                     _animTimer.Restart();
 
                 }
                 else if (_animTimer.ElapsedMilliseconds >= 40) //left
                 {
                     string numberTexture = action + _monsterWalk;
-                    _sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                    //_sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
                     _sprite.Texture = _monsterTexture[numberTexture];
                     if (_monsterWalk + 1 == nbrAction)
                     {
@@ -361,8 +362,8 @@ namespace TripOverTime.EngineNamespace
                     {
                         _monsterWalk++;
                     }
-                    _animTimer.Restart();
 
+                    _animTimer.Restart();
 
                 }
 
@@ -385,16 +386,7 @@ namespace TripOverTime.EngineNamespace
 
                 string numberTexture = action + _monsterAttack;
                 _sprite.Texture = _monsterTexture[numberTexture];
-                if (monster.Orientation == "left") //Right
-                {
-                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                }
-                else if (monster.Orientation == "right")//Left
-                {
-                    _sprite.Origin = new SFML.System.Vector2f(_monsterTexture[numberTexture].Size.X / 2, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                }
+                
                 _animTimer.Restart();
 
             }
@@ -409,7 +401,7 @@ namespace TripOverTime.EngineNamespace
             {
 
                 string numberTexture = action + _monsterDead;
-                _sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                //_sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
                 _sprite.Texture = _monsterTexture[numberTexture];
                 if (_monsterDead != nbrAction)
                 {
