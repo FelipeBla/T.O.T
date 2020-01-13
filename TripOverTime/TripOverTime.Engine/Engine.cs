@@ -17,6 +17,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.RenderWindow _window;
         Menu _menu;
         Game _game; // Contient Map, Player, Monster
+        Game _game2;
         Settings _settings;
         GUI _gui;
         Font _globalFont;
@@ -45,6 +46,8 @@ namespace TripOverTime.EngineNamespace
             string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
 
             _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
+            _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
+
         }
 
         /// <summary>
@@ -156,6 +159,7 @@ namespace TripOverTime.EngineNamespace
         public short GameTick2()
         {
             if (_game == null) throw new Exception("Game not started!");
+            if (_game2 == null) throw new Exception("Game 2 not started!");
 
             //Events
             _gui.Events2();
@@ -166,9 +170,11 @@ namespace TripOverTime.EngineNamespace
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
+            Sprite sToPositive2 = null;
+            Sprite sToNegative2 = null;
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
-            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+          if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
             {
                 //Block under player isn't solid
                 _game.GetPlayer.Gravity();
@@ -249,6 +255,98 @@ namespace TripOverTime.EngineNamespace
                 // SHOW WIN MENU !
                 return 0;
             }
+
+
+            //-------------------------------------------------------player 2
+            _game2.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game2.GetPlayer2.RealPosition2.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game2.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game2.GetPlayer2.RealPosition2.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+
+
+            if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
+            {
+                //Block under player isn't solid
+                _game2.GetPlayer2.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer2.IsJumping = false;
+                if ((sToPositive2 != null && sToNegative2 != null) && (sToPositive2.IsDangerous || sToNegative2.IsDangerous))
+                {
+                    //DIE
+                    _game.GetPlayer2.KilledBy = "Trap";
+                    return -1;
+                }
+                else
+                {
+                    _game2.GetPlayer2.RoundY(); // Don't stuck player in ground
+                }
+            }
+
+            if (!_game.GetPlayer2.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer2.KilledBy = "Monster";
+                return -1;
+            }
+
+            //Monsters move + Attack
+            foreach (Monster m2 in _game.GetMonsters)
+            {
+                if (m2.Position.X > _game.GetPlayer2.RealPosition2.X && m2.isAlive) //left
+                {
+                    m2.Orientation = "left";
+                }
+                else if (m2.Position.X < _game.GetPlayer2.RealPosition2.X && m2.isAlive) //right
+                {
+                    m2.Orientation = "right";
+                }
+
+                if (!m2.isAlive)
+                {
+                    m2.MonsterDead();
+                }
+                else if (m2.Position.X - 4 < _game.GetPlayer.RealPosition.X && m2.Position.X - 1 > _game.GetPlayer.RealPosition.X || m2.Position.X + 4 > _game.GetPlayer.RealPosition.X && m2.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                {
+                    m2.MonsterMove();
+                }
+
+                if (m2.Position.X + 2 > _game.GetPlayer.RealPosition.X && m2.Position.X - 2 < _game.GetPlayer.RealPosition.X && m2.isAlive) //attack
+                {
+                    m2.MonsterAttack();
+                }
+            }
+
+            //Gravity 4 monsters
+            foreach (Monster m2 in _game.GetMonsters)
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
+                {
+                    //Block under monster isn't solid
+                    m2.Gravity();
+                }
+                else
+                {
+                    m2.IsMoving = false;
+                    m2.RoundY(); // Don't stuck monster in ground
+                }
+
+
+
+            }
+
+            // Recalibrate float
+            _game.GetPlayer2.RoundX();
+            // WIN !!!
+            Position end2 = _game2.GetMapObject.GetEndPosition;
+            if (end2.X <= _game2.GetPlayer2.RealPosition2.X)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 0;
+            }
+
 
             // Dead return -1;
 

@@ -16,6 +16,7 @@ namespace TripOverTime.EngineNamespace
         readonly Game _context;
         readonly String _name;
         Position _position;
+        Position _position2;
         Life _life;
         bool _isAlive;
         Attack _attack;
@@ -30,6 +31,7 @@ namespace TripOverTime.EngineNamespace
             _context = context;
             _name = name;
             _position = position;
+            _position2 = position;
             _life = life;
             _isAlive = true;
             _attack = new Attack(context, this, attack);
@@ -115,6 +117,13 @@ namespace TripOverTime.EngineNamespace
             get => _position;
             set { _position = value; }
         }
+
+        internal Position Position2
+        {
+            get => _position2;
+            set { _position2 = value; }
+        }
+
 
         internal string Orientation
         {
