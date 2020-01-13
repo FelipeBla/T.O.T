@@ -73,10 +73,10 @@ namespace TripOverTime.EngineNamespace
             }
              
             // Lifebar
-            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
+            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             // HP Text
             Text hp = new Text(Convert.ToString(_context.GetGame.GetPlayer.GetLife.CurrentPoint), _context.GetFont, 28);
-            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
+            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 25);
             _window.Draw(_hpBar);
             _window.Draw(hp);
 
@@ -106,7 +106,7 @@ namespace TripOverTime.EngineNamespace
             // Background Player 2
             _window.Draw(_background);
             // Load map
-            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed2)
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
             {
                 s.Value.GetSprite2.Position = s.Key;
                 s.Value.GetSprite2.Position -= _moveTheMapOf2;
@@ -115,10 +115,10 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame2.GetPlayer2.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
+            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context.GetGame2.GetPlayer2.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             // HP Text
             Text hp2 = new Text(Convert.ToString(_context.GetGame2.GetPlayer2.GetLife.CurrentPoint), _context.GetFont, 28);
-            hp2.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
+            hp2.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 35);
             _window.Draw(_hpBar);
             _window.Draw(hp2);
             
