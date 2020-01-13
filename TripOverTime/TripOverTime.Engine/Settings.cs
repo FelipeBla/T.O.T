@@ -13,10 +13,11 @@ namespace TripOverTime.EngineNamespace
         const ushort MAX_LINES = 5;
         const ushort MAX_LINES_KB = 5;
         const ushort MAX_LINES_MULTIPLAYER = 3;
-        private static uint _XResolution = 800;
-        private static uint _YResolution = 600;
+        private static uint _XResolution = 1920;
+        private static uint _YResolution = 1080;
         private static uint _NbFPS = 60;
         private static int _MultiplayerOrNot = 0;
+        private static bool _fullscreen = true;
 
         RenderWindow _window;
         ushort _selected;
@@ -108,12 +109,23 @@ namespace TripOverTime.EngineNamespace
             _lines[0] = new Text("800x600", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("1280 x 720", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("1920 x 1080 ", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
-            _lines[3] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[3] = new Text("Fullscreen", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
+            _lines[4] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
             _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
             _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
             _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
             _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
+            _lines[4].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 5);
+
+            if (_fullscreen)
+            {
+                _lines[3].Color = Color.Green;
+            }
+            else
+            {
+                _lines[3].Color = Color.Red;
+            }
 
             _window.Display();
         }
@@ -297,7 +309,7 @@ namespace TripOverTime.EngineNamespace
             {
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 {
-                    choose = 3;
+                    choose = 4;
                     while (Keyboard.IsKeyPressed(Keyboard.Key.Escape)) Thread.Sleep(1);
                 }
 
@@ -324,7 +336,18 @@ namespace TripOverTime.EngineNamespace
 
                 for (int i = 0; i < MAX_LINES; i++)
                 {
-                    if (i == _selectedResolution)
+                    if (i == 3)
+                    {
+                        if (_fullscreen)
+                        {
+                            _lines[3].Color = Color.Green;
+                        }
+                        else
+                        {
+                            _lines[3].Color = Color.Red;
+                        }
+                    }
+                    else if (i == _selectedResolution)
                     {
                         _lines[i].Color = Color.Red;
                     }
@@ -370,9 +393,11 @@ namespace TripOverTime.EngineNamespace
                     restart();
                     break;
                 case 3:
-                    //quit (return to settings main)
-
+                    //fullscreen
+                    _fullscreen = !_fullscreen;
+                    restart();
                     break;
+                    //4 quit (return to settings main)
             }
 
         }
@@ -793,6 +818,12 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _NbFPS; }
             set { _NbFPS = value; }
+        }
+
+        public static bool Fullscreen
+        {
+            get => _fullscreen;
+            set => _fullscreen = value;
         }
         public static int MultiplayerOrNot
         {

@@ -11,10 +11,12 @@ namespace TripOverTime.EngineNamespace
     public class Menu
     {
         const ushort MAX_LINES = 4;
+        const ushort MAX_LINES2 = 3;
 
         RenderWindow _window;
         ushort _selected;
         Text[] _lines;
+        Text[] _lines2;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         string[] _maps;
@@ -29,6 +31,7 @@ namespace TripOverTime.EngineNamespace
             _selected = 0;
             _font = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _lines = new Text[MAX_LINES];
+            _lines2 = new Text[MAX_LINES2];
         }
 
         public void StartMainMenu()
@@ -70,7 +73,10 @@ namespace TripOverTime.EngineNamespace
             if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
                 if (_selected == 2) result = -1;
+                else if (_selected == 3) result = -5;
                 else result = (short)_selected;
+
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Enter)) ; //tampon
             }
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
@@ -134,12 +140,12 @@ namespace TripOverTime.EngineNamespace
             //Lines
             for (int i = 0; i < _maps.Length; i++)
             {
-                _lines[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), _font, _charSize);
+                _lines2[i] = new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\", ".totmap"), _font, _charSize);
             }
 
-            for (int i = 0; i < _lines.Length; i++)
+            for (int i = 0; i < _lines2.Length; i++)
             {
-                _lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                _lines2[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines2[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
             }
 
             _window.Display();
@@ -163,7 +169,7 @@ namespace TripOverTime.EngineNamespace
                 result = _maps[_selected];
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES - 1)
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < MAX_LINES2 - 1)
             {
                 tampon = 1;
                 _selected++;
@@ -179,17 +185,17 @@ namespace TripOverTime.EngineNamespace
             _window.Clear();
             _window.Draw(_background);
 
-            for (int i = 0; i < MAX_LINES; i++)
+            for (int i = 0; i < MAX_LINES2; i++)
             {
                 if (i == _selected)
                 {
-                    _lines[i].Color = Color.Red;
+                    _lines2[i].Color = Color.Red;
                 }
                 else
                 {
-                    _lines[i].Color = Color.Black;
+                    _lines2[i].Color = Color.Black;
                 }
-                _window.Draw(_lines[i]);
+                _window.Draw(_lines2[i]);
             }
 
             _window.Display();
