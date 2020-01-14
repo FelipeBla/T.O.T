@@ -228,7 +228,7 @@ namespace TripOverTime.EngineNamespace
         {
             get
             {
-                return _life2.GetCurrentPoint() > 0;
+                return _life2.GetCurrentPoint2() > 0;
             }
             set { _isAlive2 = value; }
         }
@@ -236,6 +236,11 @@ namespace TripOverTime.EngineNamespace
         {
             get { return _attack; }
             set { _attack = value; }
+        }
+        internal Attack GetAttack2
+        {
+            get { return _attack2; }
+            set { _attack2 = value; }
         }
 
         internal Sprite GetMonsterSprite

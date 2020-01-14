@@ -417,12 +417,12 @@ namespace TripOverTime.EngineNamespace
             }
             // ------------------------------PLAYER 2
             //Graphics
-            if (_context2.GetGame2.GetPlayer2.IsAttack)
+            if (_context2.GetGame2.GetPlayer2.IsAttack2)
             {
-                _context2.GetGame2.GetPlayer2.Attack();
+                _context2.GetGame2.GetPlayer2.Attack2();
             }
 
-            if (_context2.GetGame2.GetPlayer2.HurtPlayer)
+            if (_context2.GetGame2.GetPlayer2.HurtPlayer2)
             {
                 foreach (Monster monster in _context2.GetGame2.GetMonsters2)
                 {

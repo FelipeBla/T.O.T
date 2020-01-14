@@ -27,6 +27,8 @@ namespace TripOverTime.EngineNamespace
         Position _realPosition2;
         Life _life;
         ushort _attack;
+        Life _life2;
+        ushort _attack2;
         Sprite _sprite;
         bool _isJumping;
         bool _isJumping2;
@@ -63,32 +65,32 @@ namespace TripOverTime.EngineNamespace
 
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
-
-
-            //Player 2
             pw = 128;
             ph = 128;
 
             _monsterKillName = "void";
 
-            _context = context;
-            _name = name;
-            _position = position;
-            _realPosition2 = new Position(_position.X, _position.Y);
-            _life = life;
-            _attack = attack;
-            _isJumping = false;
-            _isAttack = false;
+            //Player 2
+            pw2 = 128;
+            ph2 = 128;
+
+            _monsterKillName = "void";
+
+            _context2 = context;
+            _name2 = name;
+            _position2 = position;
+            _realPosition2 = new Position(_position2.X, _position2.Y);
+            _life2 = life;
+            _attack2 = attack;
+            _isJumping2 = false;
+            _isAttack2 = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
-            _orientation = "right";
+            _orientation2 = "right";
 
             _attackSpeed = 1;
             _attackRange = 1.0f; // En block
 
-            pw = 128;
-            ph = 128;
 
-            _monsterKillName = "void";
 
             _attackTimer2 = new Stopwatch();
             _attackTimer2.Start();
@@ -385,6 +387,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _isAttack;
             set => _isAttack = value;
+        }
+        internal bool IsAttack2
+        {
+            get => _isAttack2;
+            set => _isAttack2 = value;
         }
 
         internal bool IsAlive

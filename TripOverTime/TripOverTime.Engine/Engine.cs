@@ -400,7 +400,101 @@ namespace TripOverTime.EngineNamespace
             _game = null;
         }
 
+        public void WinMenu2()
+        {
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("YOU WIN !", _globalFont, 64));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool quit = false;
+
+            while (!quit)
+            {
+                Joystick.Update();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+                    quit = true;
+                System.Threading.Thread.Sleep(1);
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(this, _window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
+        }
+
         public void DieMenu()
+        {
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
+            lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool quit = false;
+
+            while (!quit)
+            {
+                Joystick.Update();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+                    quit = true;
+                System.Threading.Thread.Sleep(1);
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(this, _window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
+        }
+
+        public void DieMenu2()
         {
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
