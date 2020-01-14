@@ -271,7 +271,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     foreach (Monster m in _context.GetMonsters) //Monster block?
                     {
-                        if (m.Position.Y == _realPosition.Y) //Meme niveau Y
+                        if (m.Position.Y <= _realPosition.Y && m.Position.Y >= _realPosition.Y - 0.8f) //Meme niveau Y
                         {
                             if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) + 1)
                             {
@@ -333,7 +333,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     foreach(Monster m in _context.GetMonsters) //Monster block?
                     {
-                        if (m.Position.Y == _realPosition.Y) //Meme niveau Y
+                        if (m.Position.Y <= _realPosition.Y && m.Position.Y >= _realPosition.Y - 0.8f) //Meme niveau Y
                         {
                             if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) - 1)
                             {
