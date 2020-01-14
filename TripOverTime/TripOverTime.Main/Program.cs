@@ -58,7 +58,7 @@ namespace TripOverTime.Main
                 } while (choose == -2);
 
 
-                if (choose == 0) //Lauch GAME
+                if (choose == 0) //Lauch GAME 1P
                 {
                     // Choose Map
                     string chooseMap = "null";
@@ -133,7 +133,7 @@ namespace TripOverTime.Main
                         throw new Exception("WTF?!");
                     }
                 }
-                else if (choose == 1)
+                else if (choose == 1) // Launch Game 2P
                 {
                     string chooseMap = "null";
                     engine.GetMenu.InitMapMenu();
@@ -206,7 +206,11 @@ namespace TripOverTime.Main
                         throw new Exception("WTF?!");
                     }
                 }
-                else if (choose == -1) //Settings
+                else if (choose == 2) // Map editor
+                {
+                    MapEditor.Run(window);
+                }
+                else if (choose == 3) //Settings
                 {
                     if(engine.GetSettings.RunSettings()) // if true need to apply
                     {
@@ -214,9 +218,8 @@ namespace TripOverTime.Main
                         RunAgain();
                     }
                 }
-                else if (choose == -5)
+                else if (choose == -5) // Quit
                 {
-                    Console.WriteLine("Wesh alors");
                     window.Close();
                     engine.Close = true;
                     return false;
