@@ -172,9 +172,12 @@ namespace TripOverTime.EngineNamespace
                         {
                             if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) + 1)
                             {
-                                //Blocked by monster
-                                Console.WriteLine("MONSTTERRRRRRRR");
-                                blocked = true;
+                                if (m.GetMonsterSprite.IsSolid)
+                                {
+                                    //Blocked by monster
+                                    Console.WriteLine("MONSTTERRRRRRRR");
+                                    blocked = true;
+                                }
                             }
                         }
                     }
@@ -231,9 +234,12 @@ namespace TripOverTime.EngineNamespace
                         {
                             if (Math.Round(m.Position.X) == Math.Round(_realPosition.X) - 1)
                             {
-                                //Blocked by monster
-                                Console.WriteLine("MONSTTERRRRRRRR");
-                                blocked = true;
+                                if (m.GetMonsterSprite.IsSolid)
+                                {
+                                    //Blocked by monster
+                                    Console.WriteLine("MONSTTERRRRRRRR");
+                                    blocked = true;
+                                }
                             }
                         }
                     }

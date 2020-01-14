@@ -177,8 +177,21 @@ namespace TripOverTime.EngineNamespace
             // Monsters
             foreach (Monster m in _context.GetGame.GetMonsters)
             {
+                //Orientation
+                if (m.Orientation == "right" && m.GetMonsterSprite.GetSprite.Scale != new SFML.System.Vector2f(1.0f, 1.0f)) //Right
+                {
+                    m.GetMonsterSprite.GetSprite.Origin = new SFML.System.Vector2f(0, 0);
+                    m.GetMonsterSprite.GetSprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (m.Orientation == "left" && m.GetMonsterSprite.GetSprite.Scale != new SFML.System.Vector2f(-1.0f, 1.0f))//Left
+                {
+                    m.GetMonsterSprite.GetSprite.Origin = new SFML.System.Vector2f(m.GetMonsterSprite.GetSprite.Texture.Size.X / 2, 0);
+                    m.GetMonsterSprite.GetSprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+
                 m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
                 m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;
+
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 

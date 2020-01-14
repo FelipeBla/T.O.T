@@ -43,12 +43,11 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
-            //Console.WriteLine("Frog position: [ " + _position.X + " ; " + _position.Y + " ]");
+            Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
             if (!_ismoving)
             {
                 Sprite s = null;
 
-                _origin = new Position(_position.X, _position.Y);
                 if (_orientation == "left")
                 {
                     if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
@@ -80,6 +79,7 @@ namespace TripOverTime.EngineNamespace
         internal void MonsterDead()
         {
             _sprite.MonsterDeadAnimation(this);
+            _sprite.IsSolid = false;
         }
         internal void Gravity()
         {
