@@ -9,6 +9,7 @@ namespace TripOverTime.EngineNamespace
         readonly ushort _maxPoint;
         readonly ushort _minPoint;
         ushort _currentPoint;
+        ushort _currentPoint2;
 
         public Life()
             : this(1000, 0)
@@ -20,6 +21,7 @@ namespace TripOverTime.EngineNamespace
             _maxPoint = maxPoint;
             _minPoint = minPoint;
             _currentPoint = maxPoint;
+            _currentPoint2 = maxPoint;
         }
 
         public ushort CurrentPoint
@@ -78,6 +80,11 @@ namespace TripOverTime.EngineNamespace
         {
             return _currentPoint;
         }
+        public ushort GetCurrentPoint2()
+        {
+            return _currentPoint2;
+        }
+
 
         public ushort GetMinPoint()
         {

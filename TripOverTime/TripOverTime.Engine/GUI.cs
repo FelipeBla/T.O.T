@@ -10,6 +10,7 @@ namespace TripOverTime.EngineNamespace
     public class GUI
     {
         Engine _context;
+        Engine _context2;
         RenderWindow _window;
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed;
         Dictionary<SFML.System.Vector2f, Sprite> _spritesDisplayed2;
@@ -33,6 +34,7 @@ namespace TripOverTime.EngineNamespace
         internal GUI(Engine context, RenderWindow window)
         {
             _context = context;
+            _context2 = context;
             _window = window;
             _spritesDisplayed = new Dictionary<SFML.System.Vector2f, Sprite>();
             _spritesDisplayed2 = new Dictionary<SFML.System.Vector2f, Sprite>();
@@ -415,14 +417,14 @@ namespace TripOverTime.EngineNamespace
             }
             // ------------------------------PLAYER 2
             //Graphics
-            if (_context.GetGame2.GetPlayer2.IsAttack)
+            if (_context2.GetGame2.GetPlayer2.IsAttack)
             {
-                _context.GetGame2.GetPlayer2.Attack();
+                _context2.GetGame2.GetPlayer2.Attack();
             }
 
-            if (_context.GetGame2.GetPlayer2.HurtPlayer)
+            if (_context2.GetGame2.GetPlayer2.HurtPlayer)
             {
-                foreach (Monster monster in _context.GetGame2.GetMonsters2)
+                foreach (Monster monster in _context2.GetGame2.GetMonsters2)
                 {
                     monster.GetAttack.HurtPlayer2();
                 }
@@ -435,30 +437,30 @@ namespace TripOverTime.EngineNamespace
                 }
                 else if (Keyboard.IsKeyPressed(_RightAction2))
                 {
-                    _moveTheMapOf2 += _context.GetGame2.GetPlayer2.MoveRight((float)_window.Size.X);
+                    _moveTheMapOf2 += _context2.GetGame2.GetPlayer2.MoveRight((float)_window.Size.X);
                 }
                 else if (Keyboard.IsKeyPressed(_LeftAction2))
                 {
-                    _moveTheMapOf2 -= _context.GetGame2.GetPlayer2.MoveLeft((float)_window.Size.X);
+                    _moveTheMapOf2 -= _context2.GetGame2.GetPlayer2.MoveLeft((float)_window.Size.X);
                 }
 
                 if (Keyboard.IsKeyPressed(_JumpAction2))
                 {
-                    if (_context.GetGame2.GetPlayer2.RealPosition2.Y < _context.GetGame2.GetMapObject.GetLimitMax.Y && _context.GetGame2.GetPlayer2.IsOnTheGround)
+                    if (_context2.GetGame2.GetPlayer2.RealPosition2.Y < _context2.GetGame2.GetMapObject.GetLimitMax.Y && _context2.GetGame2.GetPlayer2.IsOnTheGround)
                     {
-                        _context.GetGame2.GetPlayer2.Jump();
+                        _context2.GetGame2.GetPlayer2.Jump();
                     }
                 }
 
                 if (Keyboard.IsKeyPressed(_AttackAction2)) // ATTACK
                 {
-                    _context.GetGame2.GetPlayer2.IsAttack = true;
-                    _context.GetGame2.GetPlayer2.Attack();
+                    _context2.GetGame2.GetPlayer2.IsAttack = true;
+                    _context2.GetGame2.GetPlayer2.Attack();
                 }
 
                 if (!Keyboard.IsKeyPressed(_LeftAction2) && !Keyboard.IsKeyPressed(_RightAction2) && !Keyboard.IsKeyPressed(_JumpAction2) && !_context.GetGame2.GetPlayer2.IsAttack && !_context.GetGame2.GetPlayer2.HurtPlayer)
                 {
-                    _context.GetGame2.GetPlayer2.GetPlayerSprite.DefaultAnimation();
+                    _context2.GetGame2.GetPlayer2.GetPlayerSprite.DefaultAnimation();
                 }
             }
         }

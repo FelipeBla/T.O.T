@@ -319,8 +319,8 @@ namespace TripOverTime.EngineNamespace
             //Gravity 4 monsters
             foreach (Monster m2 in _game.GetMonsters2)
             {
-                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position2.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
+                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position2.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
                 if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
                 {
                     //Block under monster isn't solid

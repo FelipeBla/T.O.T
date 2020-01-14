@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -10,6 +8,8 @@ namespace TripOverTime.EngineNamespace
         const string PLAYER_ID = "PLAYER420";
         float pw;
         float ph;
+        float pw2;
+        float ph2;
         const float JUMPING_SPEED = 0.06f;
         const float GRAVITY_SPEED = 0.06f;
         const float JUMPING_LIMIT = 1.3f;
@@ -18,20 +18,31 @@ namespace TripOverTime.EngineNamespace
         readonly Game _context;
         readonly Checkpoint _checkpoint;
         readonly String _name;
+        readonly Game _context2;
+        readonly Checkpoint _checkpoint2;
+        readonly String _name2;
         Position _position; // Graphical position
+        Position _position2;
         Position _realPosition;
         Position _realPosition2;
         Life _life;
         ushort _attack;
         Sprite _sprite;
         bool _isJumping;
+        bool _isJumping2;
         Position _origin;
+        Position _origin2;
         string _orientation;
+        string _orientation2;
         bool _isAttack;
+        bool _isAttack2;
         bool _isHurt;
+        bool _isHurt2;
         String _monsterKillName;
         Stopwatch _attackTimer;
+        Stopwatch _attackTimer2;
         int _attackSpeed;
+        int _attackSpeed2;
         float _attackRange;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
@@ -40,7 +51,6 @@ namespace TripOverTime.EngineNamespace
             _name = name;
             _position = position;
             _realPosition = new Position(_position.X, _position.Y);
-            _realPosition2 = new Position(_position.X, _position.Y);
             _life = life;
             _attack = attack;
             _isJumping = false;
@@ -54,10 +64,34 @@ namespace TripOverTime.EngineNamespace
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
 
+
+            //Player 2
             pw = 128;
             ph = 128;
 
             _monsterKillName = "void";
+
+            _context = context;
+            _name = name;
+            _position = position;
+            _realPosition2 = new Position(_position.X, _position.Y);
+            _life = life;
+            _attack = attack;
+            _isJumping = false;
+            _isAttack = false;
+            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _orientation = "right";
+
+            _attackSpeed = 1;
+            _attackRange = 1.0f; // En block
+
+            pw = 128;
+            ph = 128;
+
+            _monsterKillName = "void";
+
+            _attackTimer2 = new Stopwatch();
+            _attackTimer2.Start();
         }
 
         internal void Jump()
@@ -86,6 +120,22 @@ namespace TripOverTime.EngineNamespace
                 _origin = null;
                 _realPosition.Y -= GRAVITY_SPEED;
                 _position.Y -= GRAVITY_SPEED;
+            }
+        }
+
+        internal void Gravity2()
+        {
+            if (_isJumping2 && _origin != null && _realPosition2.Y <= _origin2.Y + JUMPING_LIMIT) // Jump
+            {
+                _realPosition2.Y += JUMPING_SPEED;
+                _position2.Y += JUMPING_SPEED;
+                _sprite.JumpAnimation();
+            }
+            else // Fall
+            {
+                _origin2 = null;
+                _realPosition2.Y -= GRAVITY_SPEED;
+                _position2.Y -= GRAVITY_SPEED;
             }
         }
 
@@ -130,6 +180,47 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void Attack2()
+        {
+            if (_isAttack2)
+            {
+                //Evite le spam d'attaque
+                if (_attackTimer2.ElapsedMilliseconds >= 1000 / _attackSpeed2)
+                {
+                    _attackTimer2.Restart();
+                    //Attack
+                    Monster monsterToAttack = null;
+                    //check orientation
+                    if (_orientation2 == "right")
+                    {
+                        //try get monster with position
+                        foreach (Monster m in _context2.GetMonsters2)
+                        {
+                            if (m.Position2.X <= _realPosition2.X + _attackRange && m.Position2.X >= _realPosition2.X && m.Position2.Y == _realPosition2.Y)
+                                monsterToAttack = m;
+                        }
+                    }
+                    else
+                    {
+                        //try get monster with position
+                        foreach (Monster m in _context2.GetMonsters2)
+                        {
+                            if (m.Position2.X >= _realPosition2.X - _attackRange && m.Position2.X <= _realPosition2.X && m.Position2.Y == _realPosition2.Y)
+                                monsterToAttack = m;
+                        }
+                    }
+
+                    // Si il y a un monstre
+                    if (monsterToAttack != null)
+                    {
+                        //Attack
+                        monsterToAttack.life.DecreasedPoint(_attack);
+                    }
+                }
+                _sprite.AttackAnimation(4, "attack", 100);
+            }
+        }
+
         internal void RoundY()
         {
             _position.Y = (int)Math.Round(_position.Y);
@@ -140,6 +231,18 @@ namespace TripOverTime.EngineNamespace
         {
             _realPosition.X = (float)Math.Round(_realPosition.X, 2);
             _position.X = (float)Math.Round(_position.X, 2);
+        }
+
+        internal void RoundY2()
+        {
+            _position2.Y = (int)Math.Round(_position2.Y);
+            _realPosition2.Y = (int)Math.Round(_realPosition2.Y);
+        }
+
+        internal void RoundX2() // To recalibrate X (because precision of float)
+        {
+            _realPosition2.X = (float)Math.Round(_realPosition2.X, 2);
+            _position2.X = (float)Math.Round(_position2.X, 2);
         }
 
         internal SFML.System.Vector2f MoveRight(float width)
@@ -363,6 +466,12 @@ namespace TripOverTime.EngineNamespace
         {
             get => _isHurt;
             set => _isHurt = value;
+        }
+
+        internal bool HurtPlayer2
+        {
+            get => _isHurt2;
+            set => _isHurt2 = value;
         }
     }
 }
