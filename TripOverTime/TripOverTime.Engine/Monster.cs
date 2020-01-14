@@ -24,19 +24,23 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         float _monsterMove;
+        float _range;
+        string _attackCombo;
 
-        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove)
+        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
         {
             _context = context;
             _name = name;
             _position = position;
             _life = life;
             _isAlive = true;
-            _attack = new Attack(context, this, attack);
+            _attack = new Attack(context, this, attack, attackCombo);
             _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
+            _range = range + 0.2f;
+            _attackCombo = attackCombo;
         }
 
         internal void MonsterMove()
@@ -150,6 +154,16 @@ namespace TripOverTime.EngineNamespace
         {
             get => _ismoving;
             set => _ismoving = value;
+        }
+
+        internal float Range
+        {
+            get => _range;
+        }
+
+        internal string AttackCombo
+        {
+            get => _attackCombo;
         }
     }
 }

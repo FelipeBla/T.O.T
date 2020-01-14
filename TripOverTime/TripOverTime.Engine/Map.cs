@@ -41,7 +41,7 @@ namespace TripOverTime.EngineNamespace
         /// id name imgPath
         /// BLOCKS
         /// MONSTER
-        /// id name [x;y] hp imgDirPath
+        /// id name [x;y] hp imgDirPath range attackcombo
         /// MONSTER
         /// MAP
         /// 
@@ -115,7 +115,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100 ));
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
             }
 
             return monsters;
