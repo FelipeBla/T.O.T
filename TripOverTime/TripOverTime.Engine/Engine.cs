@@ -290,7 +290,7 @@ namespace TripOverTime.EngineNamespace
             }
 
             //Monsters move + Attack
-            foreach (Monster m2 in _game.GetMonsters)
+            foreach (Monster m2 in _game.GetMonsters2)
             {
                 if (m2.Position.X > _game.GetPlayer2.RealPosition2.X && m2.isAlive) //left
                 {
@@ -305,22 +305,22 @@ namespace TripOverTime.EngineNamespace
                 {
                     m2.MonsterDead();
                 }
-                else if (m2.Position.X - 4 < _game.GetPlayer.RealPosition.X && m2.Position.X - 1 > _game.GetPlayer.RealPosition.X || m2.Position.X + 4 > _game.GetPlayer.RealPosition.X && m2.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                else if (m2.Position.X - 4 < _game2.GetPlayer2.RealPosition2.X && m2.Position2.X - 1 > _game2.GetPlayer2.RealPosition.X || m2.Position.X + 4 > _game2.GetPlayer2.RealPosition2.X && m2.Position2.X + 1 < _game2.GetPlayer2.RealPosition.X)
                 {
                     m2.MonsterMove();
                 }
 
-                if (m2.Position.X + 2 > _game.GetPlayer.RealPosition.X && m2.Position.X - 2 < _game.GetPlayer.RealPosition.X && m2.isAlive) //attack
+                if (m2.Position2.X + 2 > _game2.GetPlayer2.RealPosition2.X && m2.Position2.X - 2 < _game.GetPlayer2.RealPosition2.X && m2.isAlive) //attack
                 {
                     m2.MonsterAttack();
                 }
             }
 
             //Gravity 4 monsters
-            foreach (Monster m2 in _game.GetMonsters)
+            foreach (Monster m2 in _game.GetMonsters2)
             {
-                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
                 if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
                 {
                     //Block under monster isn't solid
