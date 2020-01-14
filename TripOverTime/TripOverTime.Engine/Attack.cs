@@ -86,6 +86,11 @@ namespace TripOverTime.EngineNamespace
             return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
+        internal void HurtPlayer2()
+        {
+            _context.GetPlayer2.GetPlayerSprite.PlayerAnimation(4, "hurt", 40);
+        }
+
         internal ushort GetAttack
         {
             get => _attack;

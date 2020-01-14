@@ -8,6 +8,7 @@ namespace TripOverTime.EngineNamespace
     class Map
     {
         Dictionary<Position, Sprite> _map;
+        Dictionary<Position, Sprite> _map2;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
@@ -24,6 +25,7 @@ namespace TripOverTime.EngineNamespace
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
+            _map2 = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -142,6 +144,11 @@ namespace TripOverTime.EngineNamespace
         internal Dictionary<Position, Sprite> GetMap
         {
             get => _map;
+        }
+
+        internal Dictionary<Position, Sprite> GetMap2
+        {
+            get => _map2;
         }
 
         internal Position GetLimitMax

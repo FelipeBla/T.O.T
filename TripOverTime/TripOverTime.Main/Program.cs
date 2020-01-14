@@ -163,7 +163,7 @@ namespace TripOverTime.Main
                         if (spGame.ElapsedMilliseconds >= 1000 / tps)
                         {
                             // GameTick
-                            result = engine.GameTick();
+                            result = engine.GameTick2();
                             spGame.Restart();
                         }
 
