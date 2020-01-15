@@ -13,37 +13,31 @@ namespace TripOverTime.EngineNamespace
         Monster _monster;
         ushort _attack;
         Stopwatch _timer;
-        string[] _schemaAttack;
+        string _schemaAttack;
         int _incrementationAttack;
-        string _mapPath;
 
-        internal Attack(Game context, Monster monster, ushort attack)
+        internal Attack(Game context, Monster monster, ushort attack, string attackCombo = "A")
         {
             _context = context;
             _monster = monster;
             _attack = attack;
             _timer = new Stopwatch();
             _timer.Start();
-            _mapPath = @"..\..\..\..\Maps\attackMonster.totMonster";
 
-            //Verify if it's a map file
-            if (!_mapPath.EndsWith(".totMonster")) throw new ArgumentException("The map file is not correct (.totMonster)");
-            string text = File.ReadAllText(_mapPath);
-            // Open map file
-            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
-            _schemaAttack = StringBetweenString(text, _monster.Name + "UP", _monster.Name + "END").Split("\n");
+            _schemaAttack = attackCombo;
+
             _incrementationAttack = 0;
         }
 
         internal void AttackMonster()
         {
-            if (_incrementationAttack == _schemaAttack[0].Length -1 )
+            if (_incrementationAttack == _schemaAttack.Length -1 )
             {
                 _incrementationAttack = 0;
             }
 
-            Console.WriteLine(_schemaAttack[0][_incrementationAttack]);
-            if (_schemaAttack[0][_incrementationAttack] == 'S')
+            Console.WriteLine(_schemaAttack[_incrementationAttack]);
+            if (_schemaAttack[_incrementationAttack] == 'S')
             { 
                 SlidingAttack();
                 if (_timer.ElapsedMilliseconds >= 700)
@@ -55,11 +49,11 @@ namespace TripOverTime.EngineNamespace
                     _timer.Restart();
                 }
             }
-            else if (_schemaAttack[0][_incrementationAttack] == 'A')
+            else if (_schemaAttack[_incrementationAttack] == 'A')
             {
                 NormalAttack();
 
-                if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.isAlive)
+            if (_timer.ElapsedMilliseconds >= 910 && _monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y &&_monster.isAlive)
                 {
                     _context.GetPlayer.GetLife.DecreasedPoint(_attack);
                     _context.GetPlayer.HurtPlayer = true;
@@ -90,6 +84,11 @@ namespace TripOverTime.EngineNamespace
             int firstStringPosition = original.IndexOf(str1);
             int secondStringPosition = original.IndexOf(str2);
             return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
+        }
+
+        internal void HurtPlayer2()
+        {
+            _context.GetPlayer2.GetPlayerSprite.PlayerAnimation(4, "hurt", 40);
         }
 
         internal ushort GetAttack
