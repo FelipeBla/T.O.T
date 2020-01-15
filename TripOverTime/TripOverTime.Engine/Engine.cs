@@ -117,7 +117,7 @@ namespace TripOverTime.EngineNamespace
                     m.MonsterMove();
                 }
 
-                if (m.Position.X + 2 > _game.GetPlayer.RealPosition.X && m.Position.X - 2 < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
+                if (m.Position.X + m.Range > _game.GetPlayer.RealPosition.X && m.Position.X - m.Range < _game.GetPlayer.RealPosition.X && m.isAlive) //attack
                 {
                     m.MonsterAttack();
                 }

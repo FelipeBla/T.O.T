@@ -36,9 +36,12 @@ namespace TripOverTime.EngineNamespace
         string _orientation;
         string _orientation2;
         float _monsterMove;
+<<<<<<< HEAD
         float _monsterMove2;
+=======
         float _range;
         string _attackCombo;
+>>>>>>> Quentin
 
         internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
         {
@@ -52,8 +55,8 @@ namespace TripOverTime.EngineNamespace
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
-            _range = range + 0.2f;
-            _attackCombo = attackCombo;
+<<<<<<< HEAD
+
             _context2 = context;
             _name2 = name;
             _position2 = position;
@@ -64,6 +67,10 @@ namespace TripOverTime.EngineNamespace
             pw2 = _sprite.GetSprite.TextureRect.Width;
             ph2 = _sprite.GetSprite.TextureRect.Height;
             _monsterMove2 = monsterMove;
+=======
+            _range = range + 0.2f;
+            _attackCombo = attackCombo;
+>>>>>>> Quentin
         }
 
         internal void MonsterMove()
@@ -231,7 +238,7 @@ namespace TripOverTime.EngineNamespace
         {
             get
             {
-                return _life2.GetCurrentPoint2() > 0;
+                return _life2.GetCurrentPoint() > 0;
             }
             set { _isAlive2 = value; }
         }
@@ -240,32 +247,22 @@ namespace TripOverTime.EngineNamespace
             get { return _attack; }
             set { _attack = value; }
         }
-        internal Attack GetAttack2
-        {
-            get { return _attack2; }
-            set { _attack2 = value; }
-        }
 
         internal Sprite GetMonsterSprite
         {
             get => _sprite;
-        }
-
-        internal Sprite GetMonsterSprite2
-        {
-            get => _sprite2;
         }
         internal bool IsMoving
         {
             get => _ismoving;
             set => _ismoving = value;
         }
+<<<<<<< HEAD
         internal bool IsMoving2
         {
             get => _ismoving2;
             set => _ismoving2 = value;
-        
-        }
+=======
 
         internal float Range
         {
@@ -275,6 +272,7 @@ namespace TripOverTime.EngineNamespace
         internal string AttackCombo
         {
             get => _attackCombo;
+>>>>>>> Quentin
         }
     }
 }
