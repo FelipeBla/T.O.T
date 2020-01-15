@@ -81,7 +81,7 @@ namespace TripOverTime.EngineNamespace
                     //if (str[4] == "DANGEROUS")
                     //{
                         _sprites[i].IsDangerous = true;
-                        Console.WriteLine(str[1] + " IS DANGEROUS");
+                        //Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
             }

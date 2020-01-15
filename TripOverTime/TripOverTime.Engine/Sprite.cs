@@ -32,10 +32,9 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer;
 
-        internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false)
+        internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false)
         {
             if (String.IsNullOrEmpty(imgPath)) throw new ArgumentException("imgPath is null or empty!");
-            if (context == null) throw new ArgumentNullException("context is null!");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("name is null or empty!");
 
             _id = id;
@@ -488,6 +487,16 @@ namespace TripOverTime.EngineNamespace
         internal string Id
         {
             get => _id;
+        }
+
+        internal string Name
+        {
+            get => _name;
+        }
+
+        internal string ImgPath
+        {
+            get => _imgPath;
         }
 
         internal bool IsDangerous
