@@ -474,6 +474,50 @@ namespace TripOverTime.EngineNamespace
 
             }
         }
+        internal void MonsterMoveAnimation2(Monster monster)
+        {
+            if (monster.IsMoving)
+            {
+                int nbrAction = 25;
+                string action = "walk";
+                if (monster.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
+                {
+
+                    string numberTexture = action + _monsterWalk;
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_monsterTexture[numberTexture].Size);
+                    _sprite.Texture = _monsterTexture[numberTexture];
+                    if (_monsterWalk + 1 == nbrAction)
+                    {
+                        _monsterWalk = 1;
+                    }
+                    else
+                    {
+                        _monsterWalk++;
+                    }
+
+                    _animTimer.Restart();
+
+                }
+                else if (_animTimer.ElapsedMilliseconds >= 40) //left
+                {
+                    string numberTexture = action + _monsterWalk;
+                    //_sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                    _sprite.Texture = _monsterTexture[numberTexture];
+                    if (_monsterWalk + 1 == nbrAction)
+                    {
+                        _monsterWalk = 1;
+                    }
+                    else
+                    {
+                        _monsterWalk++;
+                    }
+
+                    _animTimer.Restart();
+
+                }
+
+            }
+        }
 
         internal void MonsterAttackAnimation(int nbrAction, string action, int speedAction)
         {

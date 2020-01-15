@@ -8,6 +8,7 @@ namespace TripOverTime.EngineNamespace
     class Map
     {
         Dictionary<Position, Sprite> _map;
+        Dictionary<Position, Sprite> _map2;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
@@ -24,6 +25,7 @@ namespace TripOverTime.EngineNamespace
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
+            _map2 = new Dictionary<Position, Sprite>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -41,7 +43,7 @@ namespace TripOverTime.EngineNamespace
         /// id name imgPath
         /// BLOCKS
         /// MONSTER
-        /// id name [x;y] hp imgDirPath
+        /// id name [x;y] hp imgDirPath range attackcombo
         /// MONSTER
         /// MAP
         /// 
@@ -115,7 +117,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100 ));
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
             }
 
             return monsters;
@@ -164,6 +166,11 @@ namespace TripOverTime.EngineNamespace
         internal Dictionary<Position, Sprite> GetMap
         {
             get => _map;
+        }
+
+        internal Dictionary<Position, Sprite> GetMap2
+        {
+            get => _map2;
         }
 
         internal Position GetLimitMax

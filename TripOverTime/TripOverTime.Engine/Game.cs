@@ -14,6 +14,7 @@ namespace TripOverTime.EngineNamespace
         List<Monster> _monsters;
         List<Monster> _monsters2;
         Map _map;
+        Map _map2;
         Stopwatch _timer;
         string _mapPath;
 
@@ -34,6 +35,10 @@ namespace TripOverTime.EngineNamespace
         internal Map GetMapObject
         {
             get => _map;
+        }
+        internal Map GetMapObject2
+        {
+            get => _map2;
         }
         public Player GetPlayer
         {
