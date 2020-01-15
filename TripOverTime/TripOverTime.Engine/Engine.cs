@@ -142,14 +142,12 @@ namespace TripOverTime.EngineNamespace
 
 
             // boss
-            Console.WriteLine(_game.GetBoss.IsAlive);
             if (!_game.GetBoss.IsAlive)
             {
                 _game.GetBoss.BossDead();
             }
             else
             {
-                Console.WriteLine("engine boss");
                 if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
                 {
                     _game.GetBoss.Orientation = "left";
@@ -295,14 +293,12 @@ namespace TripOverTime.EngineNamespace
             }
 
             // boss
-            Console.WriteLine(_game.GetBoss.IsAlive);
             if (!_game.GetBoss.IsAlive)
             {
                 _game.GetBoss.BossDead();
             }
             else
             {
-                Console.WriteLine("engine boss");
                 if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
                 {
                     _game.GetBoss.Orientation = "left";
