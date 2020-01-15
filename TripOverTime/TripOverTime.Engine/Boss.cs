@@ -24,18 +24,20 @@ namespace TripOverTime.EngineNamespace
         Position _origin;
         string _orientation;
         float _bossMove;
+        float _range;
 
-        internal Boss(Game context, String name, Position position, Life life, ushort attack, float bossMove)
+        internal Boss(Game context, String name, Position position, Life life, ushort attack, float bossMove, float range, string attackCombo)
         {
             _context = context;
             _name = name;
             _position = position;
             _life = life;
-            _attack = new Attack(_context, this, attack);
+            _attack = new Attack(_context, null, attack, attackCombo, this);
             _sprite = new Sprite(BOSS_ID, _name, $@"..\..\..\..\Assets\Boss\{name}\All", true, _context.GetMapObject, false, false, true);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _bossMove = bossMove;
+            _range = range + 0.2f;
         }
         internal void BossMove()
         {

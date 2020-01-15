@@ -34,7 +34,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void AttackMonster()
         {
-            if (_incrementationAttack == _schemaAttack.Length -1 )
+            if (_incrementationAttack == _schemaAttack.Length - 1)
             {
                 _incrementationAttack = 0;
             }
@@ -44,9 +44,9 @@ namespace TripOverTime.EngineNamespace
             {
                 _speedAttack = 50;
                 SlidingAttack();
-                if (_timer.ElapsedMilliseconds >= _speedAttack*12 && _monster.isAlive)
+                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.isAlive)
                 {
-                    if (_monster.Position.X + 2 > _context.GetPlayer.RealPosition.X && _monster.Position.X - 2 < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y)
+                    if (_monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y)
                     {
                         HurtPlayer();
                     }
@@ -59,30 +59,29 @@ namespace TripOverTime.EngineNamespace
                 _speedAttack = 80;
                 NormalAttack();
 
-            if (_timer.ElapsedMilliseconds >= _speedAttack*12 && _monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y && _monster.isAlive)
+                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y && _monster.isAlive)
                 {
-                    _context.GetPlayer.GetLife.DecreasedPoint(_attack);
-                    _context.GetPlayer.HurtPlayer = true;
                     HurtPlayer();
-                    _incrementationAttack++;
-                    _timer.Restart();
                 }
+
+                _incrementationAttack++;
+                _timer.Restart();
             }
 
         }
 
         internal void AttackBoss()
         {
-            if (_incrementationAttack == _schemaAttack[0].Length - 1)
+            if (_incrementationAttack == _schemaAttack.Length - 1)
             {
                 _incrementationAttack = 0;
             }
-            if (_schemaAttack[0][_incrementationAttack] == 'R')//run slashing
+            if (_schemaAttack[_incrementationAttack] == 'R')//run slashing
             {
                 _speedAttack = 40;
                 if (_incrementationSpeed == 0) { _boss.BossSpeed *= 5; _incrementationSpeed++; }
                 RunSlashingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack*12 && _boss.IsAlive)
+                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
                 {
                     if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
                     {
@@ -94,7 +93,7 @@ namespace TripOverTime.EngineNamespace
                     _timer.Restart();
                 }
             }
-            else if (_schemaAttack[0][_incrementationAttack] == 'A')//slashing
+            else if (_schemaAttack[_incrementationAttack] == 'A')//slashing
             {
                 _speedAttack = 40;
                 SlashingBoss();
@@ -108,7 +107,7 @@ namespace TripOverTime.EngineNamespace
                     _timer.Restart();
                 }
             }
-            else if (_schemaAttack[0][_incrementationAttack] == 'T')//throwing
+            else if (_schemaAttack[_incrementationAttack] == 'T')//throwing
             {
                 _speedAttack = 60;
                 ThrowingBoss();
@@ -124,7 +123,7 @@ namespace TripOverTime.EngineNamespace
                     _timer.Restart();
                 }
             }
-            else if (_schemaAttack[0][_incrementationAttack] == 'K')//kicking
+            else if (_schemaAttack[_incrementationAttack] == 'K')//kicking
             {
                 _speedAttack = 40;
                 KickingBoss();
@@ -138,7 +137,7 @@ namespace TripOverTime.EngineNamespace
                     _timer.Restart();
                 }
             }
-            else if (_schemaAttack[0][_incrementationAttack] == 'S')//sliding
+            else if (_schemaAttack[_incrementationAttack] == 'S')//sliding
             {
                 _speedAttack = 60;
                 SlidingBoss();
@@ -186,7 +185,7 @@ namespace TripOverTime.EngineNamespace
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding", _speedAttack);
         }
-        internal void HurtPlayer ()
+        internal void HurtPlayer()
         {
             _context.GetPlayer.GetLife.DecreasedPoint(_attack);
             _context.GetPlayer.HurtPlayer = true;

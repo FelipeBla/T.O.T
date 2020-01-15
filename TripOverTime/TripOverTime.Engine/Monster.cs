@@ -59,7 +59,7 @@ namespace TripOverTime.EngineNamespace
             _position2 = position;
             _life2 = life;
             _isAlive2 = true;
-            _attack2 = new Attack(context, this, attack);
+            _attack2 = new Attack(context, this, attack, attackCombo);
             _sprite2 = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw2 = _sprite.GetSprite.TextureRect.Width;
             ph2 = _sprite.GetSprite.TextureRect.Height;
