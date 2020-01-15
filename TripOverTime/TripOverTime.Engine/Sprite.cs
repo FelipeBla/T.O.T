@@ -29,8 +29,29 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
         SFML.Graphics.Sprite _sprite;
-        SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer;
+
+        string _id2;
+        string _name2;
+        string _imgPath2;
+        bool _isSolid2;
+        bool _isDangerous2;
+        bool _isCheckpoint2;
+        bool _isEnd2;
+        bool _isMonster2;
+        bool _isPlayer2;
+        Map _context2;
+        int _incrementationAttack2;
+        int _incrementationWalk2;
+        int _monsterWalk2;
+        int _monsterDead2;
+        int _monsterAttack2;
+        int _playerAnimation2;
+        Texture _texture2; //img
+        Dictionary<string, Texture> _playerTexture2;
+        Dictionary<string, Texture> _monsterTexture2;
+        SFML.Graphics.Sprite _sprite2;
+        Stopwatch _animTimer2;
 
         internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false)
         {
@@ -49,6 +70,20 @@ namespace TripOverTime.EngineNamespace
             _isPlayer = isPlayer;
             _animTimer = new Stopwatch();
             _animTimer.Start();
+
+            _id2 = id;
+            _name2 = name;
+            _imgPath2 = imgPath;
+            _isSolid2 = isSolid;
+            _context2 = context;
+            _isCheckpoint2 = false;
+            _isEnd2 = false;
+            _isMonster2 = isMonster;
+            _isPlayer2 = isPlayer;
+            _animTimer2 = new Stopwatch();
+            _animTimer2.Start();
+
+
             _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
 
             if (_name == "CHECKPOINT")
@@ -68,6 +103,7 @@ namespace TripOverTime.EngineNamespace
                 DirectoryInfo dir;
                 FileInfo[] img;
                 _playerTexture = new Dictionary<string, Texture>();
+                _playerTexture2 = new Dictionary<string, Texture>();
 
                 dir = new DirectoryInfo(imgPath);
                 img = dir.GetFiles();
@@ -79,10 +115,13 @@ namespace TripOverTime.EngineNamespace
                         string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
                         _playerTexture.Add(action, new Texture(f.FullName));
                         if (_playerTexture[action] == null) throw new Exception("Texture null!");
+                        _playerTexture2.Add(action, new Texture(f.FullName));
+                        if (_playerTexture2[action] == null) throw new Exception("Texture null!");
                     }
                 }
 
                 _texture = _playerTexture["stand"];
+                _texture2 = _playerTexture["stand"];
 
 
             }
@@ -141,7 +180,25 @@ namespace TripOverTime.EngineNamespace
                 _sprite.Texture = _playerTexture["stand"];
             }
         }
-
+        internal void DefaultAnimation2()
+        {
+            if (!_context2.GetGame2.GetPlayer2.IsJumping2)
+            {
+                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right")
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture["stand"].Size);
+                }
+                else
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2["stand"].Size.X / 2, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    //_sprite.TextureRect = new IntRect((int)_playerTexture["stand"].Size.X, 0, (int)-_playerTexture["stand"].Size.X, (int)_playerTexture["stand"].Size.Y);
+                }
+                _sprite2.Texture = _playerTexture2["stand"];
+            }
+        }
         internal void WalkAnimation()
         {
             if (!_context.GetGame.GetPlayer.IsJumping)
@@ -189,7 +246,53 @@ namespace TripOverTime.EngineNamespace
             }
             else JumpAnimation();
         }
+        internal void WalkAnimation2()
+        {
+            if (!_context2.GetGame.GetPlayer.IsJumping)
+            {
 
+                int nbrAction = 7;
+                string action = "walk";
+                if (_context.GetGame.GetPlayer.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+                {
+
+                    string numberTexture = action + _incrementationWalk;
+                    _sprite.Texture = _playerTexture[numberTexture];
+                    //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
+                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    if (_incrementationWalk + 1 == nbrAction)
+                    {
+                        _incrementationWalk = 1;
+                    }
+                    else
+                    {
+                        _incrementationWalk++;
+                    }
+                    _animTimer.Restart();
+
+                }
+                else if (_animTimer.ElapsedMilliseconds >= 100) //left
+                {
+                    string numberTexture = action + _incrementationWalk;
+                    _sprite.Texture = _playerTexture[numberTexture];
+                    //_sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, (int)-_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    if (_incrementationWalk + 1 == nbrAction)
+                    {
+                        _incrementationWalk = 1;
+                    }
+                    else
+                    {
+                        _incrementationWalk++;
+                    }
+                    _animTimer.Restart();
+                }
+
+            }
+            else JumpAnimation();
+        }
         internal void JumpAnimation()
         {
             if (_context.GetGame.GetPlayer.Orientation == "right") //Right
@@ -258,7 +361,74 @@ namespace TripOverTime.EngineNamespace
             }
             
         }
+        internal void JumpAnimation2()
+        {
+            if (_context2.GetGame2.GetPlayer2.Orientation2 == "right") //Right
+            {
+                if (_animTimer2.ElapsedMilliseconds >= 100)
+                {
+                    if (_sprite2.Texture == _playerTexture2["jump2"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump3"];
+                        _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    }
+                    else if (_sprite2.Texture == _playerTexture2["jump3"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump4"];
+                        _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    }
+                    else if (_sprite2.Texture == _playerTexture2["jump4"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump5"];
+                        _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        _sprite2.Texture = _playerTexture2["jump2"];
+                        _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    }
 
+                    _animTimer2.Restart();
+                }
+            }
+            else //Left
+            {
+                if (_animTimer2.ElapsedMilliseconds >= 100)
+                {
+                    if (_sprite2.Texture == _playerTexture2["jump2"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump3"];
+                        _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2["jump3"].Size.X / 2, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    }
+                    else if (_sprite2.Texture == _playerTexture2["jump3"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump4"];
+                        _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2["jump4"].Size.X / 2, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    }
+                    else if (_sprite2.Texture == _playerTexture2["jump4"])
+                    {
+                        _sprite2.Texture = _playerTexture2["jump5"];
+                        _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2["jump5"].Size.X / 2, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        _sprite2.Texture = _playerTexture["jump2"];
+                        _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2["jump2"].Size.X / 2, 0);
+                        _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    }
+
+                    _animTimer2.Restart();
+                }
+            }
+
+        }
 
         internal void PlayerAnimation(int nbrAction, string action, int time)
         {
@@ -289,6 +459,39 @@ namespace TripOverTime.EngineNamespace
                     _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
                 }
                 _animTimer.Restart();
+
+            }
+        }
+
+        internal void PlayerAnimation2(int nbrAction, string action, int time)
+        {
+            if (_animTimer2.ElapsedMilliseconds >= time)
+            {
+
+                if (_playerAnimation2 == nbrAction)
+                {
+                    _playerAnimation2 = 1;
+
+                    if (_context2.GetGame2.GetPlayer2.HurtPlayer2) { _context2.GetGame2.GetPlayer2.HurtPlayer2 = false; }
+                }
+                else
+                {
+                    _playerAnimation2++;
+                }
+
+                string numberTexture = action + _playerAnimation2;
+                _sprite.Texture = _playerTexture2[numberTexture];
+                if (_context2.GetGame2.GetPlayer2.Orientation == "right") //Right
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (_context2.GetGame2.GetPlayer2.Orientation == "left")//Left
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+                _animTimer2.Restart();
 
             }
         }
@@ -475,6 +678,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _isSolid;
             set => _isSolid = value;
+        }
+        internal bool IsSolid2
+        {
+            get => _isSolid2;
+            set => _isSolid2 = value;
         }
 
         internal bool IsEnd

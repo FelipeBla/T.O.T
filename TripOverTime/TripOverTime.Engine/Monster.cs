@@ -247,6 +247,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _sprite;
         }
+
+        internal Sprite GetMonsterSprite2
+        {
+            get => _sprite2;
+        }
         internal bool IsMoving
         {
             get => _ismoving;

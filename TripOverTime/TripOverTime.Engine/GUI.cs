@@ -18,6 +18,7 @@ namespace TripOverTime.EngineNamespace
         private SFML.System.Vector2f _moveTheMapOf;
         private SFML.System.Vector2f _moveTheMapOf2;
         SFML.Graphics.Sprite _hpBar;
+        SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _rect1;
         Texture _lifebarTexture;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
@@ -73,7 +74,7 @@ namespace TripOverTime.EngineNamespace
                 s.Value.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(s.Value.GetSprite);
             }
-             
+
             // Lifebar
             _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             // HP Text
@@ -108,7 +109,7 @@ namespace TripOverTime.EngineNamespace
             // Background Player 2
             _window.Draw(_background);
             // Load map
-            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed2)
             {
                 s.Value.GetSprite2.Position = s.Key;
                 s.Value.GetSprite2.Position -= _moveTheMapOf2;
@@ -117,27 +118,27 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context.GetGame2.GetPlayer2.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
+            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context2.GetGame2.GetPlayer2.GetLife2.PerCent), (int)_lifebarTexture.Size.Y);
             // HP Text
-            Text hp2 = new Text(Convert.ToString(_context.GetGame2.GetPlayer2.GetLife.CurrentPoint), _context.GetFont, 28);
+            Text hp2 = new Text(Convert.ToString(_context2.GetGame2.GetPlayer2.GetLife2.CurrentPoint), _context.GetFont, 28);
             hp2.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 35);
             _window.Draw(_hpBar);
             _window.Draw(hp2);
             
 
             // Player
-            if (_context.GetGame2.GetPlayer2.IsAlive)
+            if (_context2.GetGame2.GetPlayer2.IsAlive)
             {
-                _context.GetGame2.GetPlayer2.GetPlayerSprite.GetSprite2.Position = new SFML.System.Vector2f(_context.GetGame2.GetPlayer2.Position.X * 128, _window.Size.Y + _context.GetGame2.GetPlayer2.Position.Y * -128 - 65);
-                _window.Draw(_context.GetGame2.GetPlayer2.GetPlayerSprite.GetSprite2);
+                _context2.GetGame2.GetPlayer2.GetPlayerSprite.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetPlayer2.Position2.X * 128, _window.Size.Y + _context2.GetGame2.GetPlayer2.Position2.Y * -128 - 65);
+                _window.Draw(_context2.GetGame2.GetPlayer2.GetPlayerSprite2.GetSprite2);
             }
 
             // Monsters
-            foreach (Monster m in _context.GetGame2.GetMonsters)
+            foreach (Monster m in _context2.GetGame2.GetMonsters2)
             {
-                m.GetMonsterSprite.GetSprite2.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
-                m.GetMonsterSprite.GetSprite2.Position -= _moveTheMapOf2;
-                _window.Draw(m.GetMonsterSprite.GetSprite2);
+                m.GetMonsterSprite2.GetSprite2.Position = new SFML.System.Vector2f(m.Position2.X * 128, _window.Size.Y + m.Position2.Y * -128 - 40);
+                m.GetMonsterSprite2.GetSprite2.Position -= _moveTheMapOf2;
+                _window.Draw(m.GetMonsterSprite2.GetSprite2);
             }
 
             // Display
@@ -158,6 +159,12 @@ namespace TripOverTime.EngineNamespace
                 s.Value.GetSprite.Position = s.Key;
                 s.Value.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(s.Value.GetSprite);
+            }
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed2)
+            {
+                s.Value.GetSprite2.Position = s.Key;
+                s.Value.GetSprite2.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite2);
             }
 
             // Lifebar
@@ -234,6 +241,12 @@ namespace TripOverTime.EngineNamespace
                 s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
+            }
+            foreach (KeyValuePair<Position, Sprite> s in map)
+            {
+                s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
+                _window.Draw(s.Value.GetSprite2);
+                _spritesDisplayed2.Add(s.Value.GetSprite2.Position, s.Value);
             }
         }
 
@@ -437,30 +450,30 @@ namespace TripOverTime.EngineNamespace
                 }
                 else if (Keyboard.IsKeyPressed(_RightAction2))
                 {
-                    _moveTheMapOf2 += _context2.GetGame2.GetPlayer2.MoveRight((float)_window.Size.X);
+                    _moveTheMapOf2 += _context2.GetGame2.GetPlayer2.MoveRight2((float)_window.Size.X);
                 }
                 else if (Keyboard.IsKeyPressed(_LeftAction2))
                 {
-                    _moveTheMapOf2 -= _context2.GetGame2.GetPlayer2.MoveLeft((float)_window.Size.X);
+                    _moveTheMapOf2 -= _context2.GetGame2.GetPlayer2.MoveLeft2((float)_window.Size.X);
                 }
 
                 if (Keyboard.IsKeyPressed(_JumpAction2))
                 {
-                    if (_context2.GetGame2.GetPlayer2.RealPosition2.Y < _context2.GetGame2.GetMapObject.GetLimitMax.Y && _context2.GetGame2.GetPlayer2.IsOnTheGround)
+                    if (_context2.GetGame2.GetPlayer2.RealPosition2.Y < _context2.GetGame2.GetMapObject2.GetLimitMax2.Y && _context2.GetGame2.GetPlayer2.IsOnTheGround2)
                     {
-                        _context2.GetGame2.GetPlayer2.Jump();
+                        _context2.GetGame2.GetPlayer2.Jump2();
                     }
                 }
 
                 if (Keyboard.IsKeyPressed(_AttackAction2)) // ATTACK
                 {
-                    _context2.GetGame2.GetPlayer2.IsAttack = true;
-                    _context2.GetGame2.GetPlayer2.Attack();
+                    _context2.GetGame2.GetPlayer2.IsAttack2 = true;
+                    _context2.GetGame2.GetPlayer2.Attack2();
                 }
 
-                if (!Keyboard.IsKeyPressed(_LeftAction2) && !Keyboard.IsKeyPressed(_RightAction2) && !Keyboard.IsKeyPressed(_JumpAction2) && !_context.GetGame2.GetPlayer2.IsAttack && !_context.GetGame2.GetPlayer2.HurtPlayer)
+                if (!Keyboard.IsKeyPressed(_LeftAction2) && !Keyboard.IsKeyPressed(_RightAction2) && !Keyboard.IsKeyPressed(_JumpAction2) && !_context.GetGame2.GetPlayer2.IsAttack2 && !_context2.GetGame2.GetPlayer2.HurtPlayer2)
                 {
-                    _context2.GetGame2.GetPlayer2.GetPlayerSprite.DefaultAnimation();
+                    _context2.GetGame2.GetPlayer2.GetPlayerSprite2.DefaultAnimation2();
                 }
             }
         }
