@@ -481,12 +481,12 @@ namespace TripOverTime.EngineNamespace
 
                 string numberTexture = action + _playerAnimation2;
                 _sprite.Texture = _playerTexture2[numberTexture];
-                if (_context2.GetGame2.GetPlayer2.Orientation == "right") //Right
+                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right") //Right
                 {
                     _sprite2.Origin = new SFML.System.Vector2f(0, 0);
                     _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
                 }
-                else if (_context2.GetGame2.GetPlayer2.Orientation == "left")//Left
+                else if (_context2.GetGame2.GetPlayer2.Orientation2 == "left")//Left
                 {
                     _sprite2.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
                     _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);

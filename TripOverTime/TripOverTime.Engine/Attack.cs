@@ -94,7 +94,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void HurtPlayer2()
         {
-            _context.GetPlayer2.GetPlayerSprite.PlayerAnimation(4, "hurt", 40);
+            _context.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 40);
         }
 
         internal ushort GetAttack
