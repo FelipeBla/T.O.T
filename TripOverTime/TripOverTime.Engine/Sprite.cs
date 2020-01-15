@@ -352,32 +352,28 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void BossOrientation(Boss boss)
+        {
+            if(boss.Orientation == "right")
+            {
+                _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_bossTexture["stand"].Size);
+            }
+            else
+            {
+                _sprite.TextureRect = new IntRect((int)_bossTexture["stand"].Size.X, 0, -(int)_bossTexture["stand"].Size.X, (int)_bossTexture["stand"].Size.Y);
+            }
+        }
+
         internal void BossMoveAnimation(Boss boss)
         {
             if (boss.IsMoving)
             {
                 int nbrAction = 24;
                 string action = "walk (";
-                if (boss.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 40)//Right
-                {
-                    string numberTexture = action + _bossWalk +")";
-                    _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_bossTexture[numberTexture].Size);
-                    _sprite.Texture = _bossTexture[numberTexture];
-                    if (_bossWalk >= nbrAction)
-                    {
-                        _bossWalk = 1;
-                    }
-                    else
-                    {
-                        _bossWalk++;
-                    }
-                    _animTimer.Restart();
 
-                }
-                else if (_animTimer.ElapsedMilliseconds >= 40) //left
+                if (_animTimer.ElapsedMilliseconds >= 40)
                 {
                     string numberTexture = action + _bossWalk + ")";
-                    _sprite.TextureRect = new IntRect((int)_bossTexture[numberTexture].Size.X, 0, -(int)_bossTexture[numberTexture].Size.X, (int)_bossTexture[numberTexture].Size.Y);
                     _sprite.Texture = _bossTexture[numberTexture];
                     if (_bossWalk >= nbrAction)
                     {
@@ -389,14 +385,12 @@ namespace TripOverTime.EngineNamespace
                     }
                     _animTimer.Restart();
 
-
                 }
-
             }
         }
-        internal void BossAttackAnimation(int nbrAction, string action, Boss boss)
+        internal void BossAttackAnimation(int nbrAction, string action, int speedAction)
         {
-            if (_animTimer.ElapsedMilliseconds >= 50)
+            if (_animTimer.ElapsedMilliseconds >= speedAction)
             {
 
                 if (_bossAttack >= nbrAction)
@@ -408,32 +402,22 @@ namespace TripOverTime.EngineNamespace
                     _bossAttack++;
                 }
 
-                string numberTexture = action + _bossAttack;
+                string numberTexture = action + _bossAttack + ")";
                 _sprite.Texture = _bossTexture[numberTexture];
-                if (boss.Orientation == "right") //Right
-                {
-                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                }
-                else if (boss.Orientation == "left")//Left
-                {
-                    _sprite.Origin = new SFML.System.Vector2f(_bossTexture[numberTexture].Size.X / 2, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                }
-                _animTimer.Restart();
 
+                _animTimer.Restart();
             }
         }
 
         internal void BossDeadAnimation(Boss boss)
         {
             int nbrAction = 15;
-            string action = "dead";
+            string action = "dead (";
 
             if (_animTimer.ElapsedMilliseconds >= 40)
             {
 
-                string numberTexture = action + _bossDead;
+                string numberTexture = action + _bossDead + ")";
                 _sprite.TextureRect = new IntRect((int)_bossTexture[numberTexture].Size.X, 0, -(int)_bossTexture[numberTexture].Size.X, (int)_bossTexture[numberTexture].Size.Y);
                 _sprite.Texture = _bossTexture[numberTexture];
                 if (_bossDead < nbrAction)
@@ -491,9 +475,9 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        internal void MonsterAttackAnimation(int nbrAction, string action, Monster monster)
+        internal void MonsterAttackAnimation(int nbrAction, string action, int speedAction)
         {
-            if (_animTimer.ElapsedMilliseconds >= 50)
+            if (_animTimer.ElapsedMilliseconds >= speedAction)
             {
 
                 if (_monsterAttack >= nbrAction)

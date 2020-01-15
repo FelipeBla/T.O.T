@@ -225,7 +225,7 @@ namespace TripOverTime.Main
             }
 
             return true;
-            Console.WriteLine("End Game");
+            //Console.WriteLine("End Game");
 
         }        
     }

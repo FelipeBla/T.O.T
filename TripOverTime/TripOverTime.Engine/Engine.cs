@@ -137,25 +137,39 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
-            if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X && _game.GetBoss.IsAlive) //left
-            {
-                _game.GetBoss.Orientation = "left";
-            }
-            else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X && _game.GetBoss.IsAlive) //right
-            {
-                _game.GetBoss.Orientation = "right";
-            }
 
             if (!_game.GetBoss.IsAlive)
             {
                 _game.GetBoss.BossDead();
             }
-            else if (_game.GetBoss.Position.X - 4 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 4 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+            else
             {
-                _game.GetBoss.BossMove();
+                if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
+                {
+                    _game.GetBoss.Orientation = "left";
+                }
+                else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X) //right
+                {
+                    _game.GetBoss.Orientation = "right";
+                }
+
+                _game.GetBoss.GetBossSprite.BossOrientation(_game.GetBoss);
+
+                if (_game.GetBoss.Position.X + 3 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 3 < _game.GetPlayer.RealPosition.X) //attack
+                {
+                    if (_game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                    {
+                        _game.GetBoss.BossMove();
+                    }
+                    _game.GetBoss.BossAttack();
+                }
+
+                if (_game.GetBoss.Position.X - 6 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 6 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                {
+                    _game.GetBoss.BossMove();
+                    _game.GetBoss.GetBossSprite.BossMoveAnimation(_game.GetBoss);
+                }
             }
-
-
 
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
             _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);

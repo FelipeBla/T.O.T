@@ -60,8 +60,6 @@ namespace TripOverTime.EngineNamespace
                 }
 
                 _ismoving = true;
-                _sprite.BossMoveAnimation(this);
-
             }
 
         }
@@ -146,6 +144,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _ismoving;
             set => _ismoving = value;
+        }
+        internal float BossSpeed
+        {
+            get => _bossMove;
+            set => _bossMove = value;
         }
     }
 }
