@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,13 +26,40 @@ namespace TripOverTime.EngineNamespace
 
             //Liste en haut des blocks et monstres, coordonnées
 
-            window.SetKeyRepeatEnabled(false);
-
             // Choose Background
+
             string bgPath = "";
             bool again = true;
+
+            window.SetKeyRepeatEnabled(false);
+
+            window.TextEntered += (s, a) =>
+            {
+                if (a.Unicode != "\b")
+                {
+                    bgPath = bgPath + a.Unicode;
+                    Console.WriteLine(a.Unicode);
+                }
+                else if (bgPath.Length - 1 > 0)
+                {
+                    bgPath = bgPath.Remove(bgPath.Length - 1);
+                }
+            };
+
+            window.KeyReleased += (s, a) =>
+            {
+                if (a.Code == Keyboard.Key.Enter) again = false;
+                if (a.Control && a.Code == Keyboard.Key.V) //Paste
+                {
+                    bgPath += Clipboard.Contents;
+                }
+            };
+
+            window.DispatchEvents();
+
             do
             {
+                again = true;
                 // Graphic
                 DisplayBackground(window);
                 Text t = new Text("Select a background", _font, _charSize);
@@ -56,27 +84,17 @@ namespace TripOverTime.EngineNamespace
                 window.Draw(r);
                 window.Draw(t);
 
-
                 window.Display();
 
                 // Events
                 window.DispatchEvents();
-
-                window.TextEntered += (s, a) =>
-                {
-                    bgPath += a.Unicode;
-                    Console.WriteLine(a.Unicode);
-                };
-
-                window.KeyReleased += (s, a) =>
-                {
-                    if (a.Code == SFML.Window.Keyboard.Key.Enter) again = false;
-                    else if (a.Code == SFML.Window.Keyboard.Key.Backspace) bgPath.Remove(bgPath.Length - 1);
-                };
-
-                System.Threading.Thread.Sleep(1);
             } while (again);
-            
+
+            bgPath.Replace("\u0016", "");
+
+            //Console.WriteLine(bgPath);
+            //Console.WriteLine(@"..\..\..\..\Assets\Backgrounds\game_background_1.png");
+
             // Choose all blocks
 
 
