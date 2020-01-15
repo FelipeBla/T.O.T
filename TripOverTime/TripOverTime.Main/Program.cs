@@ -208,7 +208,8 @@ namespace TripOverTime.Main
                 }
                 else if (choose == 2) // Map editor
                 {
-                    MapEditor.Run(window);
+                    MapEditor m = new MapEditor();
+                    m.Run(window);
                 }
                 else if (choose == 3) //Settings
                 {
