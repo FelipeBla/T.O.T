@@ -37,6 +37,8 @@ namespace TripOverTime.EngineNamespace
             string bgPath = " ";
             string playerPath = " ";
             Position playerPos = new Position(0, 0);
+            Position posMax = new Position(15, 5);
+            Position posMin = new Position(0, 1);
             ushort playerLife = 10;
             ushort playerAtk = 5;
 
@@ -241,7 +243,7 @@ namespace TripOverTime.EngineNamespace
 
                     display = true;
                 }
-                else if (selected < lines.Count)
+                else if (selected < lines.Count && a.Unicode == "\b")
                 {
                     switch (selected)
                     {
@@ -429,8 +431,233 @@ namespace TripOverTime.EngineNamespace
             window.TextEntered -= _eventsText[2];
             window.KeyPressed -= _eventsKey[2];
 
+            //Limit map
+
+            display = true;
+
+            window.DispatchEvents();
+
+            _eventsText.Add((s, a) =>
+            {
+                if (a.Unicode != "\b" && int.TryParse(a.Unicode, out int n)) //Verify if it's a number
+                {
+                    switch (selected)
+                    {
+                        case 0:
+                            if (posMax.X == 0) posMax.X = Convert.ToSingle(a.Unicode);
+                            else posMax.X = Convert.ToSingle(Convert.ToString(posMax.X) + a.Unicode);
+                            break;
+                        case 1:
+                            if (posMin.X == 0) posMin.X = Convert.ToSingle(a.Unicode);
+                            else posMin.X = Convert.ToSingle(Convert.ToString(posMin.X) + a.Unicode);
+                            break;
+                        case 2:
+                            if (posMax.Y == 0) posMax.Y = Convert.ToSingle(a.Unicode);
+                            else posMax.Y = Convert.ToSingle(Convert.ToString(posMax.Y) + a.Unicode);
+                            break;
+                        case 3:
+                            if (posMin.Y == 0) posMin.Y = Convert.ToSingle(a.Unicode);
+                            else posMin.Y = Convert.ToSingle(Convert.ToString(posMin.Y) + a.Unicode);
+                            break;
+                    }
+
+                    display = true;
+                }
+                else if (selected < lines.Count && a.Unicode == "\b")
+                {
+                    switch (selected)
+                    {
+                        case 0:
+                            if (posMax.X >= 10)
+                                posMax.X = Convert.ToSingle(Convert.ToString(posMax.X).Remove(Convert.ToString(posMax.X).Length - 1));
+                            else
+                                posMax.X = 0;
+                            break;
+                        case 1:
+                            if (posMin.X >= 10)
+                                posMin.X = Convert.ToSingle(Convert.ToString(posMin.X).Remove(Convert.ToString(posMin.X).Length - 1));
+                            else
+                                posMin.X = 0;
+                            break;
+                        case 2:
+                            if (posMax.Y >= 10)
+                                posMax.Y = Convert.ToSingle(Convert.ToString(posMax.Y).Remove(Convert.ToString(posMax.Y).Length - 1));
+                            else
+                                posMax.Y = 0;
+                            break;
+                        case 3:
+                            if (posMin.Y >= 10)
+                                posMin.Y = Convert.ToSingle(Convert.ToString(posMin.Y).Remove(Convert.ToString(posMin.Y).Length - 1));
+                            else
+                                posMin.Y = 0;
+                            break;
+                    }
+
+                    display = true;
+                }
+            });
+
+            _eventsKey.Add((s, a) =>
+            {
+                if (a.Code == Keyboard.Key.Enter)
+                {
+                    if (selected == lines.Count)
+                    {
+                        display = true;
+                        again = false;
+                    }
+                }
+                else if (a.Control && a.Code == Keyboard.Key.V) //Paste
+                {
+                    playerPath += Clipboard.Contents;
+                    display = true;
+                }
+                else if (a.Code == Keyboard.Key.Up && selected > 0)
+                {
+                    display = true;
+                    selected--;
+                }
+                else if (a.Code == Keyboard.Key.Down && selected < lines.Count)
+                {
+                    display = true;
+                    selected++;
+                }
+            });
+
+            window.TextEntered += _eventsText[3];
+            window.KeyPressed += _eventsKey[3];
+
+            lines.Clear();
+
+            lines.Add(new Text("X MAX : ", _font1, _charSize));
+            lines.Add(new Text("X MIN : ", _font1, _charSize));
+            lines.Add(new Text("Y MAX : ", _font1, _charSize));
+            lines.Add(new Text("Y MIN : ", _font1, _charSize));
+
+            do
+            {
+                again = true;
+
+                if (display)
+                {
+                    DisplayBackground(window);
+
+                    // Title
+                    t = new Text("Player Stats & Position", _font1, _charSize);
+                    t.FillColor = Color.White;
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8);
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) - (t.GetGlobalBounds().Height / 3));
+                    r.FillColor = Color.Black;
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+                    // Inputs Label
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        lines[i].Position = new SFML.System.Vector2f(window.Size.X / 4 - (lines[i].GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2));
+
+                        r = new RectangleShape(new SFML.System.Vector2f(lines[i].GetGlobalBounds().Width * 1.5f, lines[i].GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2) - (lines[i].GetGlobalBounds().Height / 3));
+
+                        if (i == selected)
+                        {
+                            lines[i].FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+                        else
+                        {
+                            lines[i].FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(lines[i]);
+                    }
+
+                    // Inputs
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        switch (i)
+                        {
+                            case 0: //X
+                                t = new Text(Convert.ToString(posMax.X), _font2, _charSize);
+                                break;
+                            case 1: //Y
+                                t = new Text(Convert.ToString(posMin.X), _font2, _charSize);
+                                break;
+                            case 2: //Life
+                                t = new Text(Convert.ToString(posMax.Y), _font2, _charSize);
+                                break;
+                            case 3: //Atk
+                                t = new Text(Convert.ToString(posMin.Y), _font2, _charSize);
+                                break;
+
+                        }
+
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2.8f - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2));
+
+                        r = new RectangleShape(new SFML.System.Vector2f(150, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2.8f - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2) - (t.GetGlobalBounds().Height / 3));
+
+                        if (i == selected)
+                        {
+                            t.FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+                        else
+                        {
+                            t.FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // Next
+                    t = new Text("Next", _font1, _charSize);
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 2));
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 2) - (t.GetGlobalBounds().Height / 3));
+
+                    if (lines.Count == selected)
+                    {
+                        r.FillColor = Color.White;
+                        t.FillColor = Color.Black;
+                    }
+                    else
+                    {
+                        r.FillColor = Color.Black;
+                        t.FillColor = Color.White;
+                    }
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+
+                    window.Display();
+                    display = false;
+                }
+
+                // Events
+                window.DispatchEvents();
+
+                System.Threading.Thread.Sleep(1000 / 60);
+            } while (again);
+
+            window.TextEntered -= _eventsText[3];
+            window.KeyPressed -= _eventsKey[3];
+
             // Choose all blocks
 
+            // All type of monster
+
+
+            // EDITORRRRRR
 
         }
 
