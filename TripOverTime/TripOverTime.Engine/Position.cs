@@ -8,6 +8,8 @@ namespace TripOverTime.EngineNamespace
     {
         float _x;
         float _y;
+        float _x2;
+        float _y2;
 
         /// <summary>
         /// Init position
@@ -18,6 +20,8 @@ namespace TripOverTime.EngineNamespace
         {
             _x = x;
             _y = y;
+            _x2 = x;
+            _y2 = y;
         }
 
         public float X
@@ -30,7 +34,16 @@ namespace TripOverTime.EngineNamespace
             get => _y;
             internal set => _y = value;
         }
-
+        public float X2
+        {
+            get => _x2;
+            internal set => _x2 = value;
+        }
+        public float Y2
+        {
+            get => _y2;
+            internal set => _y2 = value;
+        }
 
         // For TryGetValue
         public override bool Equals(object obj)

@@ -6,6 +6,7 @@ namespace TripOverTime.EngineNamespace
     public class Player
     {
         const string PLAYER_ID = "PLAYER420";
+        const string PLAYER_ID2 = "PLAYER2501";
         float pw;
         float ph;
         float pw2;
@@ -82,8 +83,6 @@ namespace TripOverTime.EngineNamespace
             pw2 = 128;
             ph2 = 128;
 
-            _monsterKillName = "void";
-
             _context2 = context;
             _name2 = name;
             _position2 = position;
@@ -92,7 +91,7 @@ namespace TripOverTime.EngineNamespace
             _attack2 = attack;
             _isJumping2 = false;
             _isAttack2 = false;
-            _sprite2 = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
             _orientation2 = "right";
 
             _attackSpeed2 = 1;
@@ -147,17 +146,17 @@ namespace TripOverTime.EngineNamespace
 
         internal void Gravity2()
         {
-            if (_isJumping2 && _origin2 != null && _realPosition2.Y <= _origin2.Y + JUMPING_LIMIT2) // Jump
+            if (_isJumping2 && _origin2 != null && _realPosition2.Y2 <= _origin2.Y2 + JUMPING_LIMIT2) // Jump
             {
-                _realPosition2.Y += JUMPING_SPEED2;
-                _position2.Y += JUMPING_SPEED2;
+                _realPosition2.Y2 += JUMPING_SPEED2;
+                _position2.Y2 += JUMPING_SPEED2;
                 _sprite.JumpAnimation2();
             }
             else // Fall
             {
                 _origin2 = null;
-                _realPosition2.Y -= GRAVITY_SPEED2;
-                _position2.Y -= GRAVITY_SPEED2;
+                _realPosition2.Y2 -= GRAVITY_SPEED2;
+                _position2.Y2 -= GRAVITY_SPEED2;
             }
         }
 
@@ -218,7 +217,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context2.GetMonsters2)
                         {
-                            if (m.Position2.X <= _realPosition2.X + _attackRange && m.Position2.X >= _realPosition2.X && m.Position2.Y == _realPosition2.Y)
+                            if (m.Position2.X2 <= _realPosition2.X2 + _attackRange2 && m.Position2.X2 >= _realPosition2.X2 && m.Position2.Y2 == _realPosition2.Y2)
                                 monsterToAttack = m;
                         }
                     }
@@ -227,7 +226,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context2.GetMonsters2)
                         {
-                            if (m.Position2.X >= _realPosition2.X - _attackRange && m.Position2.X <= _realPosition2.X && m.Position2.Y == _realPosition2.Y)
+                            if (m.Position2.X2 >= _realPosition2.X2 - _attackRange2 && m.Position2.X2 <= _realPosition2.X2 && m.Position2.Y2 == _realPosition2.Y2)
                                 monsterToAttack = m;
                         }
                     }
@@ -236,10 +235,10 @@ namespace TripOverTime.EngineNamespace
                     if (monsterToAttack != null)
                     {
                         //Attack
-                        monsterToAttack.life.DecreasedPoint(_attack);
+                        monsterToAttack.life2.DecreasedPoint(_attack2);
                     }
                 }
-                _sprite.AttackAnimation(4, "attack", 100);
+                _sprite2.AttackAnimation(4, "attack", 100);
             }
         }
 
@@ -346,19 +345,19 @@ namespace TripOverTime.EngineNamespace
             // MOVE
             SFML.System.Vector2f moveTheMapOf2 = new SFML.System.Vector2f(0, 0);
 
-            if (_realPosition2.X >= _context2.GetMapObject2.GetLimitMax2.X) Console.WriteLine("Border of the map");
+            if (_realPosition2.X >= _context2.GetMapObject2.GetLimitMax2.X2) Console.WriteLine("Border of the map");
             else
             {
                 Sprite s = null;
                 bool blocked = false;
 
-                if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X + PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition2.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X2 + PLAYER_MOVE, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
                     foreach (Monster m in _context2.GetMonsters2) //Monster block?
                     {
-                        if (m.Position2.Y == _realPosition2.Y) //Meme niveau Y
+                        if (m.Position2.Y == _realPosition2.Y2) //Meme niveau Y
                         {
-                            if (Math.Round(m.Position2.X) == Math.Round(_realPosition2.X) + 1)
+                            if (Math.Round(m.Position2.X2) == Math.Round(_realPosition2.X2) + 1)
                             {
                                 if (m.GetMonsterSprite2.IsSolid2)
                                 {
@@ -373,17 +372,17 @@ namespace TripOverTime.EngineNamespace
                     {
                         if (s.IsSolid2) ;
                         // If player centered on screen, move the map now and not the player
-                        else if (_sprite.GetSprite.Position.X < width / 2)
+                        else if (_sprite2.GetSprite2.Position.X < width / 2)
                         {
                             // Player move
-                            _position2.X += PLAYER_MOVE;
-                            _realPosition2.X += PLAYER_MOVE;
+                            _position2.X2 += PLAYER_MOVE2;
+                            _realPosition2.X2 += PLAYER_MOVE2;
                         }
                         else
                         {
                             //Map move
                             moveTheMapOf2 = new SFML.System.Vector2f(128 / (1 / PLAYER_MOVE2), 0);
-                            _realPosition2.X += PLAYER_MOVE2;
+                            _realPosition2.X2 += PLAYER_MOVE2;
                         }
                     }
                 }
@@ -469,19 +468,19 @@ namespace TripOverTime.EngineNamespace
             // MOVE
             SFML.System.Vector2f moveTheMapOf2 = new SFML.System.Vector2f(0, 0);
 
-            if (_realPosition2.X <= _context2.GetMapObject2.GetLimitMin2.X) Console.WriteLine("Border of the map");
+            if (_realPosition2.X2 <= _context2.GetMapObject2.GetLimitMin2.X) Console.WriteLine("Border of the map");
             else
             {
                 Sprite s = null;
                 bool blocked = false;
 
-                if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X - PLAYER_MOVE2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition2.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X2 - PLAYER_MOVE2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
                     foreach (Monster m in _context2.GetMonsters2) //Monster block?
                     {
-                        if (m.Position2.Y == _realPosition2.Y) //Meme niveau Y
+                        if (m.Position2.Y2 == _realPosition2.Y2) //Meme niveau Y
                         {
-                            if (Math.Round(m.Position2.X) == Math.Round(_realPosition2.X) - 1)
+                            if (Math.Round(m.Position2.X2) == Math.Round(_realPosition2.X2) - 1)
                             {
                                 if (m.GetMonsterSprite2.IsSolid2)
                                 {
@@ -605,9 +604,9 @@ namespace TripOverTime.EngineNamespace
             get
             {
                 Sprite sToPositive2 = null, sToNegative2 = null;
-                _context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
-                _context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
-                if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
+                _context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_realPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
+                _context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_realPosition2.X2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
+                if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
                 {
                     return false;
                 }

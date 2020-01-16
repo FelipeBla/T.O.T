@@ -85,6 +85,7 @@ namespace TripOverTime.EngineNamespace
 
 
             _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = 1;
+            _playerAnimation2 = _monsterAttack2 = _monsterWalk2 = _incrementationWalk2 = _incrementationAttack2 = _monsterDead2 = 1;
 
             if (_name == "CHECKPOINT")
             {
@@ -248,50 +249,50 @@ namespace TripOverTime.EngineNamespace
         }
         internal void WalkAnimation2()
         {
-            if (!_context2.GetGame.GetPlayer.IsJumping)
+            if (!_context2.GetGame2.GetPlayer2.IsJumping2)
             {
 
                 int nbrAction = 7;
                 string action = "walk";
-                if (_context.GetGame.GetPlayer.Orientation == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
                 {
 
-                    string numberTexture = action + _incrementationWalk;
-                    _sprite.Texture = _playerTexture[numberTexture];
+                    string numberTexture = action + _incrementationWalk2;
+                    _sprite2.Texture = _playerTexture2[numberTexture];
                     //_sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_playerTexture[numberTexture].Size);
-                    _sprite.Origin = new SFML.System.Vector2f(0, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
-                    if (_incrementationWalk + 1 == nbrAction)
+                    _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                    if (_incrementationWalk2 + 1 == nbrAction)
                     {
-                        _incrementationWalk = 1;
+                        _incrementationWalk2 = 1;
                     }
                     else
                     {
-                        _incrementationWalk++;
+                        _incrementationWalk2++;
                     }
-                    _animTimer.Restart();
+                    _animTimer2.Restart();
 
                 }
-                else if (_animTimer.ElapsedMilliseconds >= 100) //left
+                else if (_animTimer2.ElapsedMilliseconds >= 100) //left
                 {
-                    string numberTexture = action + _incrementationWalk;
-                    _sprite.Texture = _playerTexture[numberTexture];
+                    string numberTexture = action + _incrementationWalk2;
+                    _sprite2.Texture = _playerTexture[numberTexture];
                     //_sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, (int)-_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
-                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
-                    _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
-                    if (_incrementationWalk + 1 == nbrAction)
+                    _sprite2.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                    if (_incrementationWalk2 + 1 == nbrAction)
                     {
-                        _incrementationWalk = 1;
+                        _incrementationWalk2 = 1;
                     }
                     else
                     {
-                        _incrementationWalk++;
+                        _incrementationWalk2++;
                     }
-                    _animTimer.Restart();
+                    _animTimer2.Restart();
                 }
 
             }
-            else JumpAnimation();
+            else JumpAnimation2();
         }
         internal void JumpAnimation()
         {
