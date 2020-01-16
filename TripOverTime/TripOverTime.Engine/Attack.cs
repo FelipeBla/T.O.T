@@ -54,17 +54,16 @@ namespace TripOverTime.EngineNamespace
                 }
             }
             else if (_schemaAttack[_incrementationAttack] == 'A')
-            {
+            { 
                 _speedAttack = 80;
                 NormalAttack();
 
                 if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.isAlive)
                 {
-                    if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y && _monster.isAlive)
+                    if (_monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y)
                     {
                         HurtPlayer();
                     }
-
                     _incrementationAttack++;
                     _timer.Restart();
                 }
