@@ -249,29 +249,35 @@ namespace TripOverTime.EngineNamespace
                 return -1;
             }
 
+
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                if (m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
-                {
-                    m.Orientation = "left";
-                }
-                else if (m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
-                {
-                    m.Orientation = "right";
-                }
+                
 
                 if (!m.isAlive)
                 {
                     m.MonsterDead();
                 }
-                else if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                else
                 {
-                    m.MonsterMove();
-                }
+                    if (m.Position.X > _game.GetPlayer.RealPosition.X) //left
+                    {
+                        m.Orientation = "left";
+                    }
+                    else if (m.Position.X < _game.GetPlayer.RealPosition.X) //right
+                    {
+                        m.Orientation = "right";
+                    }
 
-                {
-                    m.MonsterAttack();
+                    if (m.Position.X - 4 < _game.GetPlayer.RealPosition.X && m.Position.X - 1 > _game.GetPlayer.RealPosition.X || m.Position.X + 4 > _game.GetPlayer.RealPosition.X && m.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                    {
+                        m.MonsterMove();
+                    }
+
+                    {
+                        m.MonsterAttack();
+                    }
                 }
             }
 
