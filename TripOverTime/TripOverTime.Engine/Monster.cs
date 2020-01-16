@@ -257,11 +257,15 @@ namespace TripOverTime.EngineNamespace
         
         }
 
+        internal float MoveSpeed
+        {
+            get => _monsterMove;
+        }
+
         internal float Range
         {
             get => _range;
         }
-
         internal string AttackCombo
         {
             get => _attackCombo;

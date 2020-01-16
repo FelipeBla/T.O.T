@@ -13,14 +13,15 @@ namespace TripOverTime.EngineNamespace
         Font _font2;
         List<EventHandler<KeyEventArgs>> _eventsKey;
         List<EventHandler<TextEventArgs>> _eventsText;
-        string _blockId;
+        char _blockId;
 
         public MapEditor()
         {
             _font1 = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _font2 = new Font(@"..\..\..\..\Assets\Fonts\Comfortaa-Regular.ttf");
             _charSize = 32;
-            _blockId = "A";
+            _blockId = 'A';
+            _blockId--;
 
             _eventsKey = new List<EventHandler<KeyEventArgs>>();
             _eventsText = new List<EventHandler<TextEventArgs>>();
@@ -44,6 +45,7 @@ namespace TripOverTime.EngineNamespace
             ushort playerLife = 10;
             ushort playerAtk = 5;
             List<Sprite> blocks = new List<Sprite>();
+            List<Monster> monsters = new List<Monster>();
 
             bool display = true;
             bool again = true;
@@ -658,72 +660,11 @@ namespace TripOverTime.EngineNamespace
             // Choose all blocks
             selected = 0;
             bool addingBlock = false;
+            ushort startIndex = 0;
+            int j = 0;
             display = true;
 
             window.DispatchEvents();
-
-            _eventsText.Add((s, a) =>
-            {
-                if (!addingBlock)
-                {
-                    if (a.Unicode != "\b" && int.TryParse(a.Unicode, out int n)) //Verify if it's a number
-                    {
-                        switch (selected)
-                        {
-                            case 0:
-                                if (posMax.X == 0) posMax.X = Convert.ToSingle(a.Unicode);
-                                else posMax.X = Convert.ToSingle(Convert.ToString(posMax.X) + a.Unicode);
-                                break;
-                            case 1:
-                                if (posMin.X == 0) posMin.X = Convert.ToSingle(a.Unicode);
-                                else posMin.X = Convert.ToSingle(Convert.ToString(posMin.X) + a.Unicode);
-                                break;
-                            case 2:
-                                if (posMax.Y == 0) posMax.Y = Convert.ToSingle(a.Unicode);
-                                else posMax.Y = Convert.ToSingle(Convert.ToString(posMax.Y) + a.Unicode);
-                                break;
-                            case 3:
-                                if (posMin.Y == 0) posMin.Y = Convert.ToSingle(a.Unicode);
-                                else posMin.Y = Convert.ToSingle(Convert.ToString(posMin.Y) + a.Unicode);
-                                break;
-                        }
-
-                        display = true;
-                    }
-                    else if (selected < lines.Count && a.Unicode == "\b")
-                    {
-                        switch (selected)
-                        {
-                            case 0:
-                                if (posMax.X >= 10)
-                                    posMax.X = Convert.ToSingle(Convert.ToString(posMax.X).Remove(Convert.ToString(posMax.X).Length - 1));
-                                else
-                                    posMax.X = 0;
-                                break;
-                            case 1:
-                                if (posMin.X >= 10)
-                                    posMin.X = Convert.ToSingle(Convert.ToString(posMin.X).Remove(Convert.ToString(posMin.X).Length - 1));
-                                else
-                                    posMin.X = 0;
-                                break;
-                            case 2:
-                                if (posMax.Y >= 10)
-                                    posMax.Y = Convert.ToSingle(Convert.ToString(posMax.Y).Remove(Convert.ToString(posMax.Y).Length - 1));
-                                else
-                                    posMax.Y = 0;
-                                break;
-                            case 3:
-                                if (posMin.Y >= 10)
-                                    posMin.Y = Convert.ToSingle(Convert.ToString(posMin.Y).Remove(Convert.ToString(posMin.Y).Length - 1));
-                                else
-                                    posMin.Y = 0;
-                                break;
-                        }
-
-                        display = true;
-                    }
-                }
-            });
 
             _eventsKey.Add((s, a) =>
             {
@@ -742,36 +683,56 @@ namespace TripOverTime.EngineNamespace
 
                             Sprite ss = AddBlock(window);
 
+                            // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
+
                             if (ss != null)
                             {
                                 blocks.Add(ss);
-                                lines.Add(new Text(blocks[blocks.Count - 1].Id + " - " + blocks[blocks.Count - 1].Name + " - " + blocks[blocks.Count - 1].ImgPath + " - " + blocks[blocks.Count - 1].IsSolid, _font2, _charSize));
+                                string tempPath = blocks[blocks.Count - 1].ImgPath;
+
+                                while (tempPath.Length > 55) // A TESTER
+                                {
+                                    tempPath = tempPath.Remove(tempPath.Length - 1, 1);
+                                }
+
+                                lines.Add(new Text(blocks[blocks.Count - 1].Id + " - " + blocks[blocks.Count - 1].Name + " - " + tempPath + " - " + blocks[blocks.Count - 1].IsSolid, _font2, _charSize));
                             }
 
+                            selected++;
                             addingBlock = false;
 
                             display = true;
                         }
-                    }
-                    else if (a.Control && a.Code == Keyboard.Key.V) //Paste
-                    {
-                        playerPath += Clipboard.Contents;
-                        display = true;
+                        else if (selected < lines.Count && selected > 0) // Enter on a block line
+                        {
+                            // Edit
+                        }
                     }
                     else if (a.Code == Keyboard.Key.Up && selected > 0)
                     {
                         display = true;
                         selected--;
+
+                        if (lines.Count > 5 && startIndex > 0 && selected <= 4)
+                        {
+                            startIndex--;
+                        }
+
                     }
                     else if (a.Code == Keyboard.Key.Down && selected < lines.Count + 1)
                     {
                         display = true;
                         selected++;
+
+                        if (lines.Count > 5 && selected > 4 && selected < lines.Count)
+                        {
+                            startIndex++;
+                        }
+
                     }
                 }
             });
 
-            window.TextEntered += _eventsText[4];
             window.KeyPressed += _eventsKey[4];
 
             lines.Clear();
@@ -800,12 +761,13 @@ namespace TripOverTime.EngineNamespace
                     window.Draw(t);
 
                     // Block Label
-                    for (int i = 0; i < lines.Count; i++)
+                    j = 0;
+                    for (int i = startIndex; i < startIndex + 5 && i < lines.Count; i++)
                     {
-                        lines[i].Position = new SFML.System.Vector2f(window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2));
+                        lines[i].Position = new SFML.System.Vector2f(window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (j + 2));
 
                         r = new RectangleShape(new SFML.System.Vector2f(lines[i].GetGlobalBounds().Width * 1.5f, lines[i].GetGlobalBounds().Height * 2));
-                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (i + 2) - (lines[i].GetGlobalBounds().Height / 3));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (j + 2) - (lines[i].GetGlobalBounds().Height / 3));
 
                         if (i == selected)
                         {
@@ -820,14 +782,15 @@ namespace TripOverTime.EngineNamespace
 
                         window.Draw(r);
                         window.Draw(lines[i]);
+                        j++;
                     }
 
                     // Add Block
                     t = new Text("Add block...", _font1, _charSize);
-                    t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 2));
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7);
 
                     r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
-                    r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 2) - (t.GetGlobalBounds().Height / 3));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
 
                     if (lines.Count == selected)
                     {
@@ -845,10 +808,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Next
                     t = new Text("Next", _font1, _charSize);
-                    t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 3));
+                    t.Position = new SFML.System.Vector2f((window.Size.X / 4) * 3 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7);
 
                     r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
-                    r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (lines.Count + 3) - (t.GetGlobalBounds().Height / 3));
+                    r.Position = new SFML.System.Vector2f((window.Size.X / 4) * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
 
                     if (lines.Count + 1 == selected)
                     {
@@ -875,7 +838,6 @@ namespace TripOverTime.EngineNamespace
                 System.Threading.Thread.Sleep(1000 / 60);
             } while (again);
 
-            window.TextEntered -= _eventsText[4];
             window.KeyPressed -= _eventsKey[4];
 
 
@@ -888,7 +850,198 @@ namespace TripOverTime.EngineNamespace
 
 
 
+
             // All type of monster
+
+            selected = 0;
+            bool addingMonster = false;
+            startIndex = 0;
+            j = 0;
+            display = true;
+
+            window.DispatchEvents();
+
+            _eventsKey.Add((s, a) =>
+            {
+                if (!addingMonster)
+                {
+                    if (a.Code == Keyboard.Key.Enter)
+                    {
+                        if (selected == lines.Count + 1) // Next
+                        {
+                            display = true;
+                            again = false;
+                        }
+                        else if (selected == lines.Count) // Add Block
+                        {
+                            addingMonster = true;
+
+                            Sprite ss = AddMonster(window);
+
+                            // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
+
+                            if (ss != null)
+                            {
+                                monsters.Add(ss);
+
+                                // Golem1 3 3 10 1 3 1 SAAAAA
+                                //lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+                                lines.Add(new Text(monsters[monsters.Count - 1].Name + " - [ " + monsters[monsters.Count - 1].Position.X + " ; " + monsters[monsters.Count - 1].Position.Y + " ] - " + monsters[monsters.Count - 1].life.GetMaxPoint() + " - " + monsters[monsters.Count - 1].GetAttack.GetAttack + " - " + monsters[monsters.Count - 1].MoveSpeed + " - " + monsters[monsters.Count - 1].Range + " - " + monsters[monsters.Count - 1].AttackCombo, _font2, _charSize));
+                            }
+
+                            selected++;
+                            addingMonster = false;
+
+                            display = true;
+                        }
+                        else if (selected < lines.Count && selected > 0) // Enter on a block line
+                        {
+                            // Edit
+                        }
+                    }
+                    else if (a.Code == Keyboard.Key.Up && selected > 0)
+                    {
+                        display = true;
+                        selected--;
+
+                        if (lines.Count > 5 && startIndex > 0 && selected <= 4)
+                        {
+                            startIndex--;
+                        }
+
+                    }
+                    else if (a.Code == Keyboard.Key.Down && selected < lines.Count + 1)
+                    {
+                        display = true;
+                        selected++;
+
+                        if (lines.Count > 5 && selected > 4 && selected < lines.Count)
+                        {
+                            startIndex++;
+                        }
+
+                    }
+                }
+            });
+
+            window.KeyPressed += _eventsKey[5];
+
+            lines.Clear();
+
+            // Golem1 3 3 10 1 3 1 SAAAAA
+            lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+
+            do
+            {
+                again = true;
+
+                if (display)
+                {
+                    DisplayBackground(window);
+
+                    // Title
+                    t = new Text("All monsters", _font1, _charSize);
+                    t.FillColor = Color.White;
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8);
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) - (t.GetGlobalBounds().Height / 3));
+                    r.FillColor = Color.Black;
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+                    // Block Label
+                    j = 0;
+                    for (int i = startIndex; i < startIndex + 5 && i < lines.Count; i++)
+                    {
+                        lines[i].Position = new SFML.System.Vector2f(window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (j + 2));
+
+                        r = new RectangleShape(new SFML.System.Vector2f(lines[i].GetGlobalBounds().Width * 1.5f, lines[i].GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * (j + 2) - (lines[i].GetGlobalBounds().Height / 3));
+
+                        if (i == selected)
+                        {
+                            lines[i].FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+                        else
+                        {
+                            lines[i].FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(lines[i]);
+                        j++;
+                    }
+
+                    // Add Block
+                    t = new Text("Add monster...", _font1, _charSize);
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7);
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+
+                    if (lines.Count == selected)
+                    {
+                        r.FillColor = Color.White;
+                        t.FillColor = Color.Black;
+                    }
+                    else
+                    {
+                        r.FillColor = Color.Black;
+                        t.FillColor = Color.White;
+                    }
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+                    // Next
+                    t = new Text("Next", _font1, _charSize);
+                    t.Position = new SFML.System.Vector2f((window.Size.X / 4) * 3 - (t.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7);
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f((window.Size.X / 4) * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+
+                    if (lines.Count + 1 == selected)
+                    {
+                        r.FillColor = Color.White;
+                        t.FillColor = Color.Black;
+                    }
+                    else
+                    {
+                        r.FillColor = Color.Black;
+                        t.FillColor = Color.White;
+                    }
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+
+                    window.Display();
+                    display = false;
+                }
+
+                // Events
+                window.DispatchEvents();
+
+                System.Threading.Thread.Sleep(1000 / 60);
+            } while (again);
+
+            window.KeyPressed -= _eventsKey[4];
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             // EDITORRRRRR
@@ -936,7 +1089,7 @@ namespace TripOverTime.EngineNamespace
                     else path += Clipboard.Contents;
                     display = true;
                 }
-                else if (a.Code == Keyboard.Key.Up)
+                else if (a.Code == Keyboard.Key.Up && selected > 0)
                 {
                     selected--;
                     display = true;
@@ -1187,8 +1340,11 @@ namespace TripOverTime.EngineNamespace
 
             if (complete)
             {
-                _blockId += 1;
-                s = new Sprite(_blockId, name, path, isSolid);
+                _blockId++;
+                if (path.ToLower().EndsWith(".png") || path.ToLower().EndsWith(".jpg"))
+                {
+                    s = new Sprite(Convert.ToString(_blockId), name, path, isSolid);
+                }
             }
 
             window.TextEntered -= tEvent;
@@ -1196,6 +1352,365 @@ namespace TripOverTime.EngineNamespace
             window.KeyPressed -= kEvent;
 
             return s;
+        }
+
+        private Monster AddMonster(RenderWindow window)
+        {
+            Monster m = null;
+            bool again = true;
+            bool display = true;
+            Text t = null;
+            RectangleShape r = null;
+            int selected = 0;
+            bool complete = false;
+
+            // Golem1 3 3 10 1 3 1 SAAAAA
+            //lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+            //internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
+            string name = "";
+            Position pos = new Position(0, 0);
+            ushort life = 10;
+            ushort attack = 1;
+            float monsterMove = 3;
+            float range = 1;
+            string attackCombo = "SAAA";
+
+            EventHandler<KeyEventArgs> kEvent = (s, a) =>
+            {
+                if (a.Code == Keyboard.Key.Enter)
+                {
+                    if (selected == 7) //back
+                    {
+                        again = false;
+                        complete = false;
+                    }
+                    else if (selected == 6) // valid
+                    {
+                        again = false;
+                        complete = true;
+                    }
+
+                    display = true;
+                }
+                else if (a.Code == Keyboard.Key.Up && selected > 0)
+                {
+                    selected--;
+                    display = true;
+                }
+                else if (a.Code == Keyboard.Key.Down && selected < 7)
+                {
+                    selected++;
+                    display = true;
+                }
+            };
+
+            EventHandler<TextEventArgs> tEvent = (s, a) =>
+            {
+                /*if (selected == 0) //Name
+                {
+                    if (a.Unicode != "\b")
+                    {
+                        name += a.Unicode;
+                    }
+                    else if (name.Length > 0)
+                    {
+                        name = name.Remove(name.Length - 1);
+                    }
+                }
+                else if (selected == 1) //Path
+                {
+                    if (a.Unicode != "\b")
+                    {
+                        path += a.Unicode;
+                    }
+                    else if (path.Length > 0)
+                    {
+                        path = path.Remove(path.Length - 1);
+                    }
+                }*/
+
+                switch (selected)
+                {
+                    case 0: //Name
+
+                        break;
+                }
+
+
+                display = true;
+            };
+
+            window.TextEntered += tEvent;
+
+            window.KeyPressed += kEvent;
+
+            do
+            {
+                again = true;
+
+                if (display)
+                {
+                    DisplayBackground(window);
+
+                    // Title
+                    t = new Text("Add monster", _font1, _charSize);
+                    t.FillColor = Color.White;
+                    t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8);
+
+                    r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) - (t.GetGlobalBounds().Height / 3));
+                    r.FillColor = Color.Black;
+
+                    window.Draw(r);
+                    window.Draw(t);
+
+                    // Name 0
+                    if (selected == 0)
+                    {
+                        t = new Text("Name (in Monster Dir.): " + name, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 3);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 3 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("Name (in Monster Dir.): " + name, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 3);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 3 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    //lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+
+                    // HP 1
+                    if (selected == 1)
+                    {
+                        t = new Text("HP : " + life, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 4);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 4 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("HP : " + life, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 4);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 4 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // Attack 2
+                    if (selected == 2)
+                    {
+                        t = new Text("Attack : " + attack, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 4);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 4 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("Attack : " + attack, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 4);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 4 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // MoveSpeed 3
+                    if (selected == 3)
+                    {
+                        t = new Text("MoveSpeed : " + monsterMove, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 5);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 5 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("MoveSpeed : " + monsterMove, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 5);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 5 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // Range 4
+                    if (selected == 4)
+                    {
+                        t = new Text("Range : " + range, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 5);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 5 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("Range : " + range, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 5);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 5 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // AttackCombo 5
+                    if (selected == 5)
+                    {
+                        t = new Text("COMBO : " + attackCombo, _font2, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 6);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 6 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("COMBO : " + attackCombo, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 6);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 6 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    // Valid 6
+                    if (selected == 6)
+                    {
+                        t = new Text("Valid", _font1, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 7);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("Valid", _font1, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 7);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+
+                    // Back 7
+                    if (selected == 7)
+                    {
+                        t = new Text("Back", _font1, _charSize);
+                        t.FillColor = Color.Black;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 7);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.White;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+                    else
+                    {
+                        t = new Text("Back", _font1, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 8 * 7);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 4 * 3 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 8) * 7 - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+                    }
+
+                    window.Display();
+                    display = false;
+                }
+
+                window.DispatchEvents();
+
+                System.Threading.Thread.Sleep(1000 / 60);
+            } while (again);
+
+
+            if (complete)
+            {
+                m = new Monster(null, name, pos, new Life(life), attack, monsterMove, range, attackCombo);
+            }
+
+            window.TextEntered -= tEvent;
+
+            window.KeyPressed -= kEvent;
+
+            return m;
         }
 
         private void DisplayBackground(RenderWindow window)
