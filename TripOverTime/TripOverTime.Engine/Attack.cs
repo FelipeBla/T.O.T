@@ -37,11 +37,7 @@ namespace TripOverTime.EngineNamespace
             if (_incrementationAttack >= _schemaAttack.Length - 1)
             {
                 _incrementationAttack = 0;
-                Console.WriteLine(_incrementationAttack);
-                Console.WriteLine(_schemaAttack.Length);
             }
-
-            
 
             if (_schemaAttack[_incrementationAttack] == 'S')
             {
