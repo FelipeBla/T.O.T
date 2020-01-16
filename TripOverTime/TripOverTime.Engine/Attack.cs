@@ -34,12 +34,11 @@ namespace TripOverTime.EngineNamespace
 
         internal void AttackMonster()
         {
-            if (_incrementationAttack == _schemaAttack.Length - 1)
+            if (_incrementationAttack >= _schemaAttack.Length - 1)
             {
                 _incrementationAttack = 0;
             }
 
-            Console.WriteLine(_schemaAttack[_incrementationAttack]);
             if (_schemaAttack[_incrementationAttack] == 'S')
             {
                 _speedAttack = 50;
@@ -55,24 +54,26 @@ namespace TripOverTime.EngineNamespace
                 }
             }
             else if (_schemaAttack[_incrementationAttack] == 'A')
-            {
+            { 
                 _speedAttack = 80;
                 NormalAttack();
 
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _context.GetPlayer.RealPosition.Y == _monster.Position.Y && _monster.isAlive)
+                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _monster.isAlive)
                 {
-                    HurtPlayer();
+                    if (_monster.Position.X + _monster.Range > _context.GetPlayer.RealPosition.X && _monster.Position.X - _monster.Range < _context.GetPlayer.RealPosition.X && _monster.Position.Y == _context.GetPlayer.RealPosition.Y)
+                    {
+                        HurtPlayer();
+                    }
+                    _incrementationAttack++;
+                    _timer.Restart();
                 }
-
-                _incrementationAttack++;
-                _timer.Restart();
             }
 
         }
 
         internal void AttackBoss()
         {
-            if (_incrementationAttack == _schemaAttack.Length - 1)
+            if (_incrementationAttack >= _schemaAttack.Length - 1)
             {
                 _incrementationAttack = 0;
             }
