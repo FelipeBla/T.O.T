@@ -193,10 +193,12 @@ namespace TripOverTime.EngineNamespace
                                 monsterToAttack = m;
                         }
                         //boss
-                        if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
-                            _context.GetBoss.life.DecreasedPoint(_attack);
+                        
                     }
-
+                    if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                    {
+                        _context.GetBoss.life.DecreasedPoint(_attack);
+                    }
                     // Si il y a un monstre
                     if (monsterToAttack != null)
                     {

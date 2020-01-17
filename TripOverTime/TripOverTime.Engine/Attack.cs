@@ -22,11 +22,12 @@ namespace TripOverTime.EngineNamespace
         ushort _attack2;
         float _range;
         int _incrementationSpeed;
-        internal Attack(Game context, Monster monster, ushort attack, string attackCombo, Boss boss = null)
+        
         Stopwatch _timer2;
         string _schemaAttack2;
         int _incrementationAttack2;
 
+        internal Attack(Game context, Monster monster, ushort attack, string attackCombo, Boss boss = null)
         {
             _context = context;
             _monster = monster;
@@ -113,7 +114,7 @@ namespace TripOverTime.EngineNamespace
             }
 
         }
-                internal void AttackBoss()
+        internal void AttackBoss()
         {
             if (_incrementationAttack >= _schemaAttack.Length - 1)
             {
@@ -195,56 +196,7 @@ namespace TripOverTime.EngineNamespace
                 }
             }
         }
-            {
-            }
-                {
-                }
-            }
-            else if (_schemaAttack[_incrementationAttack] == 'T')//throwing
-            {
-                _speedAttack = 60;
-                ThrowingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
-                {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
-                    {
-                        _attack *= 2;
-                        HurtPlayer();
-                        _attack /= 2;
-                    }
-                    _incrementationAttack++;
-                    _timer.Restart();
-                }
-            }
-            else if (_schemaAttack[_incrementationAttack] == 'K')//kicking
-            {
-                _speedAttack = 40;
-                KickingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
-                {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
-                    {
-                        HurtPlayer();
-                    }
-                    _incrementationAttack++;
-                    _timer.Restart();
-                }
-            }
-            else if (_schemaAttack[_incrementationAttack] == 'S')//sliding
-            {
-                _speedAttack = 60;
-                SlidingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 6 && _boss.IsAlive)
-                {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
-                    {
-                        HurtPlayer();
-                    }
-                    _incrementationAttack++;
-                    _timer.Restart();
-                }
-            }
-        }
+            
 
         // AttackBossAnimation (int nbrAction,string name Action, Boss boss, int speed sprite) 
         internal void RunSlashingBoss()

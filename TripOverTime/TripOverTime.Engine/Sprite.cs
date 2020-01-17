@@ -130,6 +130,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
 
                 _texture = _playerTexture["stand"];
                 _texture2 = _playerTexture["stand"];
+            }
 
             else if (_isBoss)
             {
