@@ -33,9 +33,11 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _playerTexture;
         Dictionary<string, Texture> _monsterTexture;
         Dictionary<string, Texture> _bossTexture;
+        Dictionary<string, Texture> _bossTexture2;
         SFML.Graphics.Sprite _sprite;
         Stopwatch _animTimer;
 
+        int _bossAttack2;
         string _id2;
         string _name2;
         string _imgPath2;
@@ -648,6 +650,27 @@ internal void BossOrientation(Boss boss)
             }
         }
 
+        internal void BossAttackAnimation2(int nbrAction, string action, int speedAction)
+        {
+            if (_animTimer2.ElapsedMilliseconds >= speedAction)
+            {
+
+                if (_bossAttack2 >= nbrAction)
+                {
+                    _bossAttack2 = 1;
+                }
+                else
+                {
+                    _bossAttack2++;
+                }
+
+                string numberTexture = action + _bossAttack2 + ")";
+                _sprite2.Texture = _bossTexture2[numberTexture];
+
+                _animTimer2.Restart();
+            }
+        }
+
         internal void BossDeadAnimation(Boss boss)
         {
             int nbrAction = 15;
@@ -776,7 +799,7 @@ internal void BossOrientation(Boss boss)
                 }
 
                 string numberTexture2 = action + _monsterAttack2;
-                _sprite2.Texture = _monsterTexture2[numberTexture2];
+                _sprite2.Texture = _monsterTexture[numberTexture2];
 
                 _animTimer2.Restart();
 

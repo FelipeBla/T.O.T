@@ -17,9 +17,6 @@ namespace TripOverTime.EngineNamespace
         const float JUMPING_LIMIT = 1.3f;
         const float PPLAYER_MOVE = 0.10f;
 
-        const float JUMPING_SPEED2 = 0.06f;
-        const float GRAVITY_SPEED2 = 0.06f;
-        const float JUMPING_LIMIT2 = 1.3f;
         const float PPLAYER_MOVE2 = 0.10f;
 
         readonly Game _context;
@@ -121,8 +118,8 @@ namespace TripOverTime.EngineNamespace
             if (!_isJumping2)
             {
                 _origin2 = new Position2(_realPosition2.X2, _realPosition2.Y2);
-                _realPosition2.Y2 += JUMPING_SPEED2;
-                _position2.Y2 += JUMPING_SPEED2;
+                _realPosition2.Y2 += JUMPING_SPEED;
+                _position2.Y2 += JUMPING_SPEED;
                 _isJumping2 = true;
 
                 _sprite2.JumpAnimation2();
@@ -147,17 +144,17 @@ namespace TripOverTime.EngineNamespace
 
         internal void Gravity2()
         {
-            if (_isJumping2 && _origin2 != null && _realPosition2.Y2 <= _origin2.Y2 + JUMPING_LIMIT2) // Jump
+            if (_isJumping2 && _origin2 != null && _realPosition2.Y2 <= _origin2.Y2 + JUMPING_LIMIT) // Jump
             {
-                _realPosition2.Y2 += JUMPING_SPEED2;
-                _position2.Y2 += JUMPING_SPEED2;
+                _realPosition2.Y2 += JUMPING_SPEED;
+                _position2.Y2 += JUMPING_SPEED;
                 _sprite2.JumpAnimation2();
             }
             else // Fall
             {
                 _origin2 = null;
-                _realPosition2.Y2 -= GRAVITY_SPEED2;
-                _position2.Y2 -= GRAVITY_SPEED2;
+                _realPosition2.Y2 -= GRAVITY_SPEED;
+                _position2.Y2 -= GRAVITY_SPEED;
             }
         }
 

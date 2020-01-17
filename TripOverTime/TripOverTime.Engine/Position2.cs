@@ -33,7 +33,7 @@ namespace TripOverTime.EngineNamespace
         // For TryGetValue
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Position)) return false;
+            if (obj == null || !(obj is Position2)) return false;
             return ((Position2)obj).X2 == this.X2 && ((Position2)obj).Y2 == this.Y2;
         }
 

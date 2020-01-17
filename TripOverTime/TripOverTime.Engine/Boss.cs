@@ -16,17 +16,21 @@ namespace TripOverTime.EngineNamespace
         readonly Game _context;
         readonly String _name;
         Position _position;
+        Position2 _position2;
         Life _life;
+        Life _life2;
         bool _isAlive;
         Attack _attack;
         Sprite _sprite;
+        Sprite _sprite2;
         bool _ismoving;
         Position _origin;
         string _orientation;
         float _bossMove;
+        float _bossMove2;
         float _range;
 
-        internal Boss(Game context, String name, Position position, Life life, ushort attack, float bossMove, float range, string attackCombo)
+        internal Boss(Game context, String name, Position position, Position2 position2, Life life, ushort attack, float bossMove, float range, string attackCombo)
         {
             _context = context;
             _name = name;
@@ -37,7 +41,11 @@ namespace TripOverTime.EngineNamespace
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _bossMove = bossMove;
+            _bossMove2 = bossMove;
             _range = range + 0.2f;
+
+            _life2 = life;
+            _position2 = position2;
         }
         internal void BossMove()
         {
@@ -113,7 +121,11 @@ namespace TripOverTime.EngineNamespace
             get => _position;
             set { _position = value; }
         }
-
+        internal Position2 Position2
+        {
+            get => _position2;
+            set { _position2 = value; }
+        }
         internal string Orientation
         {
             get => _orientation;
@@ -132,6 +144,14 @@ namespace TripOverTime.EngineNamespace
                 return _life.GetCurrentPoint() > 0;
             }
         }
+
+        internal bool IsAlive2
+        {
+            get
+            {
+                return _life2.GetCurrentPoint2() > 0;
+            }
+        }
         internal Attack GetAttack
         {
             get { return _attack; }
@@ -142,6 +162,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _sprite;
         }
+        internal Sprite GetBossSprite2
+        {
+            get => _sprite2;
+        }
         internal bool IsMoving
         {
             get => _ismoving;
@@ -151,6 +175,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _bossMove;
             set => _bossMove = value;
+        }
+        internal float BossSpeed2
+        {
+            get => _bossMove2;
+            set => _bossMove2 = value;
         }
     }
 }

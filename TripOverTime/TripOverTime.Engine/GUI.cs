@@ -51,7 +51,10 @@ namespace TripOverTime.EngineNamespace
         {
             LoadMap();
         }
-
+        public void InitGame2()
+        {
+            LoadMap2();
+        }
         public void ShowMapMultiplayer()
         {
             if (!_window.IsOpen) _context.Close = true;
@@ -133,9 +136,9 @@ namespace TripOverTime.EngineNamespace
             
 
             // Player
-            if (_context2.GetGame2.GetPlayer2.IsAlive)
+            if (_context2.GetGame2.GetPlayer2.IsAlive2)
             {
-                _context2.GetGame2.GetPlayer2.GetPlayerSprite.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetPlayer2.Position2.X2 * 128, _window.Size.Y + _context2.GetGame2.GetPlayer2.Position2.Y2 * -128 - 65);
+                _context2.GetGame2.GetPlayer2.GetPlayerSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetPlayer2.Position2.X2 * 128, _window.Size.Y + _context2.GetGame2.GetPlayer2.Position2.Y2 * -128 - 65);
                 _window.Draw(_context2.GetGame2.GetPlayer2.GetPlayerSprite2.GetSprite2);
             }
 
@@ -169,7 +172,7 @@ namespace TripOverTime.EngineNamespace
             foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed2)
             {
                 s.Value.GetSprite2.Position = s.Key;
-                s.Value.GetSprite2.Position -= _moveTheMapOf;
+                s.Value.GetSprite2.Position -= _moveTheMapOf2;
                 _window.Draw(s.Value.GetSprite2);
             }
 
@@ -253,9 +256,71 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
+        }
+
+        private void LoadMap2()
+        {
+            if (!_window.IsOpen) throw new Exception("Window is not open!");
+
+            // Set background
+            Texture backgroundTexture = new Texture(_context.GetGame.GetMapObject.GetBackground);
+            if (backgroundTexture == null) throw new Exception("Texture null!");
+            backgroundTexture.Repeated = true;
+
+            _background = new SFML.Graphics.Sprite(backgroundTexture);
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(_background);
+
+            // Set lifeBar
+            _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
+            if (_lifebarTexture == null) throw new Exception("Texture null!");
+
+            _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
+            if (_hpBar == null) throw new Exception("Sprite null!");
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
+            _window.Draw(_hpBar);
+
+
+
+            Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
+
             foreach (KeyValuePair<Position, Sprite> s in map)
             {
-                s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
+                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
+                _window.Draw(s.Value.GetSprite);
+                _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
+            }
+            if (!_window.IsOpen) throw new Exception("Window is not open!");
+
+            // Set background
+            Texture backgroundTexture2 = new Texture(_context2.GetGame2.GetMapObject2.GetBackground);
+            if (backgroundTexture2 == null) throw new Exception("Texture null!");
+            backgroundTexture2.Repeated = true;
+
+            _background = new SFML.Graphics.Sprite(backgroundTexture2);
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(_background);
+
+            // Set lifeBar
+            _lifebarTexture = new Texture(_context2.GetGame2.GetMapObject2.GetLifeBar);
+            if (_lifebarTexture == null) throw new Exception("Texture null!");
+
+            _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
+            if (_hpBar == null) throw new Exception("Sprite null!");
+            _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context2.GetGame2.GetPlayer2.GetLife2.GetMaxPoint() - _context2.GetGame2.GetPlayer2.GetLife2.GetCurrentPoint2()), (int)_lifebarTexture.Size.Y));
+            _window.Draw(_hpBar);
+
+
+
+            Dictionary<Position2, Sprite> map2 = _context2.GetGame2.GetMapObject2.GetMap2;
+
+            foreach (KeyValuePair<Position2, Sprite> s in map2)
+            {
+                s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X2 * 128, _window.Size.Y + s.Key.Y2 * -128); //128*128 = Size of a sprite
                 _window.Draw(s.Value.GetSprite2);
                 _spritesDisplayed2.Add(s.Value.GetSprite2.Position, s.Value);
             }

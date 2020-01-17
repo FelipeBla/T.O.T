@@ -413,7 +413,7 @@ namespace TripOverTime.EngineNamespace
 
                 if (m2.Position2.X2 + 2 > _game2.GetPlayer2.RealPosition2.X2 && m2.Position2.X2 - 2 < _game2.GetPlayer2.RealPosition2.X2 && m2.isAlive2) //attack
                 {
-                    m2.MonsterAttack();
+                    m2.MonsterAttack2();
                 }
             }
 
