@@ -98,6 +98,12 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 
+            // Boss
+            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 -205);
+            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
+            _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
+            Console.WriteLine("BossPos: " + _context.GetGame.GetBoss.Position.X + ";" + _context.GetGame.GetBoss.Position.Y);
+
             //view player 2
             View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
             view2.Viewport = new FloatRect(0f, 0.5f, 1f, 0.5f);
@@ -204,6 +210,11 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 
+            // Boss
+            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128 -150, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 205);
+            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
+            _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
+
             // Display
             _window.Display();
 
@@ -262,7 +273,7 @@ namespace TripOverTime.EngineNamespace
             {
                 foreach (Monster monster in _context.GetGame.GetMonsters)
                 {
-                    monster.GetAttack.HurtPlayer();
+                    monster.GetAttack.HurtPlayerAnimation();
                 }
             }
 
@@ -352,7 +363,7 @@ namespace TripOverTime.EngineNamespace
             {
                 foreach (Monster monster in _context.GetGame.GetMonsters)
                 {
-                    monster.GetAttack.HurtPlayer();
+                    monster.GetAttack.HurtPlayerAnimation();
                 }
             }
 

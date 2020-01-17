@@ -199,6 +199,28 @@ namespace TripOverTime.EngineNamespace
 
             return monsters;
         }
+        internal Boss GenerateBoss()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get boss
+            // name x y hp
+            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
+            Boss boss = null;
+            foreach (string s in strBoss)
+            {
+                string[] str = s.Split(" ");
+
+                boss = new Boss(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, float.Parse(str[6]), str[7]);
+            }
+            return boss;
+
+            
+        }
 
         private Sprite RetrieveSpriteWithId(string strId)
         {

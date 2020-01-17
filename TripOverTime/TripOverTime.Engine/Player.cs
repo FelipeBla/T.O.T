@@ -67,7 +67,7 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _isAttack = false;
-            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
             _orientation = "right";
 
             _attackSpeed = 1;
@@ -166,7 +166,7 @@ namespace TripOverTime.EngineNamespace
             if (_isAttack)
             {
                 //Evite le spam d'attaque
-                if (_attackTimer.ElapsedMilliseconds >= 1000/_attackSpeed)
+                if (_attackTimer.ElapsedMilliseconds >= 400/_attackSpeed)
                 {
                     _attackTimer.Restart();
                     //Attack
@@ -180,6 +180,9 @@ namespace TripOverTime.EngineNamespace
                             if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y)
                                 monsterToAttack = m;
                         }
+                        // boss
+                        if (_context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                            _context.GetBoss.life.DecreasedPoint(_attack);
                     }
                     else
                     {
@@ -189,6 +192,9 @@ namespace TripOverTime.EngineNamespace
                             if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y)
                                 monsterToAttack = m;
                         }
+                        //boss
+                        if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                            _context.GetBoss.life.DecreasedPoint(_attack);
                     }
 
                     // Si il y a un monstre
@@ -300,12 +306,25 @@ namespace TripOverTime.EngineNamespace
                                 if (m.GetMonsterSprite.IsSolid)
                                 {
                                     //Blocked by monster
-                                    Console.WriteLine("MONSTTERRRRRRRR");
                                     blocked = true;
                                 }
                             }
                         }
                     }
+
+                    //boss
+                    if ((_context.GetBoss.Position.Y == _realPosition.Y || _context.GetBoss.Position.Y + 1 == _realPosition.Y) && _context.GetBoss.IsAlive) //Meme niveau Y
+                    {
+                        if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1)
+                        {
+                            if (_context.GetBoss.GetBossSprite.IsSolid)
+                            {
+                                //Blocked by boss
+                                blocked = true;
+                            }
+                        }
+                    }
+
                     if (!blocked)
                     {
                         if (s.IsSolid) ;

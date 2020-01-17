@@ -36,12 +36,9 @@ namespace TripOverTime.EngineNamespace
         string _orientation;
         string _orientation2;
         float _monsterMove;
-<<<<<<< HEAD
         float _monsterMove2;
-=======
         float _range;
         string _attackCombo;
->>>>>>> Quentin
 
         internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
         {
@@ -50,32 +47,28 @@ namespace TripOverTime.EngineNamespace
             _position = position;
             _life = life;
             _isAlive = true;
+            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false, false);
             _attack = new Attack(context, this, attack, attackCombo);
-            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
-<<<<<<< HEAD
-
+            _range = range + 0.2f;
+            _attackCombo = attackCombo;
             _context2 = context;
             _name2 = name;
             _position2 = position;
             _life2 = life;
             _isAlive2 = true;
-            _attack2 = new Attack(context, this, attack);
+            _attack2 = new Attack(context, this, attack, attackCombo);
             _sprite2 = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw2 = _sprite.GetSprite.TextureRect.Width;
             ph2 = _sprite.GetSprite.TextureRect.Height;
             _monsterMove2 = monsterMove;
-=======
-            _range = range + 0.2f;
-            _attackCombo = attackCombo;
->>>>>>> Quentin
         }
 
         internal void MonsterMove()
         {
-            Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
+            //Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
             if (!_ismoving)
             {
                 Sprite s = null;
@@ -231,7 +224,6 @@ namespace TripOverTime.EngineNamespace
             {
                 return _life.GetCurrentPoint() > 0;
             }
-            set { _isAlive = value; }
         }
 
         internal bool isAlive2
@@ -257,12 +249,12 @@ namespace TripOverTime.EngineNamespace
             get => _ismoving;
             set => _ismoving = value;
         }
-<<<<<<< HEAD
         internal bool IsMoving2
         {
             get => _ismoving2;
             set => _ismoving2 = value;
-=======
+        
+        }
 
         internal float Range
         {
@@ -272,7 +264,6 @@ namespace TripOverTime.EngineNamespace
         internal string AttackCombo
         {
             get => _attackCombo;
->>>>>>> Quentin
         }
     }
 }

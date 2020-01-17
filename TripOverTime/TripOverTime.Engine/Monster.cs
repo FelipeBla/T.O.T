@@ -49,7 +49,7 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = new Attack(context, this, attack, attackCombo);
-            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
+            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
@@ -61,7 +61,7 @@ namespace TripOverTime.EngineNamespace
             _position2 = position2;
             _life2 = life;
             _isAlive2 = true;
-            _attack2 = new Attack(context, this, attack);
+            _attack2 = new Attack(context, this, attack, attackCombo);
             _sprite2 = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, _context2.GetMapObject, true, false);
             pw2 = _sprite2.GetSprite2.TextureRect.Width;
             ph2 = _sprite2.GetSprite2.TextureRect.Height;
@@ -70,7 +70,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
-            Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
+            //Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
             if (!_ismoving)
             {
                 Sprite s = null;
@@ -241,7 +241,6 @@ namespace TripOverTime.EngineNamespace
             {
                 return _life.GetCurrentPoint() > 0;
             }
-            set { _isAlive = value; }
         }
 
         internal bool isAlive2
