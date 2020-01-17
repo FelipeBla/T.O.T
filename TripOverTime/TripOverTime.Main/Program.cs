@@ -3,6 +3,7 @@ using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using TripOverTime.EngineNamespace;
 
@@ -18,6 +19,23 @@ namespace TripOverTime.Main
 
         private static bool RunAgain() //fonction du jeu
         {
+            // Settings
+            if (File.Exists("settings"))
+            {
+                string settingsFile = File.ReadAllText("settings");
+                string[] st = settingsFile.Split("\n");
+                Settings.Fullscreen = Convert.ToBoolean(st[0]);
+                Settings.NbFPS = Convert.ToUInt16(st[1]);
+                Settings.XResolution = Convert.ToUInt16(st[2]);
+                Settings.YResolution = Convert.ToUInt16(st[3]);
+
+            }
+            else
+            {
+                string settingsFile = Settings.Fullscreen + "\n" + Settings.NbFPS + "\n" + Settings.XResolution + "\n" + Settings.YResolution;
+                File.WriteAllText("settings", settingsFile);
+            }
+
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
