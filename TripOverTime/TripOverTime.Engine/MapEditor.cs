@@ -708,6 +708,15 @@ namespace TripOverTime.EngineNamespace
                             // Edit
                         }
                     }
+                    else if (a.Code == Keyboard.Key.Delete)
+                    {
+                        if (lines.Count > selected && selected > 0)
+                        {
+                            lines.RemoveAt(selected);
+                            blocks.RemoveAt(selected - 1);
+                            display = true;
+                        }
+                    }
                     else if (a.Code == Keyboard.Key.Up && selected > 0)
                     {
                         display = true;
@@ -738,7 +747,7 @@ namespace TripOverTime.EngineNamespace
             lines.Clear();
 
             // 2 TRAP ..\..\..\..\Assets\Tiles\spikes.png true DANGEROUS
-            lines.Add(new Text("ID - NAME - FILEPATH/PREVIEW - SOLID - (OPTIONAL: TRAP)", _font1, _charSize));
+            lines.Add(new Text("ID - NAME - FILEPATH - SOLID - (OPTIONAL: TRAP)", _font1, _charSize));
 
             do
             {
@@ -840,17 +849,6 @@ namespace TripOverTime.EngineNamespace
 
             window.KeyPressed -= _eventsKey[4];
 
-
-
-
-
-
-
-
-
-
-
-
             // All type of monster
 
             selected = 0;
@@ -876,7 +874,7 @@ namespace TripOverTime.EngineNamespace
                         {
                             addingMonster = true;
 
-                            Sprite ss = AddMonster(window);
+                            Monster ss = AddMonster(window);
 
                             // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
 
@@ -885,8 +883,8 @@ namespace TripOverTime.EngineNamespace
                                 monsters.Add(ss);
 
                                 // Golem1 3 3 10 1 3 1 SAAAAA
-                                //lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
-                                lines.Add(new Text(monsters[monsters.Count - 1].Name + " - [ " + monsters[monsters.Count - 1].Position.X + " ; " + monsters[monsters.Count - 1].Position.Y + " ] - " + monsters[monsters.Count - 1].life.GetMaxPoint() + " - " + monsters[monsters.Count - 1].GetAttack.GetAttack + " - " + monsters[monsters.Count - 1].MoveSpeed + " - " + monsters[monsters.Count - 1].Range + " - " + monsters[monsters.Count - 1].AttackCombo, _font2, _charSize));
+                                //lines.Add(new Text("NAME - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+                                lines.Add(new Text(monsters[monsters.Count - 1].Name + " - " + monsters[monsters.Count - 1].life.GetMaxPoint() + " - " + monsters[monsters.Count - 1].GetAttack.GetAttack + " - " + monsters[monsters.Count - 1].MoveSpeed * 100 + " - " + monsters[monsters.Count - 1].Range + " - " + monsters[monsters.Count - 1].AttackCombo, _font2, _charSize));
                             }
 
                             selected++;
@@ -897,6 +895,15 @@ namespace TripOverTime.EngineNamespace
                         else if (selected < lines.Count && selected > 0) // Enter on a block line
                         {
                             // Edit
+                        }
+                    }
+                    else if (a.Code == Keyboard.Key.Delete)
+                    {
+                        if (lines.Count > selected && selected > 0)
+                        {
+                            lines.RemoveAt(selected);
+                            monsters.RemoveAt(selected - 1);
+                            display = true;
                         }
                     }
                     else if (a.Code == Keyboard.Key.Up && selected > 0)
@@ -929,7 +936,7 @@ namespace TripOverTime.EngineNamespace
             lines.Clear();
 
             // Golem1 3 3 10 1 3 1 SAAAAA
-            lines.Add(new Text("NAME - [ X ; Y ] - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+            lines.Add(new Text("NAME - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
 
             do
             {
@@ -1031,20 +1038,11 @@ namespace TripOverTime.EngineNamespace
 
             window.KeyPressed -= _eventsKey[4];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             // EDITORRRRRR
+
+
+            // Add "AIR" on null sprite position
+            // Save
 
         }
 
@@ -1369,10 +1367,10 @@ namespace TripOverTime.EngineNamespace
             //internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
             string name = "";
             Position pos = new Position(0, 0);
-            ushort life = 10;
-            ushort attack = 1;
-            float monsterMove = 3;
-            float range = 1;
+            string life = "10";
+            string attack = "1";
+            string monsterMove = "3";
+            string range = "1";
             string attackCombo = "SAAA";
 
             EventHandler<KeyEventArgs> kEvent = (s, a) =>
@@ -1406,33 +1404,69 @@ namespace TripOverTime.EngineNamespace
 
             EventHandler<TextEventArgs> tEvent = (s, a) =>
             {
-                /*if (selected == 0) //Name
-                {
-                    if (a.Unicode != "\b")
-                    {
-                        name += a.Unicode;
-                    }
-                    else if (name.Length > 0)
-                    {
-                        name = name.Remove(name.Length - 1);
-                    }
-                }
-                else if (selected == 1) //Path
-                {
-                    if (a.Unicode != "\b")
-                    {
-                        path += a.Unicode;
-                    }
-                    else if (path.Length > 0)
-                    {
-                        path = path.Remove(path.Length - 1);
-                    }
-                }*/
+                //lines.Add(new Text("NAME - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
 
                 switch (selected)
                 {
                     case 0: //Name
-
+                        if (a.Unicode != "\b")
+                        {
+                            name += a.Unicode;
+                        }
+                        else if (name.Length > 0)
+                        {
+                            name = name.Remove(name.Length - 1);
+                        }
+                        break;
+                    case 1: //HP
+                        if (a.Unicode != "\b")
+                        {
+                            life += a.Unicode;
+                        }
+                        else if (life.Length > 0)
+                        {
+                            life = life.Remove(life.Length - 1);
+                        }
+                        break;
+                    case 2: //Attack
+                        if (a.Unicode != "\b")
+                        {
+                            attack += a.Unicode;
+                        }
+                        else if (attack.Length > 0)
+                        {
+                            attack = attack.Remove(attack.Length - 1);
+                        }
+                        break;
+                    case 3: //MoveSpeed
+                        if (a.Unicode != "\b")
+                        {
+                            monsterMove += a.Unicode;
+                        }
+                        else if (monsterMove.Length > 0)
+                        {
+                            monsterMove = monsterMove.Remove(monsterMove.Length - 1);
+                        }
+                        break;
+                    case 4: //Range
+                        if (a.Unicode != "\b")
+                        {
+                            range += a.Unicode;
+                        }
+                        else if (range.Length > 0)
+                        {
+                            range = range.Remove(range.Length - 1);
+                        }
+                        break;
+                    case 5: //Combo
+                        if (a.Unicode != "\b")
+                        {
+                            attackCombo += a.Unicode;
+                        }
+                        else if (attackCombo.Length > 0)
+                        {
+                            attackCombo = attackCombo.Remove(attackCombo.Length - 1);
+                        }
                         break;
                 }
 
@@ -1703,7 +1737,8 @@ namespace TripOverTime.EngineNamespace
 
             if (complete)
             {
-                m = new Monster(null, name, pos, new Life(life), attack, monsterMove, range, attackCombo);
+                name = name.Replace("\r", "");
+                m = new Monster(null, name, pos, new Life(Convert.ToUInt16(life)), Convert.ToUInt16(attack), Convert.ToSingle(monsterMove), Convert.ToSingle(range), attackCombo);
             }
 
             window.TextEntered -= tEvent;

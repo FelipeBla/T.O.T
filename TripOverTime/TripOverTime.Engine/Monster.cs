@@ -48,10 +48,11 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = new Attack(context, this, attack, attackCombo);
-            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
+            if (_context == null) _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
+            else _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
-            _monsterMove = monsterMove;
+            _monsterMove = monsterMove / 100;
             _range = range + 0.2f;
             _attackCombo = attackCombo;
             _context2 = context;
@@ -60,7 +61,8 @@ namespace TripOverTime.EngineNamespace
             _life2 = life;
             _isAlive2 = true;
             _attack2 = new Attack(context, this, attack);
-            _sprite2 = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
+            if (_context == null) _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
+            else _sprite2 = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw2 = _sprite.GetSprite.TextureRect.Width;
             ph2 = _sprite.GetSprite.TextureRect.Height;
             _monsterMove2 = monsterMove;
