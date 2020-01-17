@@ -96,6 +96,12 @@ namespace TripOverTime.EngineNamespace
                 return -1;
             }
 
+            //Items
+            foreach (Items i in _game.GetItems)
+            {
+                i.BonusPoint();
+            }
+
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {

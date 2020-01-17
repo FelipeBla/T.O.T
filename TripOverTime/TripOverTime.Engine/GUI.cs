@@ -18,8 +18,10 @@ namespace TripOverTime.EngineNamespace
         private SFML.System.Vector2f _moveTheMapOf;
         private SFML.System.Vector2f _moveTheMapOf2;
         SFML.Graphics.Sprite _hpBar;
+        SFML.Graphics.Sprite _hudHeart;
         SFML.Graphics.Sprite _rect1;
         Texture _lifebarTexture;
+        Texture _hudHeartTexture;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
         static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
         static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
@@ -208,6 +210,22 @@ namespace TripOverTime.EngineNamespace
             _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
             _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
 
+            // bonusHeart
+            foreach (Items i in _context.GetGame.GetItems)
+            {
+                if (i.IsValid)
+                {
+                    _hudHeartTexture = new Texture(_context.GetGame.GetMapObject.GetBonusHeart);
+                    if (_hudHeartTexture == null) throw new Exception("Texture null!");
+
+                    _hudHeart = new SFML.Graphics.Sprite(_hudHeartTexture);
+                    if (_hudHeart == null) throw new Exception("Sprite null!");
+
+                    _hudHeart.TextureRect = new IntRect(new SFML.System.Vector2i(/*(int)i.Position.X * 128, (int)i.Position.Y * -128*/3,3), new SFML.System.Vector2i((int)_hudHeartTexture.Size.X - ((int)_hudHeartTexture.Size.X / 100), (int)_lifebarTexture.Size.Y));
+                    _window.Draw(_hudHeart);
+                }
+            }
+
             // Display
             _window.Display();
 
@@ -236,8 +254,6 @@ namespace TripOverTime.EngineNamespace
             _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
             
-            
-
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
             foreach (KeyValuePair<Position, Sprite> s in map)
@@ -519,7 +535,7 @@ namespace TripOverTime.EngineNamespace
         }
 
         internal SFML.Window.Keyboard.Key AttackAction2
-        {
+        { 
             get { return _AttackAction2; }
             set { _AttackAction2 = value; }
         }

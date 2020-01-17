@@ -44,6 +44,7 @@ namespace TripOverTime.EngineNamespace
         int _attackSpeed;
         int _attackSpeed2;
         float _attackRange;
+        string _imgPath;
 
         internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
         {
@@ -56,6 +57,7 @@ namespace TripOverTime.EngineNamespace
             _isJumping = false;
             _isAttack = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
+            _imgPath = imgPath;
             _orientation = "right";
 
             _attackSpeed = 1;
@@ -83,7 +85,7 @@ namespace TripOverTime.EngineNamespace
             _orientation = "right";
 
             _attackSpeed = 1;
-            _attackRange = 1.0f; // En block
+            _attackRange = 2.0f; // En block
 
             pw = 128;
             ph = 128;

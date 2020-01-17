@@ -12,6 +12,7 @@ namespace TripOverTime.EngineNamespace
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
+        string _bonusHeart = "..\\..\\..\\..\\Assets\\HUD\\hudHeart_full.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
@@ -145,6 +146,29 @@ namespace TripOverTime.EngineNamespace
             
         }
 
+        internal List<Items> GenerateItems()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get items
+            // name x y hp
+            string[] strItems = StringBetweenString(text, "ITEMS", "ITEMSEND").Split("\n");
+            List<Items> items = new List<Items>();
+
+            foreach (string s in strItems)
+            {
+                string[] str = s.Split(" ");
+
+                items.Add(new Items(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2]))));
+
+            }
+            return items;
+        }
+
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach(Sprite spr in _sprites)
@@ -191,6 +215,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
+        internal string GetBonusHeart
+        {
+            get => _bonusHeart;
+        }
+        
 
         internal Position GetEndPosition
         {
