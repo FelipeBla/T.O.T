@@ -20,7 +20,7 @@ namespace TripOverTime.EngineNamespace
         readonly String _name;
         readonly String _name2;
         Position _position;
-        Position _position2;
+        Position2 _position2;
         Life _life;
         Life _life2;
         bool _isAlive;
@@ -32,15 +32,16 @@ namespace TripOverTime.EngineNamespace
         bool _ismoving;
         bool _ismoving2;
         Position _origin;
-        Position _origin2;
+        Position2 _origin2;
         string _orientation;
         string _orientation2;
         float _monsterMove;
         float _monsterMove2;
         float _range;
+        float _range2;
         string _attackCombo;
 
-        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
+        internal Monster(Game context, String name, Position position, Position2 position2, Life life, ushort attack, float monsterMove, float range, string attackCombo)
         {
             _context = context;
             _name = name;
@@ -53,10 +54,11 @@ namespace TripOverTime.EngineNamespace
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove;
             _range = range + 0.2f;
+            _range2 = range + 0.2f;
             _attackCombo = attackCombo;
             _context2 = context;
             _name2 = name;
-            _position2 = position;
+            _position2 = position2;
             _life2 = life;
             _isAlive2 = true;
             _attack2 = new Attack(context, this, attack);
@@ -97,23 +99,23 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove2()
         {
-            Console.WriteLine("Monster position: [ " + _position2.X + " ; " + _position2.Y + " ] Orientation: " + _orientation2);
+            Console.WriteLine("Monster position: [ " + _position2.X2 + " ; " + _position2.Y2 + " ] Orientation: " + _orientation2);
             if (!_ismoving2)
             {
                 Sprite s = null;
 
                 if (_orientation2 == "left")
                 {
-                    if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_position2.X - _monsterMove2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position2.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 - _monsterMove2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         if (!s.IsSolid)
-                            _position2.X -= _monsterMove2;
+                            _position2.X2 -= _monsterMove2;
                 }
                 else
                 {
-                    if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position((float)Math.Round(_position2.X + _monsterMove2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position2.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 + _monsterMove2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                     {
-                        if (!s.IsSolid)
-                            _position2.X += _monsterMove2;
+                        if (!s.IsSolid2)
+                            _position2.X2 += _monsterMove2;
                     }
                 }
 
@@ -131,11 +133,22 @@ namespace TripOverTime.EngineNamespace
             _attack.AttackMonster();
         }
 
+        internal void MonsterAttack2()
+        {
+            _attack2.AttackMonster2();
+        }
+
 
         internal void MonsterDead()
         {
             _sprite.MonsterDeadAnimation(this);
             _sprite.IsSolid = false;
+        }
+
+        internal void MonsterDead2()
+        {
+            _sprite2.MonsterDeadAnimation(this);
+            _sprite2.IsSolid2 = false;
         }
         internal void Gravity()
         {
@@ -151,14 +164,14 @@ namespace TripOverTime.EngineNamespace
         }
         internal void Gravity2()
         {
-            if (_ismoving2 && _origin2 != null && _position2.Y <= _origin.Y + JUMPING_LIMIT) // Jump
+            if (_ismoving2 && _origin2 != null && _position2.Y2 <= _origin2.Y2 + JUMPING_LIMIT) // Jump
             {
-                _position2.Y += JUMPING_SPEED;
+                _position2.Y2 += JUMPING_SPEED;
             }
             else // Fall
             {
-                _origin = null;
-                _position2.Y -= GRAVITY_SPEED;
+                _origin2 = null;
+                _position2.Y2 -= GRAVITY_SPEED;
             }
         }
 
@@ -173,12 +186,12 @@ namespace TripOverTime.EngineNamespace
         }
         internal void RoundY2()
         {
-            _position2.Y = (int)Math.Round(_position2.Y);
+            _position2.Y2 = (int)Math.Round(_position2.Y2);
         }
 
         internal void RoundX2() // To recalibrate X (because precision of float)
         {
-            _position2.X = (float)Math.Round(_position2.X, 2);
+            _position2.X2 = (float)Math.Round(_position2.X2, 2);
         }
         private Game context
         {
@@ -194,7 +207,7 @@ namespace TripOverTime.EngineNamespace
             set { _position = value; }
         }
 
-        internal Position Position2
+        internal Position2 Position2
         {
             get => _position2;
             set { _position2 = value; }
@@ -206,7 +219,11 @@ namespace TripOverTime.EngineNamespace
             get => _orientation;
             set { _orientation = value; }
         }
-
+        internal string Orientation2
+        {
+            get => _orientation2;
+            set { _orientation2 = value; }
+        }
 
         internal Life life
         {
@@ -270,6 +287,11 @@ namespace TripOverTime.EngineNamespace
         internal float Range
         {
             get => _range;
+        }
+
+        internal float Range2
+        {
+            get => _range2;
         }
 
         internal string AttackCombo

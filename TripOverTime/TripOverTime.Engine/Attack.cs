@@ -16,6 +16,13 @@ namespace TripOverTime.EngineNamespace
         string _schemaAttack;
         int _incrementationAttack;
 
+        Game _context2;
+        Monster _monster2;
+        ushort _attack2;
+        Stopwatch _timer2;
+        string _schemaAttack2;
+        int _incrementationAttack2;
+
         internal Attack(Game context, Monster monster, ushort attack, string attackCombo = "A")
         {
             _context = context;
@@ -64,14 +71,59 @@ namespace TripOverTime.EngineNamespace
             }
 
         }
+
+        internal void AttackMonster2()
+        {
+            if (_incrementationAttack2 == _schemaAttack2.Length - 1)
+            {
+                _incrementationAttack2 = 0;
+            }
+
+            Console.WriteLine(_schemaAttack2[_incrementationAttack2]);
+            if (_schemaAttack2[_incrementationAttack2] == 'S')
+            {
+                SlidingAttack2();
+                if (_timer2.ElapsedMilliseconds >= 700)
+                {
+                    _context2.GetPlayer2.GetLife2.DecreasedPoint2(_attack2);
+                    _context2.GetPlayer2.HurtPlayer2 = true;
+                    HurtPlayer2();
+                    _incrementationAttack2++;
+                    _timer2.Restart();
+                }
+            }
+            else if (_schemaAttack2[_incrementationAttack2] == 'A')
+            {
+                NormalAttack2();
+
+                if (_timer2.ElapsedMilliseconds >= 910 && _monster2.Position2.X2 + _monster2.Range2 > _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.X2 - _monster2.Range2 < _context2.GetPlayer2.RealPosition2.X2 && _context2.GetPlayer2.RealPosition2.Y2 == _monster2.Position2.Y2 && _monster2.isAlive2)
+                {
+                    _context2.GetPlayer2.GetLife2.DecreasedPoint2(_attack2);
+                    _context2.GetPlayer2.HurtPlayer2 = true;
+                    HurtPlayer2();
+                    _incrementationAttack2++;
+                    _timer2.Restart();
+                }
+            }
+
+        }
         internal void NormalAttack()
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(12, "attack", _monster);
         }
 
+        internal void NormalAttack2()
+        {
+            _monster2.GetMonsterSprite2.MonsterAttackAnimation2(12, "attack", _monster2);
+        }
+
         internal void SlidingAttack()
         {
             _monster.GetMonsterSprite.MonsterAttackAnimation(6, "sliding", _monster);
+        }
+        internal void SlidingAttack2()
+        {
+            _monster2.GetMonsterSprite2.MonsterAttackAnimation2(6, "sliding", _monster2);
         }
 
         internal void HurtPlayer()

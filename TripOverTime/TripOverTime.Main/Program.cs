@@ -198,6 +198,19 @@ namespace TripOverTime.Main
                                 }
                             }
                         }
+                        if (engine.GetGame2.GetPlayer2.KilledBy2 == "Trap")
+                        {
+                            while (engine.GetGame2.GetPlayer2.GetLife2.GetCurrentPoint() > 0)
+                            {
+                                engine.GetGame2.GetPlayer2.GetLife2.DecreasedPoint(1);
+                                if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                                {
+                                    //GUI
+                                    engine.GetGUI.ShowMapMultiplayer();
+                                    spGui.Restart();
+                                }
+                            }
+                        }
 
                         engine.DieMenu();
                     }

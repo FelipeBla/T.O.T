@@ -18,14 +18,14 @@ namespace TripOverTime.EngineNamespace
         Game _context;
 
         //multipayer
-        Dictionary<Position, Sprite> _map2;
+        Dictionary<Position2, Sprite> _map2;
         List<Sprite> _sprites2;
         string _backgroundPath2;
         string _lifebarPath2 = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
         string _mapPath2;
-        Position _limitMin2;
-        Position _limitMax2;
-        List<Position> _checkpointPosition2;
+        Position2 _limitMin2;
+        Position2 _limitMax2;
+        List<Position2> _checkpointPosition2;
         Game _context2;
 
         internal Map(Game context, string mapPath)
@@ -40,10 +40,10 @@ namespace TripOverTime.EngineNamespace
             _checkpointPosition = new List<Position>();
 
             _context2 = context;
-            _map2 = new Dictionary<Position, Sprite>();
+            _map2 = new Dictionary<Position2, Sprite>();
             _sprites2 = new List<Sprite>();
             _mapPath2 = mapPath;
-            _checkpointPosition2 = new List<Position>();
+            _checkpointPosition2 = new List<Position2>();
 
             GenerateMap();
             //GenerateMap2();
@@ -87,9 +87,9 @@ namespace TripOverTime.EngineNamespace
             // Get limits2
             string[] limits2 = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
             string[] limitMin2 = limits[0].Split(" ");
-            _limitMin2 = new Position(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
+            _limitMin2 = new Position2(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
             string[] limitMa2x = limits[1].Split(" ");
-            _limitMax2 = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
+            _limitMax2 = new Position2(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
@@ -119,6 +119,7 @@ namespace TripOverTime.EngineNamespace
                 for(int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
                 {
                     _map.Add(new Position(x, y), RetrieveSpriteWithId( mapParsed[indexTemp].Substring(x, 1) ));
+                    _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
                 }
                 indexTemp++;
             }
@@ -192,11 +193,12 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
+                
             }
 
             return monsters;
-        } 
+        }
 
         private Sprite RetrieveSpriteWithId(string strId)
         {
@@ -221,7 +223,7 @@ namespace TripOverTime.EngineNamespace
             get => _map;
         }
 
-        internal Dictionary<Position, Sprite> GetMap2
+        internal Dictionary<Position2, Sprite> GetMap2
         {
             get => _map2;
         }
@@ -231,7 +233,7 @@ namespace TripOverTime.EngineNamespace
             get => _limitMax;
         }
 
-        internal Position GetLimitMax2
+        internal Position2 GetLimitMax2
         {
             get => _limitMax2;
         }
@@ -240,7 +242,7 @@ namespace TripOverTime.EngineNamespace
             get => _limitMin;
         }
 
-        internal Position GetLimitMin2
+        internal Position2 GetLimitMin2
         {
             get => _limitMin2;
         }
@@ -266,12 +268,24 @@ namespace TripOverTime.EngineNamespace
                 throw new InvalidOperationException("END NOT FOUND!");
             }
         }
+        internal Position2 GetEndPosition2
+        {
+            get
+            {
+                foreach (KeyValuePair<Position2, Sprite> s in _map2)
+                {
+                    if (s.Value.IsEnd2) return s.Key;
+                }
+
+                throw new InvalidOperationException("END NOT FOUND!");
+            }
+        }
 
         internal List<Position> GetCheckpointPosition
         {
             get => _checkpointPosition;
         }
-        internal List<Position> GetCheckpointPosition2
+        internal List<Position2> GetCheckpointPosition2
         {
             get => _checkpointPosition2;
         }

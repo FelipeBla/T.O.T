@@ -29,6 +29,11 @@ namespace TripOverTime.EngineNamespace
             get { return _currentPoint; }
             internal set => _currentPoint = value;
         }
+        public ushort CurrentPoint2
+        {
+            get { return _currentPoint2; }
+            internal set => _currentPoint2 = value;
+        }
 
         public ushort MaxPoint
         {
@@ -106,6 +111,20 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 _currentPoint -= damage;
+            }
+        }
+
+        public void DecreasedPoint2(ushort damage)
+        {
+            if (damage < 0) return;
+            if (damage >= _currentPoint2)
+            {
+                _currentPoint2 = 0;
+                Console.WriteLine("The player is dead.");
+            }
+            else
+            {
+                _currentPoint2 -= damage;
             }
         }
 

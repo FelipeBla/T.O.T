@@ -91,11 +91,13 @@ namespace TripOverTime.EngineNamespace
             {
                 if (_isSolid == true) throw new Exception("Checkpoint is solid!");
                 _isCheckpoint = true;
+                _isCheckpoint2 = true;
             }
             else if (_name == "END")
             {
                 if (_isSolid == true) throw new Exception("Checkpoint is solid!");
                 _isEnd = true;
+                _isEnd2 = true;
             }
 
             //For GUI(texture, srpite)
@@ -529,6 +531,40 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void AttackAnimation2(int nbrAction, string action, int time)
+        {
+            if (_animTimer2.ElapsedMilliseconds >= time)
+            {
+
+                if (_incrementationAttack2 == nbrAction)
+                {
+                    _incrementationAttack2 = 1;
+
+                    if (_context2.GetGame2.GetPlayer2.IsAttack2) { _context2.GetGame2.GetPlayer2.IsAttack2 = false; }
+                }
+                else
+                {
+                    _incrementationAttack2++;
+                }
+
+                string numberTexture2 = action + _incrementationAttack2;
+                _sprite2.Texture = _playerTexture2[numberTexture2];
+                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right") //Right
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(0, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (_context2.GetGame2.GetPlayer2.Orientation2 == "left")//Left
+                {
+                    _sprite2.Origin = new SFML.System.Vector2f(_playerTexture2[numberTexture2].Size.X / 2, 0);
+                    _sprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+                _animTimer2.Restart();
+
+            }
+        }
+
+
         internal void MonsterMoveAnimation(Monster monster)
         {
             if (monster.IsMoving)
@@ -640,6 +676,28 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal void MonsterAttackAnimation2(int nbrAction, string action, Monster monster)
+        {
+            if (_animTimer2.ElapsedMilliseconds >= 50)
+            {
+
+                if (_monsterAttack2 >= nbrAction)
+                {
+                    _monsterAttack2 = 1;
+                }
+                else
+                {
+                    _monsterAttack2++;
+                }
+
+                string numberTexture2 = action + _monsterAttack2;
+                _sprite2.Texture = _monsterTexture2[numberTexture2];
+
+                _animTimer2.Restart();
+
+            }
+        }
+
         internal void MonsterDeadAnimation(Monster m)
         {
                 int nbrAction = 15;
@@ -656,6 +714,25 @@ namespace TripOverTime.EngineNamespace
                     _monsterDead++;
                 }
                 _animTimer.Restart();
+
+            }
+        }
+        internal void MonsterDeadAnimation2(Monster m)
+        {
+            int nbrAction2 = 15;
+            string action2 = "dead";
+
+            if (_animTimer2.ElapsedMilliseconds >= 40)
+            {
+
+                string numberTexture2 = action2 + _monsterDead2;
+                //_sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
+                _sprite2.Texture = _monsterTexture2[numberTexture2];
+                if (_monsterDead2 != nbrAction2)
+                {
+                    _monsterDead2++;
+                }
+                _animTimer2.Restart();
 
             }
         }
@@ -690,6 +767,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _isEnd;
         }
+        internal bool IsEnd2
+        {
+            get => _isEnd2;
+        }
         internal bool IsCheckpoint
         {
             get => _isCheckpoint;
@@ -704,6 +785,11 @@ namespace TripOverTime.EngineNamespace
             get => _isDangerous;
             set => _isDangerous = value;
         }
-        
+        internal bool IsDangerous2
+        {
+            get => _isDangerous2;
+            set => _isDangerous2 = value;
+        }
+
     }
 }
