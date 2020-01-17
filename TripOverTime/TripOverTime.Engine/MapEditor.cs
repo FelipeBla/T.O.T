@@ -1039,7 +1039,7 @@ namespace TripOverTime.EngineNamespace
             window.KeyPressed -= _eventsKey[4];
 
             // EDITORRRRRR
-
+            ShowMap(window);
 
             // Add "AIR" on null sprite position
             // Save
@@ -1759,6 +1759,14 @@ namespace TripOverTime.EngineNamespace
             if (background == null) throw new Exception("Sprite null!");
 
             window.Draw(background);
+        }
+
+        private void ShowMap(RenderWindow window)
+        {
+            window.Clear();
+            
+
+
         }
 
     }
