@@ -2,6 +2,7 @@
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TripOverTime.EngineNamespace
@@ -130,9 +131,7 @@ namespace TripOverTime.EngineNamespace
             } while (again);
 
             bgPath = bgPath.Remove(0, 1);
-
-            //Console.WriteLine(bgPath);
-            //Console.WriteLine(@"..\..\..\..\Assets\Backgrounds\game_background_1.png");
+            bgPath = bgPath.Replace("\r", "");
 
             window.TextEntered -= _eventsText[0];
             window.KeyPressed -= _eventsKey[0];
@@ -212,7 +211,7 @@ namespace TripOverTime.EngineNamespace
             } while (again);
 
             playerPath = playerPath.Remove(0, 1);
-            //Console.WriteLine(playerPath);
+            playerPath = playerPath.Replace("\r", "");
 
             window.TextEntered -= _eventsText[1];
             window.KeyPressed -= _eventsKey[1];
@@ -1039,7 +1038,7 @@ namespace TripOverTime.EngineNamespace
             window.KeyPressed -= _eventsKey[4];
 
             // EDITORRRRRR
-            ShowMap(window);
+            ShowMap(window, bgPath, playerPath, playerPos, posMax, posMin, playerLife, playerAtk, blocks, monsters);
 
             // Add "AIR" on null sprite position
             // Save
@@ -1748,11 +1747,11 @@ namespace TripOverTime.EngineNamespace
             return m;
         }
 
-        private void DisplayBackground(RenderWindow window)
+        private void DisplayBackground(RenderWindow window, string bgPath = @"..\..\..\..\Assets\Backgrounds\time-travel-background.png")
         {
             window.Clear();
 
-            Texture backgroundTexture = new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png");
+            Texture backgroundTexture = new Texture(bgPath);
             if (backgroundTexture == null) throw new Exception("Texture null!");
 
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(backgroundTexture);
@@ -1761,13 +1760,74 @@ namespace TripOverTime.EngineNamespace
             window.Draw(background);
         }
 
-        private void ShowMap(RenderWindow window)
+        private void ShowMap(RenderWindow window,
+            string bgPath,
+            string playerPath,
+            Position playerPos,
+            Position posMax,
+            Position posMin,
+            ushort playerLife,
+            ushort playerAtk,
+            List<Sprite> blocks,
+            List<Monster> monsters)
         {
             window.Clear();
-            
 
+
+
+            Dictionary<Position, Sprite> map = new Dictionary<Position, Sprite>();
+            Player player = new Player(null, "Player", playerPos, new Life(playerLife), playerAtk, playerPath);
+            Position posActual = new Position(0, 0);
+            bool showMapAgain = true;
+            Stopwatch spTime = new Stopwatch();
+            spTime.Start();
+
+            player.GetPlayerSprite.GetSprite.Color = new Color(player.GetPlayerSprite.GetSprite.Color.R, player.GetPlayerSprite.GetSprite.Color.G, player.GetPlayerSprite.GetSprite.Color.B, 128); // Transparency
+
+            EventHandler<KeyEventArgs> events = (s, a) =>
+            {
+                if (a.Code == Keyboard.Key.Escape)
+                {
+                    showMapAgain = false;
+                }
+            };
+
+            window.KeyPressed += events;
+
+            do
+            {
+                // Affichage
+                if (spTime.ElapsedMilliseconds >= 1000/60)
+                {
+                    // Background
+                    DisplayBackground(window, bgPath);
+
+                    // Player
+                    player.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(player.RealPosition.X * 128, window.Size.Y + player.RealPosition.Y * -128 - 65);
+                    window.Draw(player.GetPlayerSprite.GetSprite);
+
+                    // Actual Pos / block
+
+
+                    // All blocks
+
+
+
+
+                    // Events and Display
+
+                    window.DispatchEvents();
+
+                    window.Display();
+
+                    spTime.Restart();
+                }
+
+                //System.Threading.Thread.Sleep(1);
+            } while (showMapAgain);
+
+            window.KeyPressed -= events;
 
         }
-
     }
 }

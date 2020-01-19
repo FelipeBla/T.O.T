@@ -45,7 +45,7 @@ namespace TripOverTime.EngineNamespace
         int _attackSpeed2;
         float _attackRange;
 
-        internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
+        internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath)
         {
             _context = context;
             _name = name;
@@ -55,7 +55,10 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _isAttack = false;
-            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            if (context != null)
+                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+            else
+                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, null, false, true);
             _orientation = "right";
 
             _attackSpeed = 1;
@@ -66,7 +69,7 @@ namespace TripOverTime.EngineNamespace
 
 
             //Player 2
-            pw = 128;
+            /*pw = 128;
             ph = 128;
 
             _monsterKillName = "void";
@@ -91,7 +94,7 @@ namespace TripOverTime.EngineNamespace
             _monsterKillName = "void";
 
             _attackTimer2 = new Stopwatch();
-            _attackTimer2.Start();
+            _attackTimer2.Start();*/
         }
 
         internal void Jump()
