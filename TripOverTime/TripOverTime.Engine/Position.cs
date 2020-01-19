@@ -21,12 +21,7 @@ namespace TripOverTime.EngineNamespace
             _x = x;
             _y = y;
         }
-        public void Position2(float x = 0, float y = 0)
-        {
-            _x2 = x;
-            _y2 = y;
-            return;
-        }
+
         public float X
         {
             get => _x;

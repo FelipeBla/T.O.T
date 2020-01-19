@@ -54,7 +54,7 @@ namespace TripOverTime.EngineNamespace
         float _attackRange;
         float _attackRange2;
 
-        internal Player(Game context, String name, Position position, Life life, ushort attack, string imgPath)
+        internal Player(Game context, String name, Position position, Position2 position2, Life life, ushort attack, string imgPath)
         {
             _context = context;
             _name = name;
@@ -83,7 +83,7 @@ namespace TripOverTime.EngineNamespace
             _monsterKillName2 = "void";
             _context2 = context;
             _name2 = name;
-            _position2 = new Position2(0, 3);
+            _position2 = position2;
             _realPosition2 = new Position2(_position2.X2, _position2.Y2);
             _life2 = life;
             _attack2 = attack;
@@ -120,6 +120,8 @@ namespace TripOverTime.EngineNamespace
                 _origin2 = new Position2(_realPosition2.X2, _realPosition2.Y2);
                 _realPosition2.Y2 += JUMPING_SPEED;
                 _position2.Y2 += JUMPING_SPEED;
+                _realPosition2.Y2 += 1;
+                _position2.Y2 += 1;
                 _isJumping2 = true;
 
                 _sprite2.JumpAnimation2();
@@ -148,7 +150,7 @@ namespace TripOverTime.EngineNamespace
             {
                 _realPosition2.Y2 += JUMPING_SPEED;
                 _position2.Y2 += JUMPING_SPEED;
-                _sprite2.JumpAnimation2();
+                _sprite2.JumpAnimation();
             }
             else // Fall
             {
