@@ -454,7 +454,7 @@ namespace TripOverTime.EngineNamespace
             return 1;
         }
 
-        public void WinMenu()
+        public bool WinMenu()
         {
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
@@ -483,12 +483,22 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
 
             bool quit = false;
-
+            bool loadNextLevel = false;
             while(!quit)
             {
                 Joystick.Update();
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+                {
                     quit = true;
+                    loadNextLevel = true;
+                }
+
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) /*|| (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0))*/) //TODO touche de la manette pour quitter
+                {
+                    loadNextLevel = false;
+                    quit = true;
+                }
+
                 System.Threading.Thread.Sleep(1);
             }
 
@@ -499,6 +509,8 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
             _game = null;
+
+            return loadNextLevel;
         }
 
         public void DieMenu()

@@ -11,13 +11,28 @@ namespace TripOverTime.Main
 {
     class Program
     {
+        /// <summary>
+        /// Variable stockant le choix du menu principal par l'utilisateur : 1P, 2P, Map editor ou Quit
+        /// </summary>
+        short choose = -2;
+        /// <summary> 
+        /// Nom en string de la map sélectionnée par l'utilisateur
+        /// </summary>
+        string chooseMap = "null";
         static void Main(string[] args) //fonction principale
         {
-            RunAgain();
+            Program program = new Program();
+            program.RunAgain();
+            
+
         }
 
-        private static bool RunAgain() //fonction du jeu
-        {
+        /// <summary>
+        /// Fonction gérant l'intégralité du jeu : Du Menu, à la gestiion de la mort du joueur
+        /// </summary>
+        /// <returns>Return uniquement quand le jeu est terminé</returns>
+        private bool RunAgain() //fonction du jeu
+        {            
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
@@ -43,34 +58,37 @@ namespace TripOverTime.Main
             //Menu
             while (!engine.Close && window.IsOpen) //GAMELOOP MASTER
             {
-                System.Threading.Thread.Sleep(200); // Evite certains bug
-                short choose = -2;
+                System.Threading.Thread.Sleep(200); // Evite certains bug                
                 engine.GetMenu.StartMainMenu();
                 spGame.Start();
 
-                do
+                while (choose == -2) 
                 {
                     if (spGame.ElapsedMilliseconds >= 1000 / tps)
                     {
                         choose = engine.GetMenu.RunMainMenu();
                         spGame.Restart();
                     }
-                } while (choose == -2);
+                } 
 
 
                 if (choose == 0) //Lauch GAME 1P
                 {
-                    // Choose Map
-                    string chooseMap = "null";
-                    engine.GetMenu.InitMapMenu();
-                    do
+                    if(chooseMap == "null")
                     {
-                        if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                        // Choose Map                    
+                        engine.GetMenu.InitMapMenu();
+
+                        while (chooseMap == "null")
                         {
-                            chooseMap = engine.GetMenu.ChooseMapMenu();
-                            spGame.Restart();
+                            if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                            {
+                                chooseMap = engine.GetMenu.ChooseMapMenu();
+                                spGame.Restart();
+                            }
                         }
-                    } while (chooseMap == "null");
+                    }
+
                     Console.WriteLine(chooseMap);
                     if (chooseMap == "quit")
                     {
@@ -100,11 +118,21 @@ namespace TripOverTime.Main
                             spGui.Restart();
                         }
                     }
+
                     if (result == 0)
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-                        engine.WinMenu();
+                        bool loadNextLevel = engine.WinMenu();
+                        if (!loadNextLevel)
+                        {
+                            choose = -2;
+                            chooseMap = "null";
+                        }
+                        else
+                        {
+                            chooseMap = engine.GetMenu.GetNextLevel();
+                        }
                     }
 
                     else if (result == -1)
@@ -137,14 +165,15 @@ namespace TripOverTime.Main
                 {
                     string chooseMap = "null";
                     engine.GetMenu.InitMapMenu();
-                    do
+                    while (chooseMap == "null")
                     {
                         if (spGame.ElapsedMilliseconds >= 1000 / tps)
                         {
                             chooseMap = engine.GetMenu.ChooseMapMenu();
                             spGame.Restart();
                         }
-                    } while (chooseMap == "null");
+                    }
+
                     Console.WriteLine(chooseMap);
                     if (chooseMap == "quit")
                     {
@@ -174,11 +203,21 @@ namespace TripOverTime.Main
                             spGui.Restart();
                         }
                     }
+
                     if (result == 0)
                     {
                         //WIN
                         Console.WriteLine("YOU WIN!");
-                        engine.WinMenu();
+                        bool loadNextLevel = engine.WinMenu();
+                        if (!loadNextLevel)
+                        {
+                            choose = -2;
+                            chooseMap = "null";
+                        }
+                        else
+                        {
+                            chooseMap = engine.GetMenu.GetNextLevel();
+                        }
                     }
                     else if (result == -1)
                     {

@@ -14,7 +14,7 @@ namespace TripOverTime.EngineNamespace
         const ushort MAX_LINES2 = 4;
 
         RenderWindow _window;
-        ushort _selected;
+        int _selected;
         Text[] _lines;
         Text[] _lines2;
         SFML.Graphics.Sprite _background;
@@ -241,6 +241,22 @@ namespace TripOverTime.EngineNamespace
             int firstStringPosition = original.IndexOf(str1);
             int secondStringPosition = original.IndexOf(str2);
             return original.Substring(firstStringPosition + str1.Length, secondStringPosition - str1.Length);
+        }
+        public string GetNextLevel()
+        {
+            _selected++;
+
+            _maps = Directory.GetFiles(@"..\..\..\..\Maps\", "*.totmap");
+            if (_selected == _maps.Length) // Donc on a plus de niveau suivant 
+            {
+                //On retourne "null"
+                _selected = -1;
+                return "null";
+            }
+            else
+            {
+                return _maps[_selected];
+            }
         }
     }
 }
