@@ -120,8 +120,6 @@ namespace TripOverTime.EngineNamespace
                 _origin2 = new Position2(_realPosition2.X2, _realPosition2.Y2);
                 _realPosition2.Y2 += JUMPING_SPEED;
                 _position2.Y2 += JUMPING_SPEED;
-                _realPosition2.Y2 += 1;
-                _position2.Y2 += 1;
                 _isJumping2 = true;
 
                 _sprite2.JumpAnimation2();

@@ -359,8 +359,8 @@ namespace TripOverTime.EngineNamespace
 
 
             //-------------------------------------------------------player 2
-            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
+            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
 
 
             if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
