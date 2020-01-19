@@ -21,12 +21,12 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         string _mapPath2;
 
-        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, ushort lifePoint, ushort atk)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk)
         {
             _mapPath = mapPath;
             _context = context;
             _map = new Map(this, mapPath);
-            _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+            _player = new Player(this, "player", startPosition, startPosition2, new Life(lifePoint), atk, playerPath);
             _monsters = _map.GenerateMonsters();
             _boss = _map.GenerateBoss();
             _timer = new Stopwatch();
@@ -35,7 +35,7 @@ namespace TripOverTime.EngineNamespace
             _mapPath2 = mapPath;
             _context2 = context;
             _map2 = new Map(this, mapPath);
-            _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+            _player2 = new Player(this, "player", startPosition, startPosition2, new Life(lifePoint), atk, playerPath);
             _monsters2 = _map.GenerateMonsters();
             _timer2 = new Stopwatch();
             _timer2.Start();
