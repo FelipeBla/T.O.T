@@ -9,10 +9,10 @@ namespace TripOverTime.EngineNamespace
     {
         Dictionary<Position, Sprite> _map;
         Dictionary<Position, Sprite> _map2;
+        List<Position> _heart;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
-        string _bonusHeart = "..\\..\\..\\..\\Assets\\HUD\\hudHeart_full.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
@@ -27,6 +27,7 @@ namespace TripOverTime.EngineNamespace
             _context = context;
             _map = new Dictionary<Position, Sprite>();
             _map2 = new Dictionary<Position, Sprite>();
+            _heart = new List<Position>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -76,7 +77,7 @@ namespace TripOverTime.EngineNamespace
                 string s = (string)blocks[i];
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
-                if (str.Length > 4)
+                if (str[1] == "TRAP")
                 {
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
@@ -89,6 +90,16 @@ namespace TripOverTime.EngineNamespace
 
             // Get map
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
+            for (int y = 0; y < mapParsed.Length; y++)
+            {
+                for(int x = 0; x < mapParsed[y].Length; x++)
+                {
+                    if (mapParsed[y][x] == 'H')
+                    {
+                        _heart.Add(new Position((float) x, (float) y));
+                    }
+                }
+            }
 
             //Boucle Y
             int indexTemp = 0;
@@ -146,29 +157,6 @@ namespace TripOverTime.EngineNamespace
             
         }
 
-        internal List<Items> GenerateItems()
-        {
-            //Verify if it's a map file
-            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
-            // Open map file
-            string text = File.ReadAllText(_mapPath);
-            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
-
-            // Get items
-            // name x y hp
-            string[] strItems = StringBetweenString(text, "ITEMS", "ITEMSEND").Split("\n");
-            List<Items> items = new List<Items>();
-
-            foreach (string s in strItems)
-            {
-                string[] str = s.Split(" ");
-
-                items.Add(new Items(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2]))));
-
-            }
-            return items;
-        }
-
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach(Sprite spr in _sprites)
@@ -215,10 +203,6 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
-        internal string GetBonusHeart
-        {
-            get => _bonusHeart;
-        }
         
 
         internal Position GetEndPosition
@@ -241,6 +225,11 @@ namespace TripOverTime.EngineNamespace
         internal Game GetGame
         {
             get => _context;
+        }
+        internal List<Position> GetHeart
+        {
+            get => _heart;
+            set => _heart = value;
         }
     }
 }

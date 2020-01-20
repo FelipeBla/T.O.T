@@ -25,6 +25,8 @@ namespace TripOverTime.EngineNamespace
         Position _position2;
         Position _realPosition;
         Position _realPosition2;
+        int _incrementationHeal;
+        int _incrementationAttack;
         Life _life;
         ushort _attack;
         Sprite _sprite;
@@ -178,10 +180,22 @@ namespace TripOverTime.EngineNamespace
                     }
 
                     // Si il y a un monstre
-                    if (monsterToAttack != null)
+                    if (monsterToAttack != null && monsterToAttack.isAlive)
                     {
                         //Attack
                         monsterToAttack.life.DecreasedPoint(_attack);
+                        _incrementationHeal++;
+                        if (_incrementationHeal > 2)
+                        {
+                            _life.BonusPoint(1);
+                            _incrementationHeal = 0;
+                        }
+                        _incrementationAttack++;
+                        if (_incrementationAttack>1)
+                        {
+                            _attack++;
+                            _incrementationAttack = 0;
+                        }
                     }
                 }
                 _sprite.AttackAnimation(4,"attack", 100);

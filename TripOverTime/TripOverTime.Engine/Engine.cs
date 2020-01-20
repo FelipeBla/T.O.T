@@ -13,6 +13,7 @@ namespace TripOverTime.EngineNamespace
         bool CLOSE = false;
         Stopwatch _timer;
         Checkpoint _checkpoint;
+        List<Position> _verifHeal;
 
         SFML.Graphics.RenderWindow _window;
         Menu _menu;
@@ -31,6 +32,7 @@ namespace TripOverTime.EngineNamespace
             _globalFont = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _timer = new Stopwatch();
             _timer.Start();
+            _verifHeal = new List<Position>();
         }
 
         public void StartGame(string mapPath)
@@ -87,19 +89,37 @@ namespace TripOverTime.EngineNamespace
                 {
                     _game.GetPlayer.RoundY(); // Don't stuck player in ground
                 }
+                
             }
 
-            if(!_game.GetPlayer.IsAlive)
+            List<Position> heart = _game.GetMapObject.GetHeart;
+            foreach (Position position in heart)
+            {
+                if (_game.GetPlayer.Position.X == position.X)
+                {
+                    //Heal
+
+                    bool verif = true;
+                    foreach(Position position1 in _verifHeal)
+                    {
+                        if (position1.X == position.X)
+                        {
+                            verif = false;
+                        }
+                    }
+                    if (verif)
+                    {
+                        _game.GetPlayer.GetLife.BonusPoint(1);
+                        _verifHeal.Add(position);
+                    }
+                }
+            }
+
+            if (!_game.GetPlayer.IsAlive)
             {
                 //DIE
                 _game.GetPlayer.KilledBy = "Monster";
                 return -1;
-            }
-
-            //Items
-            foreach (Items i in _game.GetItems)
-            {
-                i.BonusPoint();
             }
 
             //Monsters move + Attack

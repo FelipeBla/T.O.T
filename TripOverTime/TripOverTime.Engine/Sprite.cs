@@ -14,6 +14,7 @@ namespace TripOverTime.EngineNamespace
         string _imgPath;
         bool _isSolid;
         bool _isDangerous;
+        bool _isHeal;
         bool _isCheckpoint;
         bool _isEnd;
         bool _isMonster;
