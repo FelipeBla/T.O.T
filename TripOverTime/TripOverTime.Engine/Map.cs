@@ -10,6 +10,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         Dictionary<Position, Sprite> _map2;
         List<Position> _heart;
+        List<Position> _star;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
@@ -28,6 +29,7 @@ namespace TripOverTime.EngineNamespace
             _map = new Dictionary<Position, Sprite>();
             _map2 = new Dictionary<Position, Sprite>();
             _heart = new List<Position>();
+            _star = new List<Position>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -97,6 +99,10 @@ namespace TripOverTime.EngineNamespace
                     if (mapParsed[y][x] == 'H')
                     {
                         _heart.Add(new Position((float) x, (float) y));
+                    }
+                    if(mapParsed[y][x] == 'S')
+                    {
+                        _star.Add(new Position((float)x, (float)y));
                     }
                 }
             }
@@ -230,6 +236,11 @@ namespace TripOverTime.EngineNamespace
         {
             get => _heart;
             set => _heart = value;
+        }
+        internal List<Position> GetStar
+        {
+            get => _star;
+            set => _star = value;
         }
     }
 }

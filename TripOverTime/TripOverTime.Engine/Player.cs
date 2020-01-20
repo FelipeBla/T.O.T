@@ -476,6 +476,7 @@ namespace TripOverTime.EngineNamespace
         internal ushort GetAttack
         {
             get => _attack;
+            set => _attack = value;
         }
         internal Sprite GetPlayerSprite
         {

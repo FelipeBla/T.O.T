@@ -92,12 +92,13 @@ namespace TripOverTime.EngineNamespace
                 
             }
 
+
+            //Heal
             List<Position> heart = _game.GetMapObject.GetHeart;
             foreach (Position position in heart)
             {
                 if (_game.GetPlayer.Position.X == position.X)
                 {
-                    //Heal
 
                     bool verif = true;
                     foreach(Position position1 in _verifHeal)
@@ -110,6 +111,29 @@ namespace TripOverTime.EngineNamespace
                     if (verif)
                     {
                         _game.GetPlayer.GetLife.BonusPoint(1);
+                        _verifHeal.Add(position);
+                    }
+                }
+            }
+
+            //strength
+            List<Position> star = _game.GetMapObject.GetStar;
+            foreach (Position position in star)
+            {
+                if (_game.GetPlayer.Position.X == position.X)
+                {
+
+                    bool verif = true;
+                    foreach (Position position1 in _verifHeal)
+                    {
+                        if (position1.X == position.X)
+                        {
+                            verif = false;
+                        }
+                    }
+                    if (verif)
+                    {
+                        _game.GetPlayer.GetAttack++;
                         _verifHeal.Add(position);
                     }
                 }
