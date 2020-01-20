@@ -3,6 +3,7 @@ using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace TripOverTime.EngineNamespace
@@ -92,6 +93,8 @@ namespace TripOverTime.EngineNamespace
 
             window.DispatchEvents();
 
+            selected = 0;
+
             do
             {
                 again = true;
@@ -162,7 +165,7 @@ namespace TripOverTime.EngineNamespace
                 bgPath = @"..\..\..\..\Assets\Backgrounds\game_background_1.png";
                 playerPath = @"..\..\..\..\Assets\Players\Knight\AllViking";
                 playerPos = new Position(0, 2);
-                posMax = new Position(15, 5);
+                posMax = new Position(35, 10);
                 posMin = new Position(0, 1);
                 playerLife = 10;
                 playerAtk = 5;
@@ -1154,12 +1157,102 @@ namespace TripOverTime.EngineNamespace
                 window.KeyPressed -= _eventsKey[5];
             }
 
+            // Add Win Flag block
+            _blockId = Convert.ToChar(blocks[blocks.Count - 1].Id);
+            _blockId++;
+            blocks.Add(new Sprite(Convert.ToString(_blockId), "END", @"..\..\..\..\Assets\Items\flagGreen_down.png", false));
 
             // EDITORRRRRR
-            ShowMap(window, bgPath, playerPath, playerPos, posMax, posMin, playerLife, playerAtk, blocks, monsters);
+            string mapToSave = ShowMap(window, bgPath, playerPath, playerPos, posMax, posMin, playerLife, playerAtk, blocks, monsters);
+            if (mapToSave != "null")
+            {
+                // Name of map
+                string mapName = " ";
 
-            // Add "AIR" on null sprite position
-            // Save
+                _eventsText.Add((s, a) =>
+                {
+                    if (a.Unicode != "\b")
+                    {
+                        mapName = mapName + a.Unicode;
+                        display = true;
+                    }
+                    else if (mapName.Length - 1 > 0)
+                    {
+                        mapName = mapName.Remove(mapName.Length - 1);
+                        display = true;
+                    }
+                });
+
+                _eventsKey.Add((s, a) =>
+                {
+                    if (a.Code == Keyboard.Key.Enter)
+                    {
+                        again = false;
+                        display = true;
+                    }
+                    else if (a.Control && a.Code == Keyboard.Key.V) //Paste
+                    {
+                        mapName += Clipboard.Contents;
+                        display = true;
+                    }
+                });
+
+                window.TextEntered += _eventsText[_eventsText.Count - 1];
+                window.KeyPressed += _eventsKey[_eventsKey.Count - 1];
+
+                window.DispatchEvents();
+
+                display = true;
+                do
+                {
+                    again = true;
+
+                    if (display)
+                    {
+                        // Graphic
+                        DisplayBackground(window);
+                        t = new Text("Name of map", _font1, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 2);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 2) - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+
+                        t = new Text(mapName, _font2, _charSize);
+                        t.FillColor = Color.White;
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 3);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 3) - (t.GetGlobalBounds().Height / 3));
+                        r.FillColor = Color.Black;
+
+                        window.Draw(r);
+                        window.Draw(t);
+
+                        window.Display();
+                        display = false;
+                    }
+
+                    // Events
+                    window.DispatchEvents();
+
+                    System.Threading.Thread.Sleep(1000 / 60);
+                } while (again);
+
+                mapName = mapName.Remove(0, 1);
+                mapName = mapName.Replace("\r", "");
+
+                window.TextEntered -= _eventsText[_eventsText.Count - 1];
+                window.KeyPressed -= _eventsKey[_eventsKey.Count - 1];
+
+
+                // Save map
+                File.WriteAllText(@"..\..\..\..\Maps\Edited\" + mapName + ".totmap", mapToSave);
+            }
 
         }
 
@@ -1878,7 +1971,7 @@ namespace TripOverTime.EngineNamespace
             window.Draw(background);
         }
 
-        private void ShowMap(RenderWindow window,
+        private string ShowMap(RenderWindow window,
             string bgPath,
             string playerPath,
             Position playerPos,
@@ -1891,13 +1984,20 @@ namespace TripOverTime.EngineNamespace
         {
             window.Clear();
 
-            Dictionary<Position, Sprite> map = new Dictionary<Position, Sprite>();
+            string mapFileString = "null";
+            Dictionary<Position, Sprite> map = new Dictionary<Position, Sprite>(); //Map
+            List<Monster> monsterOnMap = new List<Monster>(); //Monster on the map
             Player player = new Player(null, "Player", playerPos, new Life(playerLife), playerAtk, playerPath);
             Position posActual = new Position(posMin.X, posMin.Y);
             bool showMapAgain = true;
             ushort choosenBlock = 0;
             ushort choosenMonster = 0;
+            bool onBlock = true;
             bool display = true;
+            bool showHelp = false;
+            SFML.System.Vector2f moveTheMapOf = new SFML.System.Vector2f(0, 0);
+            Text t = new Text();
+            RectangleShape rTemp = new RectangleShape();
 
             player.GetPlayerSprite.GetSprite.Color = new Color(player.GetPlayerSprite.GetSprite.Color.R, player.GetPlayerSprite.GetSprite.Color.G, player.GetPlayerSprite.GetSprite.Color.B, 128); // Transparency
 
@@ -1909,30 +2009,150 @@ namespace TripOverTime.EngineNamespace
                         showMapAgain = false;
                         break;
                     case Keyboard.Key.Left:
-                        posActual.X -= 1;
-                        display = true;
+                        if (posActual.X > posMin.X)
+                        {
+                            posActual.X -= 1;
+                            if (posActual.X >= 5) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X - 128, moveTheMapOf.Y);
+                            display = true;
+                        }
                         break;
                     case Keyboard.Key.Right:
-                        posActual.X += 1;
-                        display = true;
+                        if (posActual.X < posMax.X)
+                        {
+                            posActual.X += 1;
+                            if (posActual.X > 5) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X + 128, moveTheMapOf.Y);
+                            display = true;
+                        }
                         break;
                     case Keyboard.Key.Up:
-                        posActual.Y += 1;
-                        display = true;
+                        if (posActual.Y < posMax.Y)
+                        {
+                            if (posActual.Y * 128 >= window.Size.Y - 128) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X, moveTheMapOf.Y - 128);
+                            posActual.Y += 1;
+                            display = true;
+                        }
                         break;
                     case Keyboard.Key.Down:
-                        posActual.Y -= 1;
-                        display = true;
+                        if (posActual.Y > posMin.Y)
+                        {
+                            if (posActual.Y * 128 >= window.Size.Y) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X, moveTheMapOf.Y + 128);
+                            posActual.Y -= 1;
+                            display = true;
+                        }
                         break;
                     case Keyboard.Key.Space:
-                        if (!map.TryGetValue(posActual, out _))
+                        if (onBlock) // Place block
                         {
-                            map.Add(new Position(posActual.X, posActual.Y), blocks[choosenBlock]);
-                            posActual.X += 1;
-                            Console.WriteLine("Add a block at " + posActual.X + ";" + posActual.Y);
+                            if (!map.TryGetValue(posActual, out _))
+                            {
+                                map.Add(new Position(posActual.X, posActual.Y), blocks[choosenBlock]);
+                                if (posActual.X < posMax.X)
+                                {
+                                    posActual.X += 1;
+                                    if (posActual.X > 5) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X + 128, moveTheMapOf.Y);
+                                }
+                                //Console.WriteLine("Add a block at " + posActual.X + ";" + posActual.Y);
+                            }
                         }
+                        else // Place monster
+                        {
+                            bool itsOk = true;
+                            foreach (Monster m in monsterOnMap)
+                            {
+                                if (m.Position == posActual)
+                                {
+                                    itsOk = false;
+                                }
+                            }
+                            if (itsOk)
+                            {
+                                monsterOnMap.Add(new Monster(null, monsters[choosenMonster].Name, new Position(posActual.X, posActual.Y), monsters[choosenMonster].life, monsters[choosenMonster].GetAttack.GetAttack, monsters[choosenMonster].MoveSpeed, monsters[choosenMonster].Range, monsters[choosenMonster].AttackCombo));
+                                if (posActual.X < posMax.X)
+                                {
+                                    posActual.X += 1;
+                                    if (posActual.X > 5) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X + 128, moveTheMapOf.Y);
+                                }
+                                //Console.WriteLine("Add a monster at " + posActual.X + ";" + posActual.Y);
+                            }
+                        }
+
                         display = true;
                         break;
+                    case Keyboard.Key.Delete:
+                        if (onBlock) // Delete block
+                        {
+                            if (map.TryGetValue(posActual, out _))
+                            {
+                                map.Remove(posActual);
+                                if (posActual.X < posMax.X)
+                                {
+                                    posActual.X += 1;
+                                    if (posActual.X > 5) moveTheMapOf = new SFML.System.Vector2f(moveTheMapOf.X + 128, moveTheMapOf.Y);
+                                }
+                                //Console.WriteLine("Del a block at " + posActual.X + ";" + posActual.Y);
+                            }
+                        }
+                        else // Delete monster
+                        {
+                            foreach (Monster m in monsterOnMap)
+                            {
+                                if (m.Position.X == posActual.X && m.Position.Y == posActual.Y)
+                                {
+                                    monsterOnMap.Remove(m);
+                                    //Console.WriteLine("Del a monster at " + posActual.X + ";" + posActual.Y);
+                                    break;
+                                }
+                            }
+                        }
+
+                        display = true;
+                        break;
+                    case Keyboard.Key.Tab: // Switch block/monster
+                        onBlock = !onBlock;
+                        display = true;
+                        break;
+                    case Keyboard.Key.B:
+                        if (onBlock)
+                        {
+                            if (choosenBlock > 0)
+                                choosenBlock--;
+                            else
+                                choosenBlock = (ushort)(blocks.Count - 1);
+                        }
+                        else
+                        {
+                            if (choosenMonster > 0)
+                                choosenMonster--;
+                            else
+                                choosenMonster = (ushort)(monsters.Count - 1);
+                        }
+
+                        display = true;
+                        break;
+                    case Keyboard.Key.N:
+                        if (onBlock)
+                        {
+                            if (choosenBlock < blocks.Count - 1)
+                                choosenBlock++;
+                            else
+                                choosenBlock = 0;
+                        }
+                        else
+                        {
+                            if (choosenMonster < monsters.Count - 1)
+                                choosenMonster++;
+                            else
+                                choosenMonster = 0;
+                        }
+
+                        display = true;
+                        break;
+                }
+
+                if (a.Control) // Afficher aide & listes
+                {
+                    showHelp = !showHelp;
+                    display = true;
                 }
             };
 
@@ -1951,8 +2171,38 @@ namespace TripOverTime.EngineNamespace
                     // Background
                     DisplayBackground(window, bgPath);
 
+                    // Name blocks
+                    if (onBlock)
+                    {
+                        t = new Text(blocks[choosenBlock].Name + " (" + posActual.X + ";" + posActual.Y + ")", _font2, _charSize);
+                        t.Position = new SFML.System.Vector2f(0, 0);
+                        t.FillColor = Color.White;
+
+                        rTemp = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.05f, t.GetGlobalBounds().Height * 1.5f));
+                        rTemp.Position = new SFML.System.Vector2f(0, 0);
+                        rTemp.FillColor = Color.Black;
+
+                        window.Draw(rTemp);
+                        window.Draw(t);
+                    }
+                    // Name monsters
+                    else
+                    {
+                        t = new Text(monsters[choosenMonster].Name + " (" + posActual.X + ";" + posActual.Y + ") ", _font2, _charSize);
+                        t.Position = new SFML.System.Vector2f(0, 0);
+                        t.FillColor = Color.White;
+
+                        rTemp = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.05f, t.GetGlobalBounds().Height * 1.5f));
+                        rTemp.Position = new SFML.System.Vector2f(0, 0);
+                        rTemp.FillColor = Color.Black;
+
+                        window.Draw(rTemp);
+                        window.Draw(t);
+                    }
+
                     // Player
                     player.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(player.RealPosition.X * 128, window.Size.Y + player.RealPosition.Y * -128 - 65);
+                    player.GetPlayerSprite.GetSprite.Position -= moveTheMapOf;
                     window.Draw(player.GetPlayerSprite.GetSprite);
 
                     // All blocks
@@ -1961,17 +2211,80 @@ namespace TripOverTime.EngineNamespace
                         //Console.WriteLine("Draw " + s.Value.ImgPath + " at " + s.Key.X + ";" + s.Key.Y);
                         s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, window.Size.Y + s.Key.Y * -128);
                         s.Value.GetSprite.Color = new Color(s.Value.GetSprite.Color.R, s.Value.GetSprite.Color.G, s.Value.GetSprite.Color.B, 255);
-                        //s.Value.GetSprite.Position -= moveTheMapOf;
+                        s.Value.GetSprite.Position -= moveTheMapOf;
                         window.Draw(s.Value.GetSprite);
                     }
 
-                    // Actual Pos / block
-                    r.Position = new SFML.System.Vector2f(posActual.X * 128 - 2, window.Size.Y + posActual.Y * -128 - 2);
-                    window.Draw(r);
+                    // All monsters
+                    foreach (Monster m in monsterOnMap)
+                    {
+                        m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, window.Size.Y + m.Position.Y * -128 - 40);
+                        m.GetMonsterSprite.GetSprite.Position -= moveTheMapOf;
+                        window.Draw(m.GetMonsterSprite.GetSprite);
+                    }
 
-                    blocks[choosenBlock].GetSprite.Position = new SFML.System.Vector2f(posActual.X * 128, window.Size.Y + posActual.Y * -128);
-                    blocks[choosenBlock].GetSprite.Color = new Color(blocks[choosenBlock].GetSprite.Color.R, blocks[choosenBlock].GetSprite.Color.G, blocks[choosenBlock].GetSprite.Color.B, 128);
-                    window.Draw(blocks[choosenBlock].GetSprite);
+                    // Actual Pos / block
+                    if (onBlock)
+                    {
+                        r.Position = new SFML.System.Vector2f(posActual.X * 128 - 2, window.Size.Y + posActual.Y * -128 - 2);
+                        r.Position -= moveTheMapOf;
+                        window.Draw(r);
+
+                        blocks[choosenBlock].GetSprite.Position = new SFML.System.Vector2f(posActual.X * 128, window.Size.Y + posActual.Y * -128);
+                        blocks[choosenBlock].GetSprite.Position -= moveTheMapOf;
+                        blocks[choosenBlock].GetSprite.Color = new Color(blocks[choosenBlock].GetSprite.Color.R, blocks[choosenBlock].GetSprite.Color.G, blocks[choosenBlock].GetSprite.Color.B, 128);
+                        window.Draw(blocks[choosenBlock].GetSprite);
+                    }
+                    // Actual Pos / monster
+                    else
+                    {
+                        monsters[choosenMonster].GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(posActual.X * 128, window.Size.Y + posActual.Y * -128 - 40);
+                        monsters[choosenMonster].GetMonsterSprite.GetSprite.Position -= moveTheMapOf;
+                        monsters[choosenMonster].GetMonsterSprite.GetSprite.Color = new Color(monsters[choosenMonster].GetMonsterSprite.GetSprite.Color.R, monsters[choosenMonster].GetMonsterSprite.GetSprite.Color.G, monsters[choosenMonster].GetMonsterSprite.GetSprite.Color.B, 128);
+                        window.Draw(monsters[choosenMonster].GetMonsterSprite.GetSprite);
+                    }
+
+
+
+                    // Show help / lists
+                    if (showHelp)
+                    {
+                        rTemp = new RectangleShape(new SFML.System.Vector2f(window.Size.X, window.Size.Y));
+                        rTemp.FillColor = new Color(0, 0, 0, 128);
+                        rTemp.Position = new SFML.System.Vector2f(0, 0);
+
+                        window.Draw(rTemp);
+
+                        t = new Text("HELP", _font1, _charSize + 7);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 1);
+                        window.Draw(t);
+
+                        t = new Text("TAB: Switch between blocks and monsters list", _font2, _charSize);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 2);
+                        window.Draw(t);
+
+                        t = new Text("ECHAP: Save And Quit", _font2, _charSize);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 3);
+                        window.Draw(t);
+
+                        t = new Text("B(ack) / N(ext): Switch between blocks OR monsters", _font2, _charSize);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 4);
+                        window.Draw(t);
+
+                        t = new Text("SPACE / DEL: Place or Delete a block/monster", _font2, _charSize);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 5);
+                        window.Draw(t);
+
+                        t = new Text("Arrows: Move on the map", _font2, _charSize);
+                        t.FillColor = new Color(255, 255, 255, 255);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - t.GetGlobalBounds().Width / 2, window.Size.Y / 8 * 6);
+                        window.Draw(t);
+                    }
 
                     //Display
                     window.Display();
@@ -1985,6 +2298,55 @@ namespace TripOverTime.EngineNamespace
             } while (showMapAgain);
 
             window.KeyPressed -= events;
+
+            //Process
+            _blockId++;
+            blocks.Add(new Sprite(Convert.ToString(_blockId), "Air", @"..\..\..\..\Assets\air.png", false));
+
+            //Background & Player
+            mapFileString = "BACKGROUNDPATH\r\n" + bgPath + "\r\nBACKGROUNDPATHEND\r\nPLAYER\r\n" + playerPath + " " + playerPos.X + " " + playerPos.Y + " " + playerLife + " " + playerAtk + "\r\nPLAYEREND\r\n";
+            //Limit
+            mapFileString += "LIMIT\r\n" + posMin.X + " " + posMin.Y + "\r\n" + posMax.X + " " + posMax.Y + "\r\nLIMITEND\r\n";
+            //Blocks
+            mapFileString += "BLOCKS\r\n";
+            foreach (Sprite s in blocks)
+            { //A AIR ..\..\..\..\Assets\air.png false
+                mapFileString += s.Id + " " + s.Name + " " + s.ImgPath + " " + s.IsSolid + "\r\n";
+            }
+            mapFileString += "BLOCKSEND\r\n";
+            //Monsters
+            mapFileString += "MONSTER\r\n";
+            foreach (Monster m in monsterOnMap)
+            { //Golem1 3 3 10 1 3 1 SAAAAA
+                mapFileString += m.Name + " " + m.Position.X + " " + m.Position.Y + " " + m.life.MaxPoint + " " + m.GetAttack.GetAttack + " " + Convert.ToInt32(m.MoveSpeed*100) + " " + Convert.ToInt32(m.Range - 0.2f) + " " + m.AttackCombo + "\r\n";
+            }
+            mapFileString += "MONSTEREND\r\n";
+
+            // MAP
+            // _blockId = id Air
+            mapFileString += "MAP\r\n";
+
+            for (int y = Convert.ToInt32(posMax.Y); y >= Convert.ToInt32(posMin.Y); y--)
+            {
+                for (int x = Convert.ToInt32(posMin.X); x <= Convert.ToInt32(posMax.X); x++)
+                {
+                    if (map.TryGetValue(new Position(x, y), out Sprite s))
+                    {
+                        mapFileString += s.Id;
+                    }
+                    else
+                    {
+                        mapFileString += _blockId;
+                    }
+                }
+                mapFileString += "\r\n";
+            }
+
+            mapFileString += "MAPEND";
+
+            Console.WriteLine("\n\n" + mapFileString);
+
+            return mapFileString;
 
         }
     }
