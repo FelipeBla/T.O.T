@@ -36,7 +36,7 @@ namespace TripOverTime.EngineNamespace
         public void StartGame(string mapPath)
         {
             //Verify if it's a map file
-            if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+                if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
             // Open map file
             string text = File.ReadAllText(mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
