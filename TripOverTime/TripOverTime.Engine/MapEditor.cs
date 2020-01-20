@@ -1035,7 +1035,7 @@ namespace TripOverTime.EngineNamespace
                 System.Threading.Thread.Sleep(1000 / 60);
             } while (again);
 
-            window.KeyPressed -= _eventsKey[4];
+            window.KeyPressed -= _eventsKey[5];
 
             // EDITORRRRRR
             ShowMap(window, bgPath, playerPath, playerPos, posMax, posMin, playerLife, playerAtk, blocks, monsters);
@@ -1777,27 +1777,58 @@ namespace TripOverTime.EngineNamespace
 
             Dictionary<Position, Sprite> map = new Dictionary<Position, Sprite>();
             Player player = new Player(null, "Player", playerPos, new Life(playerLife), playerAtk, playerPath);
-            Position posActual = new Position(0, 0);
+            Position posActual = new Position(posMin.X, posMin.Y);
             bool showMapAgain = true;
-            Stopwatch spTime = new Stopwatch();
-            spTime.Start();
+            ushort choosenBlock = 0;
+            ushort choosenMonster = 0;
+            bool display = true;
 
             player.GetPlayerSprite.GetSprite.Color = new Color(player.GetPlayerSprite.GetSprite.Color.R, player.GetPlayerSprite.GetSprite.Color.G, player.GetPlayerSprite.GetSprite.Color.B, 128); // Transparency
 
             EventHandler<KeyEventArgs> events = (s, a) =>
             {
-                if (a.Code == Keyboard.Key.Escape)
+                switch (a.Code)
                 {
-                    showMapAgain = false;
+                    case Keyboard.Key.Escape:
+                        showMapAgain = false;
+                        break;
+                    case Keyboard.Key.Left:
+                        posActual.X -= 1;
+                        display = true;
+                        break;
+                    case Keyboard.Key.Right:
+                        posActual.X += 1;
+                        display = true;
+                        break;
+                    case Keyboard.Key.Up:
+                        posActual.Y += 1;
+                        display = true;
+                        break;
+                    case Keyboard.Key.Down:
+                        posActual.Y -= 1;
+                        display = true;
+                        break;
+                    case Keyboard.Key.Space:
+                        if (!map.TryGetValue(posActual, out _))
+                        {
+                            map.Add(posActual, blocks[choosenBlock]);
+                            posActual.X += 1;
+                            Console.WriteLine("Add a block at " + posActual.X + ";" + posActual.Y);
+                        }
+                        display = true;
+                        break;
                 }
             };
 
             window.KeyPressed += events;
 
+            RectangleShape r = new RectangleShape(new SFML.System.Vector2f(132, 132));
+            r.FillColor = Color.Red;
+
             do
             {
                 // Affichage
-                if (spTime.ElapsedMilliseconds >= 1000/60)
+                if (display)
                 {
                     // Background
                     DisplayBackground(window, bgPath);
@@ -1806,23 +1837,32 @@ namespace TripOverTime.EngineNamespace
                     player.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(player.RealPosition.X * 128, window.Size.Y + player.RealPosition.Y * -128 - 65);
                     window.Draw(player.GetPlayerSprite.GetSprite);
 
-                    // Actual Pos / block
-
-
                     // All blocks
+                    foreach (KeyValuePair<Position, Sprite> s in map)
+                    {
+                        Console.WriteLine("Draw " + s.Value.ImgPath + " at " + s.Key.X + ";" + s.Key.Y);
+                        s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, window.Size.Y + s.Key.Y * -128);
+                        //s.Value.GetSprite.Color = new Color(s.Value.GetSprite.Color.R, s.Value.GetSprite.Color.G, s.Value.GetSprite.Color.B, 255);
+                        //s.Value.GetSprite.Position -= moveTheMapOf;
+                        window.Draw(s.Value.GetSprite);
+                    }
 
+                    // Actual Pos / block
+                    r.Position = new SFML.System.Vector2f(posActual.X * 128 - 2, window.Size.Y + posActual.Y * -128 - 2);
+                    window.Draw(r);
 
+                    blocks[choosenBlock].GetSprite.Position = new SFML.System.Vector2f(posActual.X * 128, window.Size.Y + posActual.Y * -128);
+                    blocks[choosenBlock].GetSprite.Color = new Color(blocks[choosenBlock].GetSprite.Color.R, blocks[choosenBlock].GetSprite.Color.G, blocks[choosenBlock].GetSprite.Color.B, 128);
+                    window.Draw(blocks[choosenBlock].GetSprite);
 
-
-                    // Events and Display
-
-                    window.DispatchEvents();
-
+                    //Display
                     window.Display();
 
-                    spTime.Restart();
+                    display = false;
                 }
 
+                //Events
+                window.DispatchEvents();
                 //System.Threading.Thread.Sleep(1);
             } while (showMapAgain);
 
