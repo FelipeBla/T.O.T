@@ -21,6 +21,7 @@ namespace TripOverTime.EngineNamespace
         Settings _settings;
         GUI _gui;
         Font _globalFont;
+        Font _latoFont;
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
@@ -29,14 +30,21 @@ namespace TripOverTime.EngineNamespace
             _settings = new Settings(this, window);
             _gui = new GUI(this, window);
             _globalFont = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
+            _latoFont = new Font(@"..\..\..\..\Assets\Fonts\Lato-Regular.ttf");
             _timer = new Stopwatch();
             _timer.Start();
         }
 
+        /// <summary>
+        /// Starts the game.
+        /// </summary>
+        /// <param name="mapPath">The map path.</param>
+        /// <exception cref="ArgumentException">The map file is not correct (.totmap)</exception>
+        /// <exception cref="FileLoadException">File is empty ?</exception>
         public void StartGame(string mapPath)
         {
             //Verify if it's a map file
-                if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
             // Open map file
             string text = File.ReadAllText(mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
@@ -454,6 +462,58 @@ namespace TripOverTime.EngineNamespace
             return 1;
         }
 
+        public short TutorialGameTick()
+        {
+            if (_game == null) throw new Exception("Game not started!");
+
+            //Events
+            _gui.Events();
+
+            Sprite sToPositive = null;
+            Sprite sToNegative = null;
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+            {
+                //Block under player isn't solid
+                _game.GetPlayer.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                {
+                    //DIE
+                    _game.GetPlayer.KilledBy = "Trap";
+                    return -1;
+                }
+                else
+                {
+                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                }
+            }
+
+            if (!_game.GetPlayer.IsAlive)
+            {
+                //DIE
+                _game.GetPlayer.KilledBy = "Monster";
+                return -1;
+            }
+
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+
+
+            // Recalibrate float
+            _game.GetPlayer.RoundX();
+
+            return 1;
+        }
+        /// <summary>
+        /// Wins menu.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">Sprite null!</exception>
         public bool WinMenu()
         {
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
@@ -467,12 +527,12 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("YOU WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
-            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+            lines.Add(new Text("Press Esc to quit or Enter to play next level", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
+            lines[0].FillColor = Color.Green;
+            lines[1].FillColor = Color.Yellow;
+            lines[2].FillColor = Color.Red;
+            lines[3].FillColor = Color.Black;
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -482,24 +542,21 @@ namespace TripOverTime.EngineNamespace
 
             _window.Display();
 
-            bool quit = false;
+            bool keyPress = false;
             bool loadNextLevel = false;
-            while(!quit)
+            while(!keyPress)
             {
-                Joystick.Update();
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                 {
-                    quit = true;
+                    keyPress = true;
                     loadNextLevel = true;
                 }
 
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape) /*|| (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0))*/) //TODO touche de la manette pour quitter
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
                 {
                     loadNextLevel = false;
-                    quit = true;
+                    keyPress = true;
                 }
-
-                System.Threading.Thread.Sleep(1);
             }
 
             // QUAND QUITTE LE MENU
@@ -513,7 +570,12 @@ namespace TripOverTime.EngineNamespace
             return loadNextLevel;
         }
 
-        public void DieMenu()
+        /// <summary>
+        /// Dies menu.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">Sprite null!</exception>
+        public bool DieMenu()
         {
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
@@ -526,12 +588,12 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
             lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
-            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+            lines.Add(new Text("Press Esc to quit or Enter to restart level", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
+            lines[0].FillColor = Color.Green;
+            lines[1].FillColor = Color.Yellow;
+            lines[2].FillColor = Color.Red;
+            lines[3].FillColor = Color.Black;
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -541,14 +603,21 @@ namespace TripOverTime.EngineNamespace
 
             _window.Display();
 
-            bool quit = false;
-
-            while (!quit)
+            bool keyPress = false;
+            bool restartLevel = false;
+            while (!keyPress)
             {
-                Joystick.Update();
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))
-                    quit = true;
-                System.Threading.Thread.Sleep(1);
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                {
+                    keyPress = true;
+                    restartLevel = true;
+                }
+
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    restartLevel = false;
+                    keyPress = true;
+                }
             }
 
             // QUAND QUITTE LE MENU
@@ -558,6 +627,8 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
             _game = null;
+
+            return restartLevel;
         }
 
         private string StringBetweenString(string original, string str1, string str2)
@@ -607,5 +678,12 @@ namespace TripOverTime.EngineNamespace
         {
             get => _globalFont;
         }
+
+        public Font GetLatoFont
+        {
+            get => _latoFont;
+        }
+
+
     }
 }

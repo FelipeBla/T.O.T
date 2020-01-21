@@ -46,9 +46,9 @@ namespace TripOverTime.EngineNamespace
         }
 
 
-        public void InitGame()
+        public void InitGame(bool tutorial = false)
         {
-            LoadMap();
+            LoadMap(tutorial);
         }
 
         public void ShowMapMultiplayer()
@@ -150,6 +150,10 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
 
         }
+
+        /// <summary>
+        /// Shows the map.
+        /// </summary>
         public void ShowMap()
         {
             if (!_window.IsOpen) _context.Close = true;
@@ -174,7 +178,6 @@ namespace TripOverTime.EngineNamespace
             hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
             _window.Draw(hp);
            
-
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
@@ -212,7 +215,7 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
 
         }
-        private void LoadMap()
+        private void LoadMap(bool tutorial = false)
         {
             if (!_window.IsOpen) throw new Exception("Window is not open!");
 
@@ -228,16 +231,23 @@ namespace TripOverTime.EngineNamespace
             _window.Draw(_background);
 
             // Set lifeBar
-            _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
-            if (_lifebarTexture == null) throw new Exception("Texture null!");
+            if (tutorial)
+            {
+                _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetArrowKey);
+
+                if (_lifebarTexture == null) throw new Exception("Texture null!");
+            }
+            else
+            {
+                _lifebarTexture = new Texture(_context.GetGame.GetMapObject.GetLifeBar);
+                if (_lifebarTexture == null) throw new Exception("Texture null!");
+            }
 
             _hpBar = new SFML.Graphics.Sprite(_lifebarTexture);
             if (_hpBar == null) throw new Exception("Sprite null!");
             _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
             
-            
-
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
             foreach (KeyValuePair<Position, Sprite> s in map)
@@ -246,6 +256,54 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(s.Value.GetSprite);
                 _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
             }
+        }
+
+        /// <summary>
+        /// Shows the tutorial map.
+        /// </summary>
+        public void ShowTutorialMap()
+        {
+            if (!_window.IsOpen) _context.Close = true;
+
+            _window.Clear();
+            // Background Player 1
+            _window.Draw(_background);
+
+            // Load map
+            foreach (KeyValuePair<SFML.System.Vector2f, Sprite> s in _spritesDisplayed)
+            {
+                s.Value.GetSprite.Position = s.Key;
+                s.Value.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(s.Value.GetSprite);
+            }
+
+            // Lifebar
+            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
+            // HP Text
+            _window.Draw(_hpBar);
+
+            Text t1 = new Text("Utiliser la flèche du clavier pour déplacer le viking.", _context.GetLatoFont, 35)
+            {
+                Position = new SFML.System.Vector2f(250, 30)
+            };
+            _window.Draw(t1);
+
+            Text t2 = new Text("Utiliser l'espace pour attaquer", _context.GetLatoFont, 35)
+            {
+                Position = new SFML.System.Vector2f(250, 60)
+            };
+            _window.Draw(t2);
+
+            // Player
+            if (_context.GetGame.GetPlayer.IsAlive)
+            {
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
+            }
+
+            // Display
+            _window.Display();
+
         }
 
         internal void Events()

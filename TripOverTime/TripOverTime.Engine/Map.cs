@@ -12,6 +12,7 @@ namespace TripOverTime.EngineNamespace
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
+        string _arrowKeyPath = "..\\..\\..\\..\\Assets\\HUD\\arrowKeys.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
@@ -190,6 +191,11 @@ namespace TripOverTime.EngineNamespace
         internal string GetLifeBar
         {
             get => _lifebarPath;
+        }
+
+        internal string GetArrowKey
+        {
+            get => _arrowKeyPath;
         }
 
         internal Position GetEndPosition
