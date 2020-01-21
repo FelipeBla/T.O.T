@@ -17,7 +17,7 @@ namespace TripOverTime.EngineNamespace
         private static uint _YResolution = 1080;
         private static uint _NbFPS = 60;
         private static int _MultiplayerOrNot = 0;
-        private static bool _fullscreen = false;
+        private static bool _fullscreen = true;
 
         RenderWindow _window;
         ushort _selected;

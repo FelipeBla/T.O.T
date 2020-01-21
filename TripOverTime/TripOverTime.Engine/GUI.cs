@@ -282,13 +282,13 @@ namespace TripOverTime.EngineNamespace
             // HP Text
             _window.Draw(_hpBar);
 
-            Text t1 = new Text("Utiliser la flèche du clavier pour déplacer le viking.", _context.GetLatoFont, 35)
+            Text t1 = new Text("Utiliser les flèche du clavier pour déplacer le viking.", _context.GetFont, 35)
             {
                 Position = new SFML.System.Vector2f(250, 30)
             };
             _window.Draw(t1);
 
-            Text t2 = new Text("Utiliser l'espace pour attaquer", _context.GetLatoFont, 35)
+            Text t2 = new Text("Utiliser espace pour attaquer", _context.GetFont, 35)
             {
                 Position = new SFML.System.Vector2f(250, 60)
             };

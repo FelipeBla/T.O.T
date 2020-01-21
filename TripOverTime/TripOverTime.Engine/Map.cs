@@ -12,7 +12,7 @@ namespace TripOverTime.EngineNamespace
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
-        string _arrowKeyPath = "..\\..\\..\\..\\Assets\\HUD\\arrowKeys.png";
+        string _arrowKeyPath = "..\\..\\..\\..\\Assets\\HUD\\arrowKeysSpace.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
