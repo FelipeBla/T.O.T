@@ -10,6 +10,8 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         List<Position> _heart;
         List<Position> _star;
+        List<Position> _trap;
+        Sprite _spriteChange;
         List<Position2> _heart2;
         List<Position2> _star2;
         List<Sprite> _sprites;
@@ -41,6 +43,7 @@ namespace TripOverTime.EngineNamespace
             _map = new Dictionary<Position, Sprite>();
             _heart = new List<Position>();
             _star = new List<Position>();
+            _trap = new List<Position>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -117,6 +120,10 @@ namespace TripOverTime.EngineNamespace
                         Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
+                if (str[1] == "AIR")
+                {
+                    _spriteChange = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
+                }
             }
 
             // Get map
@@ -127,11 +134,15 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (mapParsed[y][x] == 'H')
                     {
-                        _heart.Add(new Position((float) x, (float) y));
+                        _heart.Add(new Position((float) x, (float)_limitMax.Y - y));
                     }
-                    if(mapParsed[y][x] == 'S')
+                    if (mapParsed[y][x] == 'S')
                     {
-                        _star.Add(new Position((float)x, (float)y));
+                        _star.Add(new Position((float)x, (float)_limitMax.Y - y));
+                    }
+                    if (mapParsed[y][x] == '2')
+                    {
+                        _trap.Add(new Position((float)x, (float)_limitMax.Y - y));
                     }
                 }
             }
@@ -392,12 +403,14 @@ namespace TripOverTime.EngineNamespace
         internal List<Position> GetHeart
         {
             get => _heart;
-            set => _heart = value;
         }
         internal List<Position> GetStar
         {
             get => _star;
-            set => _star = value;
+        }
+        internal List<Position> GetTrap
+        {
+            get => _trap;
         }
         internal List<Position2> GetHeart2
         {
@@ -408,6 +421,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _star2;
             set => _star2 = value;
+        }
+        internal Sprite GetSpriteChange
+        {
+            get => _spriteChange;
         }
     }
 }
