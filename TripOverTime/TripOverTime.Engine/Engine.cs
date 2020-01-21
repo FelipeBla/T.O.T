@@ -15,6 +15,7 @@ namespace TripOverTime.EngineNamespace
         Stopwatch _timer;
         Checkpoint _checkpoint;
         List<Position> _verifHeal;
+        List<Position2> _verifHeal2;
 
         SFML.Graphics.RenderWindow _window;
         Menu _menu;
@@ -34,6 +35,7 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
             _verifHeal = new List<Position>();
+            _verifHeal2 = new List<Position2>();
         }
 
         public void StartGame(string mapPath)
@@ -292,6 +294,51 @@ namespace TripOverTime.EngineNamespace
                     _game.GetPlayer.RoundY(); // Don't stuck player in ground
                 }
             }
+            //Heal
+            List<Position> heart = _game.GetMapObject.GetHeart;
+            foreach (Position position in heart)
+            {
+                if (_game.GetPlayer.Position.X == position.X)
+                {
+
+                    bool verif = true;
+                    foreach (Position position1 in _verifHeal)
+                    {
+                        if (position1.X == position.X)
+                        {
+                            verif = false;
+                        }
+                    }
+                    if (verif)
+                    {
+                        _game.GetPlayer.GetLife.BonusPoint(1);
+                        _verifHeal.Add(position);
+                    }
+                }
+            }
+
+            //strength
+            List<Position> star = _game.GetMapObject.GetStar;
+            foreach (Position position in star)
+            {
+                if (_game.GetPlayer.Position.X == position.X)
+                {
+
+                    bool verif = true;
+                    foreach (Position position1 in _verifHeal)
+                    {
+                        if (position1.X == position.X)
+                        {
+                            verif = false;
+                        }
+                    }
+                    if (verif)
+                    {
+                        _game.GetPlayer.GetAttack++;
+                        _verifHeal.Add(position);
+                    }
+                }
+            }
 
             if (!_game.GetPlayer.IsAlive)
             {
@@ -431,6 +478,51 @@ namespace TripOverTime.EngineNamespace
                 else
                 {
                     _game2.GetPlayer2.RoundY2(); // Don't stuck player in ground
+                }
+            }
+            //Heal
+            List<Position2> heart2 = _game2.GetMapObject2.GetHeart2;
+            foreach (Position2 position2 in heart2)
+            {
+                if (_game2.GetPlayer2.Position2.X2 == position2.X2)
+                {
+
+                    bool verif2 = true;
+                    foreach (Position2 position12 in _verifHeal2)
+                    {
+                        if (position12.X2 == position2.X2)
+                        {
+                            verif2 = false;
+                        }
+                    }
+                    if (verif2)
+                    {
+                        _game2.GetPlayer2.GetLife2.BonusPoint2(1);
+                        _verifHeal2.Add(position2);
+                    }
+                }
+            }
+
+            //strength
+            List<Position2> star2 = _game2.GetMapObject2.GetStar2;
+            foreach (Position2 position2 in star2)
+            {
+                if (_game2.GetPlayer2.Position2.X2 == position2.X2)
+                {
+
+                    bool verif2 = true;
+                    foreach (Position2 position12 in _verifHeal2)
+                    {
+                        if (position12.X2 == position2.X2)
+                        {
+                            verif2 = false;
+                        }
+                    }
+                    if (verif2)
+                    {
+                        _game2.GetPlayer2.GetAttack2++;
+                        _verifHeal2.Add(position2);
+                    }
                 }
             }
 
