@@ -8,6 +8,8 @@ namespace TripOverTime.EngineNamespace
     class Map
     {
         Dictionary<Position, Sprite> _map;
+        List<Position> _heart;
+        List<Position> _star;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
@@ -35,6 +37,8 @@ namespace TripOverTime.EngineNamespace
 
             _context = context;
             _map = new Dictionary<Position, Sprite>();
+            _heart = new List<Position>();
+            _star = new List<Position>();
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
@@ -99,7 +103,7 @@ namespace TripOverTime.EngineNamespace
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
                 _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
-                if (str.Length > 4)
+                if (str[1] == "TRAP")
                 {
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
@@ -113,6 +117,20 @@ namespace TripOverTime.EngineNamespace
 
             // Get map
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
+            for (int y = 0; y < mapParsed.Length; y++)
+            {
+                for(int x = 0; x < mapParsed[y].Length; x++)
+                {
+                    if (mapParsed[y][x] == 'H')
+                    {
+                        _heart.Add(new Position((float) x, (float) y));
+                    }
+                    if(mapParsed[y][x] == 'S')
+                    {
+                        _star.Add(new Position((float)x, (float)y));
+                    }
+                }
+            }
 
             //Boucle Y
             int indexTemp = 0;
@@ -324,6 +342,7 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
+        
 
         internal Position GetEndPosition
         {
@@ -365,6 +384,24 @@ namespace TripOverTime.EngineNamespace
         internal Game GetGame2
         {
             get => _context2;
+        }
+               internal List<Position> GetHeart
+        {
+            get => _heart;
+            set => _heart = value;
+        }
+        internal List<Position> GetStar
+        {
+            get => _star;
+            set => _star = value;
+        }
+    }
+            set => _heart = value;
+        }
+        internal List<Position> GetStar
+        {
+            get => _star;
+            set => _star = value;
         }
     }
 }

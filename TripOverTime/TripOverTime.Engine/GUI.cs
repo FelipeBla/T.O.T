@@ -248,6 +248,7 @@ namespace TripOverTime.EngineNamespace
             _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
             _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
 
+           
             // Display
             _window.Display();
 
@@ -276,8 +277,6 @@ namespace TripOverTime.EngineNamespace
             _hpBar.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), new SFML.System.Vector2i((int)_lifebarTexture.Size.X - ((int)_lifebarTexture.Size.X / 100) * (_context.GetGame.GetPlayer.GetLife.GetMaxPoint() - _context.GetGame.GetPlayer.GetLife.GetCurrentPoint()), (int)_lifebarTexture.Size.Y));
             _window.Draw(_hpBar);
             
-            
-
             Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
 
             foreach (KeyValuePair<Position, Sprite> s in map)
@@ -627,7 +626,7 @@ namespace TripOverTime.EngineNamespace
         }
 
         internal SFML.Window.Keyboard.Key AttackAction2
-        {
+        { 
             get { return _AttackAction2; }
             set { _AttackAction2 = value; }
         }

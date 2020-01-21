@@ -29,6 +29,8 @@ namespace TripOverTime.EngineNamespace
         Position2 _position2;
         Position _realPosition;
         Position2 _realPosition2;
+        int _incrementationHeal;
+        int _incrementationAttack;
         Life _life;
         ushort _attack;
         Life _life2;
@@ -53,6 +55,7 @@ namespace TripOverTime.EngineNamespace
         int _attackSpeed2;
         float _attackRange;
         float _attackRange2;
+        string _imgPath;
 
         internal Player(Game context, String name, Position position, Position2 position2, Life life, ushort attack, string imgPath)
         {
@@ -65,6 +68,7 @@ namespace TripOverTime.EngineNamespace
             _isJumping = false;
             _isAttack = false;
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
+            _imgPath = imgPath;
             _orientation = "right";
 
             _attackSpeed = 1;
@@ -93,7 +97,8 @@ namespace TripOverTime.EngineNamespace
             _orientation2 = "right";
 
             _attackSpeed2 = 1;
-            _attackRange2 = 1.0f; // En block
+            _attackRange = 2.0f; // En block
+            _attackRange2 = 2.0f; // En block
 
 
 
@@ -197,10 +202,22 @@ namespace TripOverTime.EngineNamespace
                         _context.GetBoss.life.DecreasedPoint(_attack);
                     }
                     // Si il y a un monstre
-                    if (monsterToAttack != null)
+                    if (monsterToAttack != null && monsterToAttack.isAlive)
                     {
                         //Attack
                         monsterToAttack.life.DecreasedPoint(_attack);
+                        _incrementationHeal++;
+                        if (_incrementationHeal > 2)
+                        {
+                            _life.BonusPoint(1);
+                            _incrementationHeal = 0;
+                        }
+                        _incrementationAttack++;
+                        if (_incrementationAttack>1)
+                        {
+                            _attack++;
+                            _incrementationAttack = 0;
+                        }
                     }
                 }
                 _sprite.AttackAnimation(4,"attack", 100);
@@ -673,6 +690,7 @@ namespace TripOverTime.EngineNamespace
         internal ushort GetAttack
         {
             get => _attack;
+            set => _attack = value;
         }
         internal ushort GetAttack2
         {
