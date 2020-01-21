@@ -10,6 +10,8 @@ namespace TripOverTime.EngineNamespace
         Dictionary<Position, Sprite> _map;
         List<Position> _heart;
         List<Position> _star;
+        List<Position2> _heart2;
+        List<Position2> _star2;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
@@ -43,6 +45,8 @@ namespace TripOverTime.EngineNamespace
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
 
+            _heart2 = new List<Position2>();
+            _star2 = new List<Position2>();
             _context2 = context;
             _map2 = new Dictionary<Position2, Sprite>();
             _sprites2 = new List<Sprite>();
@@ -385,7 +389,7 @@ namespace TripOverTime.EngineNamespace
         {
             get => _context2;
         }
-               internal List<Position> GetHeart
+        internal List<Position> GetHeart
         {
             get => _heart;
             set => _heart = value;
@@ -395,13 +399,15 @@ namespace TripOverTime.EngineNamespace
             get => _star;
             set => _star = value;
         }
-    }
-            set => _heart = value;
-        }
-        internal List<Position> GetStar
+        internal List<Position2> GetHeart2
         {
-            get => _star;
-            set => _star = value;
+            get => _heart2;
+            set => _heart2 = value;
+        }
+        internal List<Position2> GetStar2
+        {
+            get => _star2;
+            set => _star2 = value;
         }
     }
 }
