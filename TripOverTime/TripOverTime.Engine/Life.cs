@@ -44,6 +44,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => (float)_currentPoint / (float)_maxPoint;
         }
+        public float PerCent2
+        {
+            get => (float)_currentPoint2 / (float)_maxPoint;
+        }
 
         public bool IsFull
         {

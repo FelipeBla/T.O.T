@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using SFML;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace TripOverTime.EngineNamespace
@@ -374,7 +375,7 @@ namespace TripOverTime.EngineNamespace
                 if ((sToPositive2 != null && sToNegative2 != null) && (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2))
                 {
                     //DIE
-                    _game2.GetPlayer2.KilledBy2 = "Trap";
+                    _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
                 else
@@ -437,6 +438,53 @@ namespace TripOverTime.EngineNamespace
 
             }
 
+            // boss
+            if (!_game2.GetBoss2.IsAlive2)
+            {
+                _game2.GetBoss2.BossDead2();
+            }
+            else
+            {
+                if (_game2.GetBoss2.Position2.X2 > _game2.GetPlayer2.RealPosition2.X2) //left
+                {
+                    _game2.GetBoss2.Orientation2 = "left";
+                }
+                else if (_game2.GetBoss2.Position2.X2 < _game2.GetPlayer2.RealPosition2.X2) //right
+                {
+                    _game2.GetBoss2.Orientation2 = "right";
+                }
+
+                _game2.GetBoss2.GetBossSprite2.BossOrientation2(_game2.GetBoss2);
+
+                if (_game2.GetBoss2.Position2.X2 + 3 > _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 - 3 < _game2.GetPlayer2.RealPosition2.X2) //attack
+                {
+                    if (_game2.GetBoss2.Position2.X2 - 1 > _game2.GetPlayer2.RealPosition2.X2 || _game2.GetBoss2.Position2.X2 + 1 < _game2.GetPlayer2.RealPosition2.X2)
+                    {
+                        _game2.GetBoss2.BossMove2();
+                    }
+                    _game2.GetBoss2.BossAttack2();
+                }
+
+                else if (_game2.GetBoss2.Position2.X2 - 6 < _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 - 1 > _game2.GetPlayer2.RealPosition2.X2 || _game2.GetBoss2.Position2.X2 + 6 > _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 + 1 < _game2.GetPlayer2.RealPosition2.X2)
+                {
+                    _game2.GetBoss2.BossMove2();
+                    _game2.GetBoss2.GetBossSprite2.BossMoveAnimation2(_game2.GetBoss2);
+                }
+            }
+
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+            {
+                //Block under monster isn't solid
+                _game.GetBoss.Gravity();
+            }
+            else
+            {
+                _game.GetBoss.IsMoving = false;
+                _game.GetBoss.RoundY(); // Don't stuck monster in ground
+            }
+
             // Recalibrate float
             _game2.GetPlayer2.RoundX2();
             // WIN !!!
@@ -456,6 +504,11 @@ namespace TripOverTime.EngineNamespace
 
         public void WinMenu()
         {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 
@@ -550,6 +603,11 @@ namespace TripOverTime.EngineNamespace
 
         public void DieMenu()
         {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 

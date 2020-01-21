@@ -40,6 +40,7 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
 
+            _boss2 = boss;
             _context2 = context;
             _timer2 = new Stopwatch();
             _timer2.Start();
@@ -47,6 +48,8 @@ namespace TripOverTime.EngineNamespace
             _schemaAttack = attackCombo;
             _schemaAttack2 = attackCombo;
             _incrementationAttack = 0;
+            _incrementationAttack2 = 0;
+
         }
 
         internal void AttackMonster()
@@ -232,58 +235,58 @@ namespace TripOverTime.EngineNamespace
             {
                 _speedAttack2 = 40;
                 SlashingBoss2();
-                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
                 {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
+                    if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
-                        HurtPlayer();
+                        HurtPlayer2();
                     }
                     _incrementationAttack++;
-                    _timer.Restart();
+                    _timer2.Restart();
                 }
             }
-            else if (_schemaAttack[_incrementationAttack] == 'T')//throwing
+            else if (_schemaAttack2[_incrementationAttack] == 'T')//throwing
             {
                 _speedAttack = 60;
-                ThrowingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
+                ThrowingBoss2();
+                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
                 {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
+                    if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
-                        _attack *= 2;
-                        HurtPlayer();
-                        _attack /= 2;
+                        _attack2 *= 2;
+                        HurtPlayer2();
+                        _attack2 /= 2;
                     }
                     _incrementationAttack++;
-                    _timer.Restart();
+                    _timer2.Restart();
                 }
             }
-            else if (_schemaAttack[_incrementationAttack] == 'K')//kicking
+            else if (_schemaAttack2[_incrementationAttack] == 'K')//kicking
             {
-                _speedAttack = 40;
-                KickingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 12 && _boss.IsAlive)
+                _speedAttack2 = 40;
+                KickingBoss2();
+                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
                 {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
+                    if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
-                        HurtPlayer();
+                        HurtPlayer2();
                     }
                     _incrementationAttack++;
-                    _timer.Restart();
+                    _timer2.Restart();
                 }
             }
-            else if (_schemaAttack[_incrementationAttack] == 'S')//sliding
+            else if (_schemaAttack2[_incrementationAttack] == 'S')//sliding
             {
                 _speedAttack = 60;
-                SlidingBoss();
-                if (_timer.ElapsedMilliseconds >= _speedAttack * 6 && _boss.IsAlive)
+                SlidingBoss2();
+                if (_timer2.ElapsedMilliseconds >= _speedAttack * 6 && _boss2.IsAlive2)
                 {
-                    if (_boss.Position.X + 3 > _context.GetPlayer.RealPosition.X && _boss.Position.X - 3 < _context.GetPlayer.RealPosition.X && (_boss.Position.Y == _context.GetPlayer.RealPosition.Y || _boss.Position.Y + 1 == _context.GetPlayer.RealPosition.Y))
+                    if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
-                        HurtPlayer();
+                        HurtPlayer2();
                     }
                     _incrementationAttack++;
-                    _timer.Restart();
+                    _timer2.Restart();
                 }
             }
         }
@@ -309,15 +312,26 @@ namespace TripOverTime.EngineNamespace
         {
             _boss.GetBossSprite.BossAttackAnimation(12, "throwing (", _speedAttack);
         }
+        internal void ThrowingBoss2()
+        {
+            _boss2.GetBossSprite2.BossAttackAnimation2(12, "throwing (", _speedAttack);
+        }
         internal void KickingBoss()
         {
             _boss.GetBossSprite.BossAttackAnimation(12, "kicking (", _speedAttack);
+        }
+        internal void KickingBoss2()
+        {
+            _boss2.GetBossSprite2.BossAttackAnimation2(12, "kicking (", _speedAttack);
         }
         internal void SlidingBoss()
         {
             _boss.GetBossSprite.BossAttackAnimation(6, "sliding (", _speedAttack);
         }
-
+        internal void SlidingBoss2()
+        {
+            _boss2.GetBossSprite2.BossAttackAnimation2(6, "sliding (", _speedAttack);
+        }
 
         internal void NormalAttack()
         {
@@ -358,7 +372,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void HurtPlayer2()
         {
-            _context.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 40);
+            _context2.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 40);
         }
 
         internal ushort GetAttack

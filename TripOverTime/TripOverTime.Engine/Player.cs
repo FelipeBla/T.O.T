@@ -226,6 +226,8 @@ namespace TripOverTime.EngineNamespace
                             if (m.Position2.X2 <= _realPosition2.X2 + _attackRange2 && m.Position2.X2 >= _realPosition2.X2 && m.Position2.Y2 == _realPosition2.Y2)
                                 monsterToAttack = m;
                         }
+                        if (_context2.GetBoss2.Position2.X2 <= _realPosition2.X2 + _attackRange2 && _context2.GetBoss2.Position2.X2 >= _realPosition2.X2 && _context2.GetBoss2.Position2.Y2 == _realPosition2.Y2)
+                            _context2.GetBoss2.life2.DecreasedPoint2(_attack2);
                     }
                     else
                     {
@@ -235,6 +237,10 @@ namespace TripOverTime.EngineNamespace
                             if (m.Position2.X2 >= _realPosition2.X2 - _attackRange2 && m.Position2.X2 <= _realPosition2.X2 && m.Position2.Y2 == _realPosition2.Y2)
                                 monsterToAttack = m;
                         }
+                    }
+                    if (_context2.GetBoss2.Position2.X2 >= _realPosition2.X2 - _attackRange2 && _context2.GetBoss2.Position2.X2 <= _realPosition2.X2 && _context2.GetBoss2.Position2.Y2 == _realPosition2.Y2)
+                    {
+                        _context2.GetBoss2.life2.DecreasedPoint2(_attack2);
                     }
 
                     // Si il y a un monstre
@@ -384,6 +390,19 @@ namespace TripOverTime.EngineNamespace
                                     Console.WriteLine("MONSTTERRRRRRRR");
                                     blocked = true;
                                 }
+                            }
+                        }
+                    }
+
+                    //boss
+                    if ((_context2.GetBoss2.Position2.Y2 == _realPosition2.Y2 || _context2.GetBoss2.Position2.Y2 + 1 == _realPosition2.Y2) && _context2.GetBoss2.IsAlive2) //Meme niveau Y
+                    {
+                        if (Math.Round(_context2.GetBoss2.Position2.X2) == Math.Round(_realPosition2.X2) + 1)
+                        {
+                            if (_context2.GetBoss2.GetBossSprite2.IsSolid2)
+                            {
+                                //Blocked by boss
+                                blocked = true;
                             }
                         }
                     }

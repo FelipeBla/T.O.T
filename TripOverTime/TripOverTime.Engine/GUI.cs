@@ -63,7 +63,7 @@ namespace TripOverTime.EngineNamespace
             //view player 1
             View view1 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
             view1.Viewport = new FloatRect(0f, 0f, 1f, 0.5f);
-            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution * 9 / 10);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
             Vector2f PositionScreen1 = new Vector2f(400, 300);
 
@@ -79,10 +79,10 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
+            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context.GetGame.GetPlayer.GetLife.PerCent), (int)_lifebarTexture.Size.Y);
             // HP Text
             Text hp = new Text(Convert.ToString(_context.GetGame.GetPlayer.GetLife.CurrentPoint), _context.GetFont, 28);
-            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 25);
+            hp.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
             _window.Draw(_hpBar);
             _window.Draw(hp);
 
@@ -94,10 +94,23 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Monsters
-            foreach (Monster m in _context.GetGame.GetMonsters) 
+            foreach (Monster m in _context.GetGame.GetMonsters)
             {
-                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 -40);
-                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;                
+                //Orientation
+                if (m.Orientation == "right" && m.GetMonsterSprite.GetSprite.Scale != new SFML.System.Vector2f(1.0f, 1.0f)) //Right
+                {
+                    m.GetMonsterSprite.GetSprite.Origin = new SFML.System.Vector2f(0, 0);
+                    m.GetMonsterSprite.GetSprite.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (m.Orientation == "left" && m.GetMonsterSprite.GetSprite.Scale != new SFML.System.Vector2f(-1.0f, 1.0f))//Left
+                {
+                    m.GetMonsterSprite.GetSprite.Origin = new SFML.System.Vector2f(m.GetMonsterSprite.GetSprite.Texture.Size.X / 2, 0);
+                    m.GetMonsterSprite.GetSprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+
+                m.GetMonsterSprite.GetSprite.Position = new SFML.System.Vector2f(m.Position.X * 128, _window.Size.Y + m.Position.Y * -128 - 40);
+                m.GetMonsterSprite.GetSprite.Position -= _moveTheMapOf;
+
                 _window.Draw(m.GetMonsterSprite.GetSprite);
             }
 
@@ -110,7 +123,7 @@ namespace TripOverTime.EngineNamespace
             //view player 2
             View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
             view2.Viewport = new FloatRect(0f, 0.5f, 1f, 0.5f);
-            view2.Size = new Vector2f(Settings.XResolution, Settings.YResolution * 9 / 10);
+            view2.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             Vector2f PositionScreen2 = new Vector2f(400, 300);
             _window.SetView(view2);
 
@@ -127,10 +140,10 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Lifebar
-            _hpBar.TextureRect = new IntRect(0, -30, (int)(_lifebarTexture.Size.X * _context2.GetGame2.GetPlayer2.GetLife2.PerCent), (int)_lifebarTexture.Size.Y);
+            _hpBar.TextureRect = new IntRect(0, 0, (int)(_lifebarTexture.Size.X * _context2.GetGame2.GetPlayer2.GetLife2.PerCent2), (int)_lifebarTexture.Size.Y);
             // HP Text
-            Text hp2 = new Text(Convert.ToString(_context2.GetGame2.GetPlayer2.GetLife2.CurrentPoint), _context.GetFont, 28);
-            hp2.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 35);
+            Text hp2 = new Text(Convert.ToString(_context2.GetGame2.GetPlayer2.GetLife2.CurrentPoint2), _context.GetFont, 28);
+            hp2.Position = new SFML.System.Vector2f(_lifebarTexture.Size.X / 2 - hp.GetGlobalBounds().Width / 2, _lifebarTexture.Size.Y / 2 - hp.GetGlobalBounds().Height / 2 - 5);
             _window.Draw(_hpBar);
             _window.Draw(hp2);
             
@@ -145,11 +158,28 @@ namespace TripOverTime.EngineNamespace
             // Monsters
             foreach (Monster m in _context2.GetGame2.GetMonsters2)
             {
+                //Orientation
+                if (m.Orientation2 == "right" && m.GetMonsterSprite2.GetSprite2.Scale != new SFML.System.Vector2f(1.0f, 1.0f)) //Right
+                {
+                    m.GetMonsterSprite2.GetSprite2.Origin = new SFML.System.Vector2f(0, 0);
+                    m.GetMonsterSprite2.GetSprite2.Scale = new SFML.System.Vector2f(1.0f, 1.0f);
+                }
+                else if (m.Orientation2 == "left" && m.GetMonsterSprite2.GetSprite2.Scale != new SFML.System.Vector2f(-1.0f, 1.0f))//Left
+                {
+                    m.GetMonsterSprite2.GetSprite2.Origin = new SFML.System.Vector2f(m.GetMonsterSprite2.GetSprite2.Texture.Size.X / 2, 0);
+                    m.GetMonsterSprite2.GetSprite2.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
+                }
+
                 m.GetMonsterSprite2.GetSprite2.Position = new SFML.System.Vector2f(m.Position2.X2 * 128, _window.Size.Y + m.Position2.Y2 * -128 - 40);
                 m.GetMonsterSprite2.GetSprite2.Position -= _moveTheMapOf2;
+
                 _window.Draw(m.GetMonsterSprite2.GetSprite2);
             }
-
+            // Boss
+            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetBoss2.Position2.X2 * 128, _window.Size.Y + _context2.GetGame2.GetBoss2.Position2.Y2 * -128 - 205);
+            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position -= _moveTheMapOf2;
+            _window.Draw(_context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2);
+            Console.WriteLine("BossPos: " + _context2.GetGame2.GetBoss2.Position2.X2 + ";" + _context2.GetGame2.GetBoss2.Position2.Y2);
             // Display
             _window.Display();
 

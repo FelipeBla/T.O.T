@@ -88,7 +88,7 @@ namespace TripOverTime.EngineNamespace
             string[] limits2 = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
             string[] limitMin2 = limits[0].Split(" ");
             _limitMin2 = new Position2(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
-            string[] limitMa2x = limits[1].Split(" ");
+            string[] limitMax2 = limits[1].Split(" ");
             _limitMax2 = new Position2(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get all blocks in level (id, name, path, isSolid)
@@ -98,12 +98,14 @@ namespace TripOverTime.EngineNamespace
                 string s = (string)blocks[i];
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
                 if (str.Length > 4)
                 {
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
                     //{
                         _sprites[i].IsDangerous = true;
+                        _sprites2[i].IsDangerous2 = true;
                         Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
@@ -151,6 +153,7 @@ namespace TripOverTime.EngineNamespace
                 string s = (string)blocks[i];
                 string[] str = s.Split(" ");
                 _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
                 if (str.Length > 4)
                 {
                     //Console.WriteLine(str[4]);
@@ -158,6 +161,7 @@ namespace TripOverTime.EngineNamespace
                     //if (str[4] == "DANGEROUS")
                     //{
                     _sprites[i].IsDangerous = true;
+                    _sprites2[i].IsDangerous2 = true;
                     Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
@@ -199,6 +203,28 @@ namespace TripOverTime.EngineNamespace
 
             return monsters;
         }
+        internal List<Monster> GenerateMonsters2()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get monsters
+            // name x y hp
+            string[] strmonsters = StringBetweenString(text, "MONSTER", "MONSTEREND").Split("\n");
+            List<Monster> monsters = new List<Monster>();
+            foreach (string s in strmonsters)
+            {
+                string[] str = s.Split(" ");
+
+                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, Convert.ToSingle(str[6]), str[7]));
+
+            }
+
+            return monsters;
+        }
         internal Boss GenerateBoss()
         {
             //Verify if it's a map file
@@ -221,7 +247,28 @@ namespace TripOverTime.EngineNamespace
 
             
         }
+        internal Boss GenerateBoss2()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
 
+            // Get boss
+            // name x y hp
+            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
+            Boss boss = null;
+            foreach (string s in strBoss)
+            {
+                string[] str = s.Split(" ");
+
+                boss = new Boss(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
+            }
+            return boss;
+
+
+        }
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach(Sprite spr in _sprites)
