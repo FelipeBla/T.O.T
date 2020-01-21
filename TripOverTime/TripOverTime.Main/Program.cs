@@ -211,8 +211,15 @@ namespace TripOverTime.Main
                                 }
                             }
                         }
-
+                        if (engine.GetGame.GetPlayer.KilledBy != "void")
+                        {
+                            engine.DieMenu();
+                        }
                         engine.DieMenu();
+                        if (engine.GetGame2.GetPlayer2.KilledBy2 != "void")
+                        {
+                            engine.DieMenu();
+                        }
                     }
                     else
                     {

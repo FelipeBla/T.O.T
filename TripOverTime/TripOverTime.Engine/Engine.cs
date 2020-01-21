@@ -758,7 +758,7 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
+            lines.Add(new Text("PLAYER 1 DIIIIED !", _globalFont, 64));
             lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
@@ -805,8 +805,8 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
-            lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
+            lines.Add(new Text("PLAYER 2 DIEEEEED", _globalFont, 64));
+            lines.Add(new Text("Killed by : " + _game2.GetPlayer2.KilledBy2, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
