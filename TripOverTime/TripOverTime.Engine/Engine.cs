@@ -472,7 +472,7 @@ namespace TripOverTime.EngineNamespace
                 if ((sToPositive2 != null && sToNegative2 != null) && (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2))
                 {
                     //DIE
-                    _game.GetPlayer.KilledBy = "Trap";
+                    _game2.GetPlayer2.KilledBy2 = "Trap";
                     return -1;
                 }
                 else
