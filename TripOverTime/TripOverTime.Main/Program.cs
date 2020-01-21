@@ -78,7 +78,8 @@ namespace TripOverTime.Main
 
                 if (choose == 0) //Lauch GAME 1P
                 {
-                    // Choose Map
+                // Choose Map
+                ChooseMapMenu:
                     string chooseMap = "null";
                     engine.GetMenu.InitMapMenu();
                     do
@@ -94,6 +95,24 @@ namespace TripOverTime.Main
                     {
                         window.Close();
                         RunAgain();
+                    }
+                    else if (chooseMap == "editedMap")
+                    {
+                        engine.GetMenu.InitMapEditedMenu();
+                        do
+                        {
+                            if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                            {
+                                chooseMap = engine.GetMenu.ChooseMapEditedMenu();
+                                spGame.Restart();
+                            }
+                        } while (chooseMap == "editedMap");
+
+                        if (chooseMap == "back")
+                        {
+                            //back to map menu
+                            goto ChooseMapMenu;
+                        }
                     }
                     // Start a game
                     engine.StartGame(chooseMap); //map, player sprite
