@@ -228,13 +228,13 @@ namespace TripOverTime.EngineNamespace
                         Console.WriteLine("-" + _attack + " to " + monsterToAttack.Name + " who have " + monsterToAttack.life.GetCurrentPoint);
                         monsterToAttack.life.DecreasedPoint(_attack);
                         _incrementationHeal++;
-                        if (_incrementationHeal > 2)
+                        if (_incrementationHeal > 10)
                         {
                             _life.BonusPoint(1);
                             _incrementationHeal = 0;
                         }
                         _incrementationAttack++;
-                        if (_incrementationAttack > 1)
+                        if (_incrementationAttack > 5)
                         {
                             _attack++;
                             _incrementationAttack = 0;
@@ -369,17 +369,16 @@ namespace TripOverTime.EngineNamespace
                     //boss
                     if (_context.GetBoss != null)
                     {
-                        if ((_context.GetBoss.Position.Y == _realPosition.Y || _context.GetBoss.Position.Y + 1 == _realPosition.Y) && _context.GetBoss.IsAlive) //Meme niveau Y
+
+                        if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1 && _context.GetBoss.IsAlive)
                         {
-                            if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1)
+                            if (_context.GetBoss.GetBossSprite.IsSolid)
                             {
-                                if (_context.GetBoss.GetBossSprite.IsSolid)
-                                {
-                                    //Blocked by boss
-                                    blocked = true;
-                                }
+                                //Blocked by boss
+                                blocked = true;
                             }
                         }
+                        
                     }
                     
 
