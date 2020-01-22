@@ -287,22 +287,11 @@ namespace TripOverTime.EngineNamespace
             List<Position> heart = _game.GetMapObject.GetHeart;
             foreach (Position position in heart)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
-
-                    bool verif = true;
-                    foreach (Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetLife.BonusPoint(1);
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetLife.BonusPoint(1);
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
                 }
             }
 
@@ -310,26 +299,17 @@ namespace TripOverTime.EngineNamespace
             List<Position> star = _game.GetMapObject.GetStar;
             foreach (Position position in star)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
 
-                    bool verif = true;
-                    foreach (Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetAttack++;
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetAttack++;
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+
                 }
             }
 
-            
+
 
             if (!_game.GetPlayer.IsAlive)
             {
