@@ -617,7 +617,6 @@ namespace TripOverTime.EngineNamespace
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
-            //background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
             List<Text> lines = new List<Text>();
@@ -627,14 +626,25 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
-
             for (int i = 0; i < lines.Count; i++)
             {
-                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                RectangleShape r = new RectangleShape(new Vector2f(lines[i].GetGlobalBounds().Width + 20, lines[i].GetGlobalBounds().Height + 20));
+                r.FillColor = Color.White;
+
+                if (i == 0)
+                    lines[i].FillColor = Color.Green;
+                else if (i == lines.Count - 1)
+                {
+                    r.FillColor = Color.Black;
+                    lines[i].FillColor = Color.White;
+                }
+                else
+                    lines[i].FillColor = Color.Black;
+
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                r.Position = new Vector2f(lines[i].Position.X - 10, lines[i].Position.Y);
+
+                _window.Draw(r);
                 _window.Draw(lines[i]);
             }
 
@@ -718,10 +728,9 @@ namespace TripOverTime.EngineNamespace
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
 
-            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
-            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
 
@@ -731,16 +740,29 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("PLAYER 1 DIIIIED !", _globalFont, 64));
             lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
-            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
+            
 
             for (int i = 0; i < lines.Count; i++)
             {
-                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                RectangleShape r = new RectangleShape(new Vector2f(lines[i].GetGlobalBounds().Width + 20, lines[i].GetGlobalBounds().Height + 20));
+                r.FillColor = Color.White;
+
+                if (i == 0)
+                    lines[i].FillColor = Color.Red;
+                else if (i == lines.Count - 1)
+                {
+                    r.FillColor = Color.Black;
+                    lines[i].FillColor = Color.White;
+                }
+                else
+                    lines[i].FillColor = Color.Black;
+
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                r.Position = new Vector2f(lines[i].Position.X - 10, lines[i].Position.Y);
+
+                _window.Draw(r);
                 _window.Draw(lines[i]);
             }
 
