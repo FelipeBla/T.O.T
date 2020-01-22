@@ -213,7 +213,7 @@ namespace TripOverTime.EngineNamespace
         {
             get
             {
-                return _life.GetCurrentPoint() > 0;
+                return _life.GetCurrentPoint > 0;
             }
         }
 

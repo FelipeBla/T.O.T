@@ -114,7 +114,7 @@ namespace TripOverTime.Main
 
                         if (engine.GetGame.GetPlayer.KilledBy == "Trap")
                         {
-                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint > 0)
                             {
                                 engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
                                 if (spGui.ElapsedMilliseconds >= 1000 / fps)
@@ -195,7 +195,7 @@ namespace TripOverTime.Main
 
                         if (engine.GetGame.GetPlayer.KilledBy == "Trap")
                         {
-                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                            while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint > 0)
                             {
                                 engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
                                 if (spGui.ElapsedMilliseconds >= 1000 / fps)

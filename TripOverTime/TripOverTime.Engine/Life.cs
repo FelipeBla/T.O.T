@@ -85,9 +85,10 @@ namespace TripOverTime.EngineNamespace
             _currentPoint = 1000;
         }
 
-        public ushort GetCurrentPoint()
+        public ushort GetCurrentPoint
         {
-            return _currentPoint;
+            get => _currentPoint;
+            set => _currentPoint = value;
         }
         public ushort GetCurrentPoint2()
         {

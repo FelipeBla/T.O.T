@@ -14,7 +14,6 @@ namespace TripOverTime.EngineNamespace
         bool CLOSE = false;
         Stopwatch _timer;
         Checkpoint _checkpoint;
-        List<Position> _verifHeal;
         List<Position2> _verifHeal2;
 
         SFML.Graphics.RenderWindow _window;
@@ -34,7 +33,6 @@ namespace TripOverTime.EngineNamespace
             _globalFont = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
             _timer = new Stopwatch();
             _timer.Start();
-            _verifHeal = new List<Position>();
             _verifHeal2 = new List<Position2>();
         }
 
@@ -82,17 +80,18 @@ namespace TripOverTime.EngineNamespace
             else
             {
                 _game.GetPlayer.IsJumping = false;
-                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                _game.GetPlayer.RoundY(); // Don't stuck player in ground
+            }
+
+            List<Position> _trap = _game.GetMapObject.GetTrap;
+            foreach (Position position in _trap)
+            {
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetPlayer.RealPosition.Y == position.Y)
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
-                else
-                {
-                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
-                }
-                
             }
 
 
@@ -100,45 +99,26 @@ namespace TripOverTime.EngineNamespace
             List<Position> heart = _game.GetMapObject.GetHeart;
             foreach (Position position in heart)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
-
-                    bool verif = true;
-                    foreach(Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetLife.BonusPoint(1);
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetLife.BonusPoint(1);
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
                 }
             }
+
 
             //strength
             List<Position> star = _game.GetMapObject.GetStar;
             foreach (Position position in star)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
 
-                    bool verif = true;
-                    foreach (Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetAttack++;
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetAttack++;
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+
                 }
             }
 
@@ -159,6 +139,15 @@ namespace TripOverTime.EngineNamespace
                 else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
                 {
                     m.Orientation = "right";
+                }
+
+                foreach (Position position in _trap)
+                {
+                    if (m.Position.X == position.X && m.Position.Y == position.Y)
+                    {
+                        //DIE
+                        m.life.DecreasedPoint(100);
+                    }
                 }
 
                 if (!m.isAlive)
@@ -298,22 +287,11 @@ namespace TripOverTime.EngineNamespace
             List<Position> heart = _game.GetMapObject.GetHeart;
             foreach (Position position in heart)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
-
-                    bool verif = true;
-                    foreach (Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetLife.BonusPoint(1);
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetLife.BonusPoint(1);
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
                 }
             }
 
@@ -321,24 +299,17 @@ namespace TripOverTime.EngineNamespace
             List<Position> star = _game.GetMapObject.GetStar;
             foreach (Position position in star)
             {
-                if (_game.GetPlayer.Position.X == position.X)
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
 
-                    bool verif = true;
-                    foreach (Position position1 in _verifHeal)
-                    {
-                        if (position1.X == position.X)
-                        {
-                            verif = false;
-                        }
-                    }
-                    if (verif)
-                    {
-                        _game.GetPlayer.GetAttack++;
-                        _verifHeal.Add(position);
-                    }
+                    _game.GetPlayer.GetAttack++;
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+
                 }
             }
+
+
 
             if (!_game.GetPlayer.IsAlive)
             {
@@ -667,7 +638,7 @@ namespace TripOverTime.EngineNamespace
             //Lines
             lines.Add(new Text("PLAYER1 1 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
-            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
@@ -719,7 +690,7 @@ namespace TripOverTime.EngineNamespace
             //Lines
             lines.Add(new Text("PLAYER 2 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
-            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
             lines[0].Color = Color.Green;
