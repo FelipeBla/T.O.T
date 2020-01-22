@@ -544,7 +544,7 @@ namespace TripOverTime.EngineNamespace
             {
                 foreach (Monster monster in _context2.GetGame2.GetMonsters2)
                 {
-                    monster.GetAttack2.HurtPlayer2();
+                    monster.GetAttack2.HurtPlayerAnimation2();
                 }
             }
             else

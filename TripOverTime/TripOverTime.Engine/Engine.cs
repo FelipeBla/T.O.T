@@ -454,7 +454,13 @@ namespace TripOverTime.EngineNamespace
                 // SHOW WIN MENU !
                 return 0;
             }
-
+            //win player 2
+            if (end.X <= _game2.GetPlayer2.RealPosition2.X2)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 2;
+            }
 
             //-------------------------------------------------------player 2
             _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
@@ -659,7 +665,7 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU WIN !", _globalFont, 64));
+            lines.Add(new Text("PLAYER1 1 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
@@ -698,6 +704,11 @@ namespace TripOverTime.EngineNamespace
 
         public void WinMenu2()
         {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 
@@ -706,7 +717,7 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU WIN !", _globalFont, 64));
+            lines.Add(new Text("PLAYER 2 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
@@ -756,6 +767,8 @@ namespace TripOverTime.EngineNamespace
             background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
+
+
             List<Text> lines = new List<Text>();
             //Lines
             lines.Add(new Text("PLAYER 1 DIIIIED !", _globalFont, 64));
@@ -797,6 +810,11 @@ namespace TripOverTime.EngineNamespace
 
         public void DieMenu2()
         {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 

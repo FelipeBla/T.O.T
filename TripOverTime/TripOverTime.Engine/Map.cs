@@ -105,8 +105,9 @@ namespace TripOverTime.EngineNamespace
             {
                 string s = (string)blocks[i];
                 string[] str = s.Split(" ");
-                _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
-                _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                Sprite SpriteToAdd = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
+                _sprites.Add(SpriteToAdd);
+                _sprites2.Add(SpriteToAdd);
                 if (str[1] == "TRAP")
                 {
                     //Console.WriteLine(str[4]);

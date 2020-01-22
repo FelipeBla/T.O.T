@@ -125,8 +125,10 @@ namespace TripOverTime.Main
                                 }
                             }
                         }
-
-                        engine.DieMenu();
+                        if (engine.GetGame.GetPlayer.KilledBy != "Void")
+                        {
+                            engine.DieMenu();
+                        }
                     }
                     else
                     {
@@ -180,6 +182,12 @@ namespace TripOverTime.Main
                         Console.WriteLine("YOU WIN!");
                         engine.WinMenu();
                     }
+                    if (result == 2)
+                    {
+                        //WIN
+                        Console.WriteLine("YOU WIN!");
+                        engine.WinMenu2();
+                    }
                     else if (result == -1)
                     {
                         //DIE
@@ -215,10 +223,10 @@ namespace TripOverTime.Main
                         {
                             engine.DieMenu();
                         }
-                        engine.DieMenu();
+                      
                         if (engine.GetGame2.GetPlayer2.KilledBy2 != "void")
                         {
-                            engine.DieMenu();
+                            engine.DieMenu2();
                         }
                     }
                     else
