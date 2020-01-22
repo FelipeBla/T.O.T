@@ -358,16 +358,14 @@ namespace TripOverTime.EngineNamespace
                     }
 
                     //boss
-                    if ((_context.GetBoss.Position.Y == _realPosition.Y || _context.GetBoss.Position.Y + 1 == _realPosition.Y) && _context.GetBoss.IsAlive) //Meme niveau Y
+                    if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1 && _context.GetBoss.IsAlive)
                     {
-                        if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1)
+                        if (_context.GetBoss.GetBossSprite.IsSolid)
                         {
-                            if (_context.GetBoss.GetBossSprite.IsSolid)
-                            {
-                                //Blocked by boss
-                                blocked = true;
-                            }
+                            //Blocked by boss
+                            blocked = true;
                         }
+                    
                     }
 
                     if (!blocked)
