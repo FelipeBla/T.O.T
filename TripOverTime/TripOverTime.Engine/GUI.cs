@@ -282,17 +282,33 @@ namespace TripOverTime.EngineNamespace
             // HP Text
             _window.Draw(_hpBar);
 
-            Text t1 = new Text("Utiliser les flèche du clavier pour déplacer le viking.", _context.GetFont, 35)
+            Text t1 = new Text("Utiliser la flèche de droite pour avancer.", _context.GetLatoFont, 35)
             {
-                Position = new SFML.System.Vector2f(250, 30)
+                Position = new SFML.System.Vector2f(320, 10)
             };
             _window.Draw(t1);
 
-            Text t2 = new Text("Utiliser espace pour attaquer", _context.GetFont, 35)
+            Text t2 = new Text("Utiliser la flèche de gauche pour reculer.", _context.GetLatoFont, 35)
             {
-                Position = new SFML.System.Vector2f(250, 60)
+                Position = new SFML.System.Vector2f(320, 50)
             };
             _window.Draw(t2);
+            Text t3 = new Text("Utiliser la flèche du haut pour sauter.", _context.GetLatoFont, 35)
+            {
+                Position = new SFML.System.Vector2f(320, 90)
+            };
+            _window.Draw(t3);
+            Text t4 = new Text("Utiliser espace pour attaquer", _context.GetLatoFont, 35)
+            {
+                Position = new SFML.System.Vector2f(320, 130)
+            };
+            _window.Draw(t4);
+
+            Text t5 = new Text("Sacrifiez-vous pour quitter le tuto", _context.GetLatoFont, 35)
+            {
+                Position = new SFML.System.Vector2f(320, 170)
+            };
+            _window.Draw(t5);
 
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
