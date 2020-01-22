@@ -71,7 +71,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterMove()
         {
-            Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
+            //Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
             if (!_ismoving)
             {
                 Sprite s = null;

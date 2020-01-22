@@ -59,7 +59,7 @@ namespace TripOverTime.EngineNamespace
         float _attackRange2;
         string _imgPath;
 
-        internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath)
+        internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath, bool multiplayer = false)
         {
             _context = context;
             _name = name;
@@ -67,6 +67,7 @@ namespace TripOverTime.EngineNamespace
             _realPosition = new Position(_position.X, _position.Y);
             _life = life;
             _attack = attack;
+            _imgPath = imgPath;
             _isJumping = false;
             _isAttack = false;
             if (context != null)
@@ -81,7 +82,7 @@ namespace TripOverTime.EngineNamespace
             _incrementationAttack2 = 0;
 
             _attackSpeed = 1;
-            _attackRange = 1.0f; // En block
+            _attackRange = 2.0f; // En block
 
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
@@ -90,32 +91,35 @@ namespace TripOverTime.EngineNamespace
 
             _monsterKillName = "void";
 
-            //Player 2
-            pw2 = 128;
-            ph2 = 128;
-            _monsterKillName2 = "void";
-            _context2 = context;
-            _name2 = name;
-            _position2 = new Position2(_position.X, _position.Y);
-            _realPosition2 = new Position2(_position2.X2, _position2.Y2);
-            _life2 = life;
-            _attack2 = attack;
-            _isJumping2 = false;
-            _isAttack2 = false;
-            if (_context2 == null)
-                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, null, false, true);
-            else
-                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
-            _orientation2 = "right";
+            if (multiplayer)
+            {
+                //Player 2
+                pw2 = 128;
+                ph2 = 128;
+                _monsterKillName2 = "void";
+                _context2 = context;
+                _name2 = name;
+                _position2 = new Position2(_position.X, _position.Y);
+                _realPosition2 = new Position2(_position2.X2, _position2.Y2);
+                _life2 = life;
+                _attack2 = attack;
+                _isJumping2 = false;
+                _isAttack2 = false;
+                if (_context2 == null)
+                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, null, false, true);
+                else
+                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
+                _orientation2 = "right";
 
-            _attackSpeed2 = 1;
-            _attackRange = 2.0f; // En block
-            _attackRange2 = 2.0f; // En block
+                _attackSpeed2 = 1;
+                _attackRange2 = 2.0f; // En block
 
 
 
-            _attackTimer2 = new Stopwatch();
-            _attackTimer2.Start();
+                _attackTimer2 = new Stopwatch();
+                _attackTimer2.Start();
+            }
+            
         }
 
         internal void Jump()
@@ -192,7 +196,9 @@ namespace TripOverTime.EngineNamespace
                         foreach (Monster m in _context.GetMonsters)
                         {
                             if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            {
                                 monsterToAttack = m;
+                            }
                         }
                         // boss
                         if (_context.GetBoss != null && _context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
@@ -204,19 +210,22 @@ namespace TripOverTime.EngineNamespace
                         foreach (Monster m in _context.GetMonsters)
                         {
                             if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            {
                                 monsterToAttack = m;
+                            }
                         }
                         //boss
-
+                        if (_context.GetBoss != null && _context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                        {
+                            _context.GetBoss.life.DecreasedPoint(_attack);
+                        }
                     }
-                    if (_context.GetBoss != null && _context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
-                    {
-                        _context.GetBoss.life.DecreasedPoint(_attack);
-                    }
+                    
                     // Si il y a un monstre
                     if (monsterToAttack != null && monsterToAttack.isAlive)
                     {
                         //Attack
+                        Console.WriteLine("-" + _attack + " to " + monsterToAttack.Name + " who have " + monsterToAttack.life.GetCurrentPoint);
                         monsterToAttack.life.DecreasedPoint(_attack);
                         _incrementationHeal++;
                         if (_incrementationHeal > 2)

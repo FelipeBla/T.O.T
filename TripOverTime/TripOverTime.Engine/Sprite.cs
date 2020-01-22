@@ -63,7 +63,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _monsterTexture2;
         Stopwatch _animTimer2;
 
-internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
+        internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false, bool multiplayer = false)
         {
             if (String.IsNullOrEmpty(imgPath)) throw new ArgumentException("imgPath is null or empty!");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("name is null or empty!");
@@ -206,7 +206,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
 
         internal void DefaultAnimation()
         {
-            if(!_context.GetGame.GetPlayer.IsJumping)
+            if (!_context.GetGame.GetPlayer.IsJumping)
             {
                 if (_context.GetGame.GetPlayer.Orientation == "right")
                 {
@@ -273,7 +273,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
                     string numberTexture = action + _incrementationWalk;
                     _sprite.Texture = _playerTexture[numberTexture];
                     //_sprite.TextureRect = new IntRect((int)_playerTexture[numberTexture].Size.X, 0, (int)-_playerTexture[numberTexture].Size.X, (int)_playerTexture[numberTexture].Size.Y);
-                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X/2, 0);
+                    _sprite.Origin = new SFML.System.Vector2f(_playerTexture[numberTexture].Size.X / 2, 0);
                     _sprite.Scale = new SFML.System.Vector2f(-1.0f, 1.0f);
                     if (_incrementationWalk + 1 == nbrAction)
                     {
@@ -285,7 +285,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
                     }
                     _animTimer.Restart();
                 }
-                
+
             }
             else JumpAnimation();
         }
@@ -402,7 +402,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
                     _animTimer.Restart();
                 }
             }
-            
+
         }
         internal void JumpAnimation2()
         {
@@ -605,9 +605,9 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
         }
 
 
-internal void BossOrientation(Boss boss)
+        internal void BossOrientation(Boss boss)
         {
-            if(boss.Orientation == "right")
+            if (boss.Orientation == "right")
             {
                 _sprite.TextureRect = new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_bossTexture["stand"].Size);
             }
@@ -844,7 +844,7 @@ internal void BossOrientation(Boss boss)
 
                 string numberTexture = action + _monsterAttack;
                 _sprite.Texture = _monsterTexture[numberTexture];
-                
+
                 _animTimer.Restart();
 
             }
@@ -874,8 +874,8 @@ internal void BossOrientation(Boss boss)
 
         internal void MonsterDeadAnimation(Monster m)
         {
-                int nbrAction = 15;
-                string action = "dead";
+            int nbrAction = 15;
+            string action = "dead";
 
             if (_animTimer.ElapsedMilliseconds >= 40)
             {

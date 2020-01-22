@@ -90,7 +90,7 @@ namespace TripOverTime.Main
                             spGame.Restart();
                         }
                     } while (chooseMap == "null");
-                    Console.WriteLine(chooseMap);
+
                     if (chooseMap == "quit")
                     {
                         window.Close();
@@ -183,8 +183,8 @@ namespace TripOverTime.Main
                             chooseMap = engine.GetMenu.ChooseMapMenu();
                             spGame.Restart();
                         }
-                    } while (chooseMap == "null");
-                    Console.WriteLine(chooseMap);
+                    } while (chooseMap == "null" || chooseMap == "editedMap");
+
                     if (chooseMap == "quit")
                     {
                         RunAgain();

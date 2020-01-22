@@ -22,25 +22,28 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         string _mapPath2;
 
-        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk, bool multiplayer = false)
         {
             _mapPath = mapPath;
             _context = context;
-            _map = new Map(this, mapPath);
-            _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+            _map = new Map(this, mapPath, multiplayer);
+            _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath, multiplayer);
             _monsters = _map.GenerateMonsters();
             _boss = _map.GenerateBoss();
             _timer = new Stopwatch();
             _timer.Start();
 
-            _map2 = _map;
-            _boss2 = _map2.GenerateBoss2();
-            _mapPath2 = mapPath;
-            _context2 = context;
-            _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
-            _monsters2 = _map.GenerateMonsters2();
-            _timer2 = new Stopwatch();
-            _timer2.Start();
+            if (multiplayer)
+            {
+                _map2 = new Map(this, mapPath, multiplayer);
+                _boss2 = _map2.GenerateBoss2();
+                _mapPath2 = mapPath;
+                _context2 = context;
+                _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+                _monsters2 = _map.GenerateMonsters2();
+                _timer2 = new Stopwatch();
+                _timer2.Start();
+            }
         }
 
         internal Map GetMapObject
