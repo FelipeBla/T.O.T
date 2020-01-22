@@ -59,7 +59,11 @@ namespace TripOverTime.EngineNamespace
         float _attackRange2;
         string _imgPath;
 
+<<<<<<< HEAD
+        internal Player(Game context, String name, Position position, Position2 position2, Life life, ushort attack, string imgPath)
+=======
         internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath)
+>>>>>>> Quentin
         {
             _context = context;
             _name = name;
@@ -69,10 +73,15 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _isAttack = false;
+<<<<<<< HEAD
+            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
+            _imgPath = imgPath;
+=======
             if (context != null)
                 _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             else
                 _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, null, false, true);
+>>>>>>> Quentin
             _orientation = "right";
 
             _incrementationHeal = 0;
@@ -85,7 +94,14 @@ namespace TripOverTime.EngineNamespace
 
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
+<<<<<<< HEAD
+            pw = 128;
+=======
+
+
+            //Player 2
             /*pw = 128;
+>>>>>>> Quentin
             ph = 128;
 
             _monsterKillName = "void";
@@ -96,7 +112,7 @@ namespace TripOverTime.EngineNamespace
             _monsterKillName2 = "void";
             _context2 = context;
             _name2 = name;
-            _position2 = new Position2(_position.X, _position.Y);
+            _position2 = position2;
             _realPosition2 = new Position2(_position2.X2, _position2.Y2);
             _life2 = life;
             _attack2 = attack;

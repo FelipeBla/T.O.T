@@ -297,6 +297,9 @@ namespace TripOverTime.EngineNamespace
                 }
             } while (!returnMain);
 
+            string settingsFile = _fullscreen + "\n" + _NbFPS + "\n" + _XResolution + "\n" + _YResolution;
+            System.IO.File.WriteAllText("settings", settingsFile);
+
             return _applyNeed;
         }
 

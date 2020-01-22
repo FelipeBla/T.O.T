@@ -117,8 +117,12 @@ namespace TripOverTime.EngineNamespace
                     //if (str[4] == "DANGEROUS")
                     //{
                         _sprites[i].IsDangerous = true;
+<<<<<<< HEAD
                         _sprites2[i].IsDangerous2 = true;
                         Console.WriteLine(str[1] + " IS DANGEROUS");
+=======
+                        //Console.WriteLine(str[1] + " IS DANGEROUS");
+>>>>>>> Quentin
                     //}
                 }
                 if (str[1] == "AIR")
@@ -196,7 +200,7 @@ namespace TripOverTime.EngineNamespace
                     //{
                     _sprites[i].IsDangerous = true;
                     _sprites2[i].IsDangerous2 = true;
-                        Console.WriteLine(str[1] + " IS DANGEROUS");
+                    Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
             }
@@ -231,8 +235,12 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
+<<<<<<< HEAD
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
                 
+=======
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
+>>>>>>> Quentin
             }
 
             return monsters;

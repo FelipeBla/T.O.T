@@ -3,6 +3,7 @@ using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using TripOverTime.EngineNamespace;
 
@@ -18,6 +19,23 @@ namespace TripOverTime.Main
 
         private static bool RunAgain() //fonction du jeu
         {
+            // Settings
+            if (File.Exists("settings"))
+            {
+                string settingsFile = File.ReadAllText("settings");
+                string[] st = settingsFile.Split("\n");
+                Settings.Fullscreen = Convert.ToBoolean(st[0]);
+                Settings.NbFPS = Convert.ToUInt16(st[1]);
+                Settings.XResolution = Convert.ToUInt16(st[2]);
+                Settings.YResolution = Convert.ToUInt16(st[3]);
+
+            }
+            else
+            {
+                string settingsFile = Settings.Fullscreen + "\n" + Settings.NbFPS + "\n" + Settings.XResolution + "\n" + Settings.YResolution;
+                File.WriteAllText("settings", settingsFile);
+            }
+
             // To manage FramePS and TicksPS
             Stopwatch spGui = new Stopwatch();
             Stopwatch spGame = new Stopwatch();
@@ -60,7 +78,8 @@ namespace TripOverTime.Main
 
                 if (choose == 0) //Lauch GAME 1P
                 {
-                    // Choose Map
+                // Choose Map
+                ChooseMapMenu:
                     string chooseMap = "null";
                     engine.GetMenu.InitMapMenu();
                     do
@@ -76,6 +95,24 @@ namespace TripOverTime.Main
                     {
                         window.Close();
                         RunAgain();
+                    }
+                    else if (chooseMap == "editedMap")
+                    {
+                        engine.GetMenu.InitMapEditedMenu();
+                        do
+                        {
+                            if (spGame.ElapsedMilliseconds >= 1000 / tps)
+                            {
+                                chooseMap = engine.GetMenu.ChooseMapEditedMenu();
+                                spGame.Restart();
+                            }
+                        } while (chooseMap == "editedMap");
+
+                        if (chooseMap == "back")
+                        {
+                            //back to map menu
+                            goto ChooseMapMenu;
+                        }
                     }
                     // Start a game
                     engine.StartGame(chooseMap); //map, player sprite
@@ -236,7 +273,8 @@ namespace TripOverTime.Main
                 }
                 else if (choose == 2) // Map editor
                 {
-                    MapEditor.Run(window);
+                    MapEditor m = new MapEditor();
+                    m.Run(window);
                 }
                 else if (choose == 3) //Settings
                 {

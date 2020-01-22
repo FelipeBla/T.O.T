@@ -38,6 +38,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _bossTexture;
         Dictionary<string, Texture> _bossTexture2;
         SFML.Graphics.Sprite _sprite;
+        SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer;
 
         int _bossAttack2;
@@ -63,10 +64,9 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer2;
 
-internal Sprite(string id, string name, string imgPath, bool isSolid, Map context, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
+internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
         {
             if (String.IsNullOrEmpty(imgPath)) throw new ArgumentException("imgPath is null or empty!");
-            if (context == null) throw new ArgumentNullException("context is null!");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("name is null or empty!");
 
             _id = id;
@@ -953,6 +953,16 @@ internal void BossOrientation(Boss boss)
         internal string Id
         {
             get => _id;
+        }
+
+        internal string Name
+        {
+            get => _name;
+        }
+
+        internal string ImgPath
+        {
+            get => _imgPath;
         }
 
         internal bool IsDangerous

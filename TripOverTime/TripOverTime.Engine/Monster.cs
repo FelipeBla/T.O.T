@@ -41,7 +41,7 @@ namespace TripOverTime.EngineNamespace
         float _range2;
         string _attackCombo;
 
-        internal Monster(Game context, String name, Position position, Position2 position2, Life life, ushort attack, float monsterMove, float range, string attackCombo)
+        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
         {
             _context = context;
             _name = name;
@@ -49,21 +49,22 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = new Attack(context, this, attack, attackCombo);
-            _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false, false);
+            if (_context == null) _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
+            else _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
-            _monsterMove = monsterMove;
+            _monsterMove = monsterMove / 100;
             _range = range + 0.2f;
             _range2 = range + 0.2f;
             _attackCombo = attackCombo;
             _context2 = context;
             _name2 = name;
-            _position2 = position2;
+            _position2 = new Position2(_position.X, _position.Y);
             _life2 = life;
             _isAlive2 = true;
             _attack2 = new Attack(context, this, attack, attackCombo);
-            _sprite2 = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, _context2.GetMapObject, true, false);
-            pw2 = _sprite2.GetSprite2.TextureRect.Width;
+            if (_context2 == null) _sprite = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
+            else _sprite2 = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, _context2.GetMapObject, true, false);
             ph2 = _sprite2.GetSprite2.TextureRect.Height;
             _monsterMove2 = monsterMove;
         }
@@ -283,6 +284,11 @@ namespace TripOverTime.EngineNamespace
         
         }
 
+        internal float MoveSpeed
+        {
+            get => _monsterMove;
+        }
+
         internal float Range
         {
             get => _range;
@@ -292,7 +298,6 @@ namespace TripOverTime.EngineNamespace
         {
             get => _range2;
         }
-
         internal string AttackCombo
         {
             get => _attackCombo;
