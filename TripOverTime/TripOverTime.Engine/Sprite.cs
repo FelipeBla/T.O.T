@@ -169,6 +169,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
                 DirectoryInfo dirMonster;
                 FileInfo[] imgMonster;
                 _monsterTexture = new Dictionary<string, Texture>();
+                _monsterTexture2 = new Dictionary<string, Texture>();
 
                 dirMonster = new DirectoryInfo(imgPath);
                 imgMonster = dirMonster.GetFiles();
@@ -180,11 +181,16 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
                         string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
                         _monsterTexture.Add(action, new Texture(f.FullName));
                         if (_monsterTexture[action] == null) throw new Exception("Texture null!");
+                        _monsterTexture2.Add(action, new Texture(f.FullName));
+                        if (_monsterTexture2[action] == null) throw new Exception("Texture null!");
                     }
                 }
 
                 _texture = _monsterTexture["stand"];
+                _texture2 = _monsterTexture["stand"];
             }
+
+
 
             else
             {
@@ -291,7 +297,7 @@ internal Sprite(string id, string name, string imgPath, bool isSolid, Map contex
 
                 int nbrAction = 7;
                 string action = "walk";
-                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right" && _animTimer.ElapsedMilliseconds >= 100)//Right
+                if (_context2.GetGame2.GetPlayer2.Orientation2 == "right" && _animTimer2.ElapsedMilliseconds >= 100)//Right
                 {
 
                     string numberTexture = action + _incrementationWalk2;

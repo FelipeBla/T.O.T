@@ -147,7 +147,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterDead2()
         {
-            _sprite2.MonsterDeadAnimation(this);
+            _sprite2.MonsterDeadAnimation2(this);
             _sprite2.IsSolid2 = false;
         }
         internal void Gravity()

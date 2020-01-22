@@ -93,33 +93,36 @@ namespace TripOverTime.EngineNamespace
 
          internal void AttackMonster2()
         {
-            if (_incrementationAttack2 == _schemaAttack2.Length - 1)
+            if (_incrementationAttack2 >= _schemaAttack2.Length - 1)
             {
                 _incrementationAttack2 = 0;
             }
 
-            Console.WriteLine(_schemaAttack2[_incrementationAttack2]);
             if (_schemaAttack2[_incrementationAttack2] == 'S')
             {
+                _speedAttack2 = 50;
                 SlidingAttack2();
-                if (_timer2.ElapsedMilliseconds >= 700)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _monster2.isAlive2)
                 {
-                    _context2.GetPlayer2.GetLife2.DecreasedPoint2(_attack2);
-                    _context2.GetPlayer2.HurtPlayer2 = true;
-                    HurtPlayer2();
+                    if (_monster2.Position2.X2 + _monster2.Range2 > _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.X2 - _monster2.Range2 < _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2)
+                    {
+                        HurtPlayer2();
+                    }
                     _incrementationAttack2++;
                     _timer2.Restart();
                 }
             }
             else if (_schemaAttack2[_incrementationAttack2] == 'A')
             {
+                _speedAttack2 = 80;
                 NormalAttack2();
 
-                if (_timer2.ElapsedMilliseconds >= 910 && _monster2.Position2.X2 + _monster2.Range2 > _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.X2 - _monster2.Range2 < _context2.GetPlayer2.RealPosition2.X2 && _context2.GetPlayer2.RealPosition2.Y2 == _monster2.Position2.Y2 && _monster2.isAlive2)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _monster2.isAlive2)
                 {
-                    _context2.GetPlayer2.GetLife2.DecreasedPoint2(_attack2);
-                    _context2.GetPlayer2.HurtPlayer2 = true;
-                    HurtPlayer2();
+                    if (_monster2.Position2.X2 + _monster2.Range2 > _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.X2 - _monster2.Range2 < _context2.GetPlayer2.RealPosition2.X2 && _monster2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2)
+                    {
+                        HurtPlayer2();
+                    }
                     _incrementationAttack2++;
                     _timer2.Restart();
                 }
@@ -216,7 +219,7 @@ namespace TripOverTime.EngineNamespace
             }
             if (_schemaAttack2[_incrementationAttack2] == 'R')//run slashing
             {
-                _speedAttack = 40;
+                _speedAttack2 = 40;
                 if (_incrementationSpeed2 == 0) { _boss2.BossSpeed2 *= 5; _incrementationSpeed2++; }
                 RunSlashingBoss2();
                 if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _boss2.IsAlive2)
@@ -235,21 +238,21 @@ namespace TripOverTime.EngineNamespace
             {
                 _speedAttack2 = 40;
                 SlashingBoss2();
-                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _boss2.IsAlive2)
                 {
                     if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
                         HurtPlayer2();
                     }
-                    _incrementationAttack++;
+                    _incrementationAttack2++;
                     _timer2.Restart();
                 }
             }
-            else if (_schemaAttack2[_incrementationAttack] == 'T')//throwing
+            else if (_schemaAttack2[_incrementationAttack2] == 'T')//throwing
             {
                 _speedAttack = 60;
                 ThrowingBoss2();
-                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _boss2.IsAlive2)
                 {
                     if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
@@ -257,35 +260,35 @@ namespace TripOverTime.EngineNamespace
                         HurtPlayer2();
                         _attack2 /= 2;
                     }
-                    _incrementationAttack++;
+                    _incrementationAttack2++;
                     _timer2.Restart();
                 }
             }
-            else if (_schemaAttack2[_incrementationAttack] == 'K')//kicking
+            else if (_schemaAttack2[_incrementationAttack2] == 'K')//kicking
             {
                 _speedAttack2 = 40;
                 KickingBoss2();
-                if (_timer2.ElapsedMilliseconds >= _speedAttack * 12 && _boss2.IsAlive2)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 12 && _boss2.IsAlive2)
                 {
                     if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
                         HurtPlayer2();
                     }
-                    _incrementationAttack++;
+                    _incrementationAttack2++;
                     _timer2.Restart();
                 }
             }
-            else if (_schemaAttack2[_incrementationAttack] == 'S')//sliding
+            else if (_schemaAttack2[_incrementationAttack2] == 'S')//sliding
             {
-                _speedAttack = 60;
+                _speedAttack2 = 60;
                 SlidingBoss2();
-                if (_timer2.ElapsedMilliseconds >= _speedAttack * 6 && _boss2.IsAlive2)
+                if (_timer2.ElapsedMilliseconds >= _speedAttack2 * 6 && _boss2.IsAlive2)
                 {
                     if (_boss2.Position2.X2 + 3 > _context2.GetPlayer2.RealPosition2.X2 && _boss2.Position2.X2 - 3 < _context2.GetPlayer2.RealPosition2.X2 && (_boss2.Position2.Y2 == _context2.GetPlayer2.RealPosition2.Y2 || _boss2.Position2.Y2 + 1 == _context2.GetPlayer2.RealPosition2.Y2))
                     {
                         HurtPlayer2();
                     }
-                    _incrementationAttack++;
+                    _incrementationAttack2++;
                     _timer2.Restart();
                 }
             }
@@ -362,7 +365,10 @@ namespace TripOverTime.EngineNamespace
         {
             _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
         }
-
+        internal void HurtPlayerAnimation2()
+        {
+            _context2.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 60);
+        }
         private string StringBetweenString(string original, string str1, string str2)
         {
             int firstStringPosition = original.IndexOf(str1);
@@ -372,7 +378,9 @@ namespace TripOverTime.EngineNamespace
 
         internal void HurtPlayer2()
         {
-            _context2.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 40);
+            _context2.GetPlayer2.GetLife2.DecreasedPoint2(_attack);
+            _context2.GetPlayer2.HurtPlayer2 = true;
+            HurtPlayerAnimation2();
         }
 
         internal ushort GetAttack

@@ -33,7 +33,7 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
 
-            _map2 = new Map(this, mapPath);
+            _map2 = _map;
             _boss2 = _map2.GenerateBoss2();
             _mapPath2 = mapPath;
             _context2 = context;
@@ -49,7 +49,7 @@ namespace TripOverTime.EngineNamespace
         }
         internal Map GetMapObject2
         {
-            get => _map2;
+            get => _map;
         }
         public Player GetPlayer
         {
