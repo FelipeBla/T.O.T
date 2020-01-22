@@ -314,13 +314,13 @@ namespace TripOverTime.EngineNamespace
 
 
 
-            Dictionary<Position, Sprite> map = _context.GetGame.GetMapObject.GetMap;
+            Dictionary<Position2, Sprite> map = _context2.GetGame2.GetMapObject2.GetMap2;
 
-            foreach (KeyValuePair<Position, Sprite> s in map)
+            foreach (KeyValuePair<Position2, Sprite> s in map)
             {
-                s.Value.GetSprite.Position = new SFML.System.Vector2f(s.Key.X * 128, _window.Size.Y + s.Key.Y * -128); //128*128 = Size of a sprite
-                _window.Draw(s.Value.GetSprite);
-                _spritesDisplayed.Add(s.Value.GetSprite.Position, s.Value);
+                s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X2 * 128, _window.Size.Y + s.Key.Y2 * -128); //128*128 = Size of a sprite
+                _window.Draw(s.Value.GetSprite2);
+                _spritesDisplayed.Add(s.Value.GetSprite2.Position, s.Value);
             }
             if (!_window.IsOpen) throw new Exception("Window is not open!");
 
@@ -348,11 +348,11 @@ namespace TripOverTime.EngineNamespace
 
             Dictionary<Position2, Sprite> map2 = _context2.GetGame2.GetMapObject2.GetMap2;
 
-            foreach (KeyValuePair<Position2, Sprite> s in map2)
+            foreach (KeyValuePair<Position2, Sprite> s2 in map2)
             {
-                s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X2 * 128, _window.Size.Y + s.Key.Y2 * -128); //128*128 = Size of a sprite
-                _window.Draw(s.Value.GetSprite2);
-                _spritesDisplayed2.Add(s.Value.GetSprite2.Position, s.Value);
+                s2.Value.GetSprite2.Position = new SFML.System.Vector2f(s2.Key.X2 * 128, _window.Size.Y + s2.Key.Y2 * -128); //128*128 = Size of a sprite
+                _window.Draw(s2.Value.GetSprite2);
+                _spritesDisplayed2.Add(s2.Value.GetSprite2.Position, s2.Value);
             }
         }
 

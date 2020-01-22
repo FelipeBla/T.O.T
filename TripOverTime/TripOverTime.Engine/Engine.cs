@@ -462,7 +462,7 @@ namespace TripOverTime.EngineNamespace
                 if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
                 {
                     _game2.GetPlayer2.GetLife2.BonusPoint2(1);
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
                     _gui.LoadMap2();
                 }
             }
@@ -476,8 +476,8 @@ namespace TripOverTime.EngineNamespace
                 {
 
                     _game2.GetPlayer2.GetAttack2++;
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
-                    _gui.LoadMap();
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
+                    _gui.LoadMap2();
 
                 }
             }
