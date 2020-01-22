@@ -186,7 +186,7 @@ namespace TripOverTime.EngineNamespace
 
                 if (!(allMonsters.ContainsKey(str[0]))) // Ne contient pas deja le monstre
                 {
-                    allMonsters.Add(str[0], new Sprite("MONSTER420", str[0], $@"..\..\..\..\Assets\Monster\{str[0]}", true, _context.GetMapObject, true, false));
+                    allMonsters.Add(str[0], new Sprite("MONSTER420", str[0], $@"..\..\..\..\Assets\Monster\{str[0]}", true, _context.GetMapObject, true, false, false, false));
                 }
             }
 
@@ -194,7 +194,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], allMonsters[str[0]]));
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], allMonsters[str[0]].Clone()));
             }
 
             return monsters;
@@ -215,7 +215,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
+                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], null, true));
 
             }
 

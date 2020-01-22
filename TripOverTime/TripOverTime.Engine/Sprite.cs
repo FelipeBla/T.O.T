@@ -81,32 +81,34 @@ namespace TripOverTime.EngineNamespace
             _animTimer = new Stopwatch();
             _animTimer.Start();
             _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = _bossAttack = _bossDead = _bossDead2 = _bossWalk = _bossWalk2 = 1;
-            _id2 = id;
-            _name2 = name;
-            _imgPath2 = imgPath;
-            _isSolid2 = isSolid;
-            _context2 = context;
-            _isCheckpoint2 = false;
-            _isEnd2 = false;
-            _isMonster2 = isMonster;
-            _isPlayer2 = isPlayer;
-            _animTimer2 = new Stopwatch();
-            _animTimer2.Start();
 
-
-            _playerAnimation2 = _monsterAttack2 = _monsterWalk2 = _incrementationWalk2 = _incrementationAttack2 = _monsterDead2 = 1;
+            if (multiplayer)
+            {
+                _id2 = id;
+                _name2 = name;
+                _imgPath2 = imgPath;
+                _isSolid2 = isSolid;
+                _context2 = context;
+                _isCheckpoint2 = false;
+                _isEnd2 = false;
+                _isMonster2 = isMonster;
+                _isPlayer2 = isPlayer;
+                _animTimer2 = new Stopwatch();
+                _animTimer2.Start();
+                _playerAnimation2 = _monsterAttack2 = _monsterWalk2 = _incrementationWalk2 = _incrementationAttack2 = _monsterDead2 = 1;
+            }
 
             if (_name == "CHECKPOINT")
             {
                 if (_isSolid == true) throw new Exception("Checkpoint is solid!");
                 _isCheckpoint = true;
-                _isCheckpoint2 = true;
+                if (multiplayer) _isCheckpoint2 = true;
             }
             else if (_name == "END")
             {
-                if (_isSolid == true) throw new Exception("Checkpoint is solid!");
+                if (_isSolid == true) throw new Exception("End is solid!");
                 _isEnd = true;
-                _isEnd2 = true;
+                if (multiplayer) _isEnd2 = true;
             }
 
             //For GUI(texture, srpite)
@@ -115,7 +117,7 @@ namespace TripOverTime.EngineNamespace
                 DirectoryInfo dir;
                 FileInfo[] img;
                 _playerTexture = new Dictionary<string, Texture>();
-                _playerTexture2 = new Dictionary<string, Texture>();
+                if (multiplayer) _playerTexture2 = new Dictionary<string, Texture>();
 
                 dir = new DirectoryInfo(imgPath);
                 img = dir.GetFiles();
@@ -127,13 +129,16 @@ namespace TripOverTime.EngineNamespace
                         string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
                         _playerTexture.Add(action, new Texture(f.FullName));
                         if (_playerTexture[action] == null) throw new Exception("Texture null!");
-                        _playerTexture2.Add(action, new Texture(f.FullName));
-                        if (_playerTexture2[action] == null) throw new Exception("Texture null!");
+                        if (multiplayer)
+                        {
+                            _playerTexture2.Add(action, new Texture(f.FullName));
+                            if (_playerTexture2[action] == null) throw new Exception("Texture null!");
+                        }
                     }
                 }
 
                 _texture = _playerTexture["stand"];
-                _texture2 = _playerTexture["stand"];
+                if (multiplayer) _texture2 = _playerTexture["stand"];
             }
 
             else if (_isBoss)
@@ -141,7 +146,7 @@ namespace TripOverTime.EngineNamespace
                 DirectoryInfo dirBoss;
                 FileInfo[] imgBoss;
                 _bossTexture = new Dictionary<string, Texture>();
-                _bossTexture2 = new Dictionary<string, Texture>();
+                if (multiplayer) _bossTexture2 = new Dictionary<string, Texture>();
 
                 dirBoss = new DirectoryInfo(imgPath);
                 imgBoss = dirBoss.GetFiles();
@@ -152,14 +157,18 @@ namespace TripOverTime.EngineNamespace
                     {
                         string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
                         _bossTexture.Add(action, new Texture(f.FullName));
-                        _bossTexture2.Add(action, new Texture(f.FullName));
                         if (_bossTexture[action] == null) throw new Exception("Texture null!");
-                        if (_bossTexture2[action] == null) throw new Exception("Texture null!");
+
+                        if (multiplayer)
+                        {
+                            _bossTexture2.Add(action, new Texture(f.FullName));
+                            if (_bossTexture2[action] == null) throw new Exception("Texture null!");
+                        }
                     }
                 }
 
                 _texture = _bossTexture["stand"];
-                _texture2 = _bossTexture["stand"];
+                if (multiplayer) _texture2 = _bossTexture["stand"];
             }
 
 
@@ -168,7 +177,7 @@ namespace TripOverTime.EngineNamespace
                 DirectoryInfo dirMonster;
                 FileInfo[] imgMonster;
                 _monsterTexture = new Dictionary<string, Texture>();
-                _monsterTexture2 = new Dictionary<string, Texture>();
+                if (multiplayer) _monsterTexture2 = new Dictionary<string, Texture>();
 
                 dirMonster = new DirectoryInfo(imgPath);
                 imgMonster = dirMonster.GetFiles();
@@ -178,15 +187,20 @@ namespace TripOverTime.EngineNamespace
                     if (f.Extension == ".png")
                     {
                         string action = f.Name.ToLower().Substring(f.Name.IndexOf("_") + 1, f.Name.Length - f.Name.IndexOf("_") - 5); // -5 = ".png"
+
                         _monsterTexture.Add(action, new Texture(f.FullName));
                         if (_monsterTexture[action] == null) throw new Exception("Texture null!");
-                        _monsterTexture2.Add(action, new Texture(f.FullName));
-                        if (_monsterTexture2[action] == null) throw new Exception("Texture null!");
+
+                        if (multiplayer)
+                        {
+                            _monsterTexture2.Add(action, new Texture(f.FullName));
+                            if (_monsterTexture2[action] == null) throw new Exception("Texture null!");
+                        }
                     }
                 }
 
-                _texture = _monsterTexture["stand"];
-                _texture2 = _monsterTexture["stand"];
+                _texture = new Texture(_monsterTexture["stand"]);
+                if (multiplayer) _texture2 = _monsterTexture["stand"];
             }
 
 
@@ -200,8 +214,11 @@ namespace TripOverTime.EngineNamespace
             _sprite = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
             if (_sprite == null) throw new Exception("Sprite null!");
 
-            _sprite2 = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
-            if (_sprite2 == null) throw new Exception("Sprite2 null!");
+            if (multiplayer)
+            {
+                _sprite2 = new SFML.Graphics.Sprite(_texture, new IntRect(new SFML.System.Vector2i(0, 0), (SFML.System.Vector2i)_texture.Size));
+                if (_sprite2 == null) throw new Exception("Sprite2 null!");
+            }
         }
 
         internal void DefaultAnimation()
@@ -874,19 +891,17 @@ namespace TripOverTime.EngineNamespace
 
         internal void MonsterDeadAnimation(Monster m)
         {
+
             int nbrAction = 15;
             string action = "dead";
 
-            if (_animTimer.ElapsedMilliseconds >= 40)
+            if (_animTimer.ElapsedMilliseconds >= 40 && _monsterDead < nbrAction)
             {
 
                 string numberTexture = action + _monsterDead;
                 //_sprite.TextureRect = new IntRect((int)_monsterTexture[numberTexture].Size.X, 0, -(int)_monsterTexture[numberTexture].Size.X, (int)_monsterTexture[numberTexture].Size.Y);
                 _sprite.Texture = _monsterTexture[numberTexture];
-                if (_monsterDead < nbrAction)
-                {
-                    _monsterDead++;
-                }
+                _monsterDead++;
                 _animTimer.Restart();
 
             }
@@ -911,14 +926,34 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        internal Sprite Clone()
+        {
+            Sprite s = (Sprite)this.MemberwiseClone();
+            s.GetSprite = new SFML.Graphics.Sprite(s.GetSprite);
+            s.GetTexture = new Texture(s.GetTexture);
+            s.ResetAnimation = 1;
+            return s;
+        }
+
+        private int ResetAnimation
+        {
+            set
+            {
+                _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = _bossAttack = _bossDead = _bossDead2 = _bossWalk = _bossWalk2 = new int();
+                _playerAnimation = _monsterAttack = _monsterWalk = _incrementationWalk = _incrementationAttack = _monsterDead = _bossAttack = _bossDead = _bossDead2 = _bossWalk = _bossWalk2 = value;
+            }
+        }
+
         internal Texture GetTexture
         {
             get => _texture;
+            set => _texture = value;
         }
 
         internal SFML.Graphics.Sprite GetSprite
         {
             get => _sprite;
+            set => _sprite = value;
         }
 
         internal SFML.Graphics.Sprite GetSprite2
