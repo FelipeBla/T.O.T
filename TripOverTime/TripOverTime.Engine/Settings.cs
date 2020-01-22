@@ -45,45 +45,40 @@ namespace TripOverTime.EngineNamespace
             _lines = new Text[MAX_LINES];
             _linesKB = new Text[MAX_LINES_KB];
             _linesMultiplayer = new Text[MAX_LINES_MULTIPLAYER];
-
+            // Set background
+            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
+            if (_background == null) throw new Exception("Sprite null!");
         }
 
         public void StartSettings()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
+            _lines = new Text[5];
             _lines[0] = new Text("Resolution", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("FPS", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("Key Binding Player 1", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[3] = new Text("Key Binding Player 2", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[4] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
 
-            _lines[0].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[0].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 1);
-            _lines[1].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[1].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 2);
-            _lines[2].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[2].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 3);
-            _lines[3].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 4);
-            _lines[4].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[3].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * 5);
+            for (int i = 0; i < 5; i++)
+            {
+                _lines[i].FillColor = Color.White;
+                _lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+            }
 
             _window.Display();
         }
         public void StartSettingsMultiplayer()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
+            _lines = new Text[3];
+
             _lines[0] = new Text("1 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("2 Player", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("Return", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
@@ -98,14 +93,11 @@ namespace TripOverTime.EngineNamespace
         public void StartSettingsResolution()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
+            _lines = new Text[5];
+
             _lines[0] = new Text("800x600", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("1280 x 720", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("1920 x 1080 ", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
@@ -133,14 +125,11 @@ namespace TripOverTime.EngineNamespace
         public void StartSettingsFPS()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
+            _lines = new Text[4];
+
             _lines[0] = new Text("30", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[1] = new Text("60", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
             _lines[2] = new Text("120", new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf"), _charSize);
@@ -157,11 +146,6 @@ namespace TripOverTime.EngineNamespace
         public void StartSettingsKB()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -173,7 +157,7 @@ namespace TripOverTime.EngineNamespace
 
             for (int i = 0; i < MAX_LINES_KB; i++)
             {
-                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i+1));
             }
 
             _window.Display();
@@ -182,11 +166,6 @@ namespace TripOverTime.EngineNamespace
         public void StartSettingsKB2()
         {
             //Background
-            // Set background
-            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
-            if (_background == null) throw new Exception("Sprite null!");
-
-            _background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(_background);
 
             //Lines
@@ -198,7 +177,7 @@ namespace TripOverTime.EngineNamespace
 
             for (int i = 0; i < MAX_LINES_KB; i++)
             {
-                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _linesKB[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_linesKB[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i+1));
             }
 
             _window.Display();
@@ -239,16 +218,22 @@ namespace TripOverTime.EngineNamespace
                     _window.Clear();
                     _window.Draw(_background);
 
-                    for (int i = 0; i < MAX_LINES; i++)
+                    for (int i = 0; i < _lines.Length; i++)
                     {
+                        RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_lines[i].GetGlobalBounds().Width + 20, _lines[i].GetGlobalBounds().Height + 20));
+                        r.Position = new SFML.System.Vector2f(_lines[i].Position.X - 10, _lines[i].Position.Y - 5);
+
                         if (i == _selected)
                         {
-                            _lines[i].Color = Color.Red;
+                            r.FillColor = Color.Black;
+                            _lines[i].FillColor = Color.White;
                         }
                         else
                         {
-                            _lines[i].Color = Color.Black; //meilleure visibilité
+                            r.FillColor = Color.White;
+                            _lines[i].FillColor = Color.Black;
                         }
+                        _window.Draw(r);
                         _window.Draw(_lines[i]);
                     }
 
@@ -337,29 +322,38 @@ namespace TripOverTime.EngineNamespace
                 _window.Clear();
                 _window.Draw(_background);
 
-                for (int i = 0; i < MAX_LINES; i++)
+                for (int i = 0; i < _lines.Length; i++)
                 {
+                    RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_lines[i].GetGlobalBounds().Width + 20, _lines[i].GetGlobalBounds().Height + 20));
+                    r.Position = new SFML.System.Vector2f(_lines[i].Position.X - 10, _lines[i].Position.Y - 5);
+                    
+                    if (i == _selectedResolution)
+                    {
+                        r.FillColor = Color.Black;
+                        _lines[i].FillColor = Color.White;
+                    }
+                    else
+                    {
+                        r.FillColor = Color.White;
+                        _lines[i].FillColor = Color.Black;
+                    }
+
                     if (i == 3)
                     {
                         if (_fullscreen)
                         {
-                            _lines[3].Color = Color.Green;
+                            _lines[3].FillColor = Color.Green;
                         }
                         else
                         {
-                            _lines[3].Color = Color.Red;
+                            _lines[3].FillColor = Color.Red;
                         }
                     }
-                    else if (i == _selectedResolution)
-                    {
-                        _lines[i].Color = Color.Red;
-                    }
-                    else
-                    {
-                        _lines[i].Color = Color.Black;
-                    }
+
+                    _window.Draw(r);
                     _window.Draw(_lines[i]);
                 }
+
                 _window.Display();
 
                 if (tampon == 1)
@@ -438,16 +432,22 @@ namespace TripOverTime.EngineNamespace
                 _window.Clear();
                 _window.Draw(_background);
 
-                for (int i = 0; i < MAX_LINES; i++)
+                for (int i = 0; i < _lines.Length; i++)
                 {
+                    RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_lines[i].GetGlobalBounds().Width + 20, _lines[i].GetGlobalBounds().Height + 20));
+                    r.Position = new SFML.System.Vector2f(_lines[i].Position.X - 10, _lines[i].Position.Y - 5);
+
                     if (i == _selectedFPS)
                     {
-                        _lines[i].Color = Color.Red;
+                        r.FillColor = Color.Black;
+                        _lines[i].FillColor = Color.White;
                     }
                     else
                     {
-                        _lines[i].Color = Color.Black;
+                        r.FillColor = Color.White;
+                        _lines[i].FillColor = Color.Black;
                     }
+                    _window.Draw(r);
                     _window.Draw(_lines[i]);
                 }
 
@@ -480,85 +480,6 @@ namespace TripOverTime.EngineNamespace
                     _NbFPS = 120;
                     break;
                 case 3:
-                    //quit (return to settings main)
-
-                    break;
-            }
-
-
-        }
-
-        public void RunSettingsMultiplayer()
-        {
-            Thread.Sleep(100);
-            short choose = -2;
-            short tampon = 0;
-            do
-            {
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
-                {
-                    choose = 3;
-                }
-
-                else if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
-                {
-                    choose = (short)_selectedFPS;
-                }
-
-                else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selectedFPS < MAX_LINES - 1)
-                {
-                    tampon = 1;
-                    _selectedFPS++;
-                }
-                else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selectedFPS > 0)
-                {
-                    tampon = 2;
-                    _selectedFPS--;
-                }
-
-
-                //Graphics
-                _window.Clear();
-                _window.Draw(_background);
-
-                for (int i = 0; i < MAX_LINES; i++)
-                {
-                    if (i == _selectedFPS)
-                    {
-                        _linesMultiplayer[i].Color = Color.Red;
-                    }
-                    else
-                    {
-                        _linesMultiplayer[i].Color = Color.Black;
-                    }
-                    _window.Draw(_lines[i]);
-                }
-
-                _window.Display();
-
-                if (tampon == 1)
-                {
-                    tampon = 0;
-                    while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
-                }
-                else if (tampon == 2)
-                {
-                    tampon = 0;
-                    while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
-                }
-            } while (choose == -3);
-
-            switch (choose)
-            {
-                case 0:
-                    //30fps
-                    _MultiplayerOrNot = 1;
-                    break;
-                case 1:
-                    //60fps
-                    _MultiplayerOrNot = 2;
-                    break;
-                case 2:
                     //quit (return to settings main)
 
                     break;
@@ -602,16 +523,22 @@ namespace TripOverTime.EngineNamespace
                     _window.Clear();
                     _window.Draw(_background);
 
-                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    for (int i = 0; i < _linesKB.Length; i++)
                     {
+                        RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_linesKB[i].GetGlobalBounds().Width + 20, _linesKB[i].GetGlobalBounds().Height + 20));
+                        r.Position = new SFML.System.Vector2f(_linesKB[i].Position.X - 10, _linesKB[i].Position.Y - 5);
+
                         if (i == _selectedKB)
                         {
-                            _linesKB[i].Color = Color.Red;
+                            r.FillColor = Color.Black;
+                            _linesKB[i].FillColor = Color.White;
                         }
                         else
                         {
-                            _linesKB[i].Color = Color.Black;
+                            r.FillColor = Color.White;
+                            _linesKB[i].FillColor = Color.Black;
                         }
+                        _window.Draw(r);
                         _window.Draw(_linesKB[i]);
                     }
 
@@ -631,13 +558,32 @@ namespace TripOverTime.EngineNamespace
 
                 if (choose != 4)
                 {
-                    _linesKB[choose].Color = Color.Blue;
                     _window.Clear();
                     _window.Draw(_background);
-                    for (int i = 0; i < MAX_LINES_KB; i++)
+
+                    for (int i = 0; i < _linesKB.Length; i++)
                     {
+                        RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_linesKB[i].GetGlobalBounds().Width + 20, _linesKB[i].GetGlobalBounds().Height + 20));
+                        r.Position = new SFML.System.Vector2f(_linesKB[i].Position.X - 10, _linesKB[i].Position.Y - 5);
+
+                        if (i == _selectedKB)
+                        {
+                            r.FillColor = Color.Black;
+                            _linesKB[i].FillColor = Color.White;
+                        }
+                        else
+                        {
+                            r.FillColor = Color.White;
+                            _linesKB[i].FillColor = Color.Black;
+                        }
+
+                        _linesKB[choose].FillColor = Color.Blue;
+
+                        _window.Draw(r);
                         _window.Draw(_linesKB[i]);
                     }
+
+
                     _window.Display();
 
                     //Clear event buffer
@@ -720,16 +666,22 @@ namespace TripOverTime.EngineNamespace
                     _window.Clear();
                     _window.Draw(_background);
 
-                    for (int i = 0; i < MAX_LINES_KB; i++)
+                    for (int i = 0; i < _linesKB.Length; i++)
                     {
+                        RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_linesKB[i].GetGlobalBounds().Width + 20, _linesKB[i].GetGlobalBounds().Height + 20));
+                        r.Position = new SFML.System.Vector2f(_linesKB[i].Position.X - 10, _linesKB[i].Position.Y - 5);
+
                         if (i == _selectedKB)
                         {
-                            _linesKB[i].Color = Color.Red;
+                            r.FillColor = Color.Black;
+                            _linesKB[i].FillColor = Color.White;
                         }
                         else
                         {
-                            _linesKB[i].Color = Color.Black;
+                            r.FillColor = Color.White;
+                            _linesKB[i].FillColor = Color.Black;
                         }
+                        _window.Draw(r);
                         _window.Draw(_linesKB[i]);
                     }
 
@@ -749,13 +701,31 @@ namespace TripOverTime.EngineNamespace
 
                 if (choose != 4)
                 {
-                    _linesKB[choose].Color = Color.Blue;
                     _window.Clear();
                     _window.Draw(_background);
-                    for (int i = 0; i < MAX_LINES_KB; i++)
+
+                    for (int i = 0; i < _linesKB.Length; i++)
                     {
+                        RectangleShape r = new RectangleShape(new SFML.System.Vector2f(_linesKB[i].GetGlobalBounds().Width + 20, _linesKB[i].GetGlobalBounds().Height + 20));
+                        r.Position = new SFML.System.Vector2f(_linesKB[i].Position.X - 10, _linesKB[i].Position.Y - 5);
+
+                        if (i == _selectedKB)
+                        {
+                            r.FillColor = Color.Black;
+                            _linesKB[i].FillColor = Color.White;
+                        }
+                        else
+                        {
+                            r.FillColor = Color.White;
+                            _linesKB[i].FillColor = Color.Black;
+                        }
+
+                        _linesKB[choose].FillColor = Color.Blue;
+
+                        _window.Draw(r);
                         _window.Draw(_linesKB[i]);
                     }
+
                     _window.Display();
 
                     //Clear event buffer
