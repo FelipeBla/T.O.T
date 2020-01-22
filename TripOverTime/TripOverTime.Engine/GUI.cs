@@ -244,10 +244,12 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Boss
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128 -150, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 205);
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
-            _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
-
+            if (_context.GetGame.GetBoss != null)
+            {
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128 - 150, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 205);
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
+            }
            
             // Display
             _window.Display();

@@ -117,9 +117,9 @@ namespace TripOverTime.EngineNamespace
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
                     //{
-                        _sprites[i].IsDangerous = true;
-                        _sprites2[i].IsDangerous2 = true;
-                        Console.WriteLine(str[1] + " IS DANGEROUS");
+                    _sprites[i].IsDangerous = true;
+                    _sprites2[i].IsDangerous2 = true;
+                    Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
                 if (str[1] == "AIR")
@@ -133,11 +133,11 @@ namespace TripOverTime.EngineNamespace
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
             for (int y = 0; y < mapParsed.Length; y++)
             {
-                for(int x = 0; x < mapParsed[y].Length; x++)
+                for (int x = 0; x < mapParsed[y].Length; x++)
                 {
                     if (mapParsed[y][x] == 'H')
                     {
-                        _heart.Add(new Position((float) x, (float)_limitMax.Y - y));
+                        _heart.Add(new Position((float)x, (float)_limitMax.Y - y));
                     }
                     if (mapParsed[y][x] == 'S')
                     {
@@ -152,11 +152,11 @@ namespace TripOverTime.EngineNamespace
 
             //Boucle Y
             int indexTemp = 0;
-            for(int y = Convert.ToInt32(_limitMax.Y); y >= Convert.ToInt32(_limitMin.Y); y-- )
+            for (int y = Convert.ToInt32(_limitMax.Y); y >= Convert.ToInt32(_limitMin.Y); y--)
             {
-                for(int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
+                for (int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
                 {
-                    _map.Add(new Position(x, y), RetrieveSpriteWithId( mapParsed[indexTemp].Substring(x, 1) ));
+                    _map.Add(new Position(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
                     _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
                 }
                 indexTemp++;
@@ -198,7 +198,7 @@ namespace TripOverTime.EngineNamespace
                     //{
                     _sprites[i].IsDangerous = true;
                     _sprites2[i].IsDangerous2 = true;
-                        Console.WriteLine(str[1] + " IS DANGEROUS");
+                    Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
             }
@@ -234,7 +234,7 @@ namespace TripOverTime.EngineNamespace
                 string[] str = s.Split(" ");
 
                 monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
-                
+
             }
 
             return monsters;
@@ -255,7 +255,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
+                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
 
             }
 
@@ -269,19 +269,23 @@ namespace TripOverTime.EngineNamespace
             string text = File.ReadAllText(_mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
 
-            // Get boss
-            // name x y hp
-            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
             Boss boss = null;
-            foreach (string s in strBoss)
-            {
-                string[] str = s.Split(" ");
 
-                boss = new Boss(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, float.Parse(str[6]), str[7]);
+            if (text.Contains("BOSS"))
+            {
+                // Get boss
+                // name x y hp
+                string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
+                foreach (string s in strBoss)
+                {
+                    string[] str = s.Split(" ");
+
+                    boss = new Boss(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
+                }
             }
+
             return boss;
 
-            
         }
         internal Boss GenerateBoss2()
         {
@@ -291,23 +295,30 @@ namespace TripOverTime.EngineNamespace
             string text = File.ReadAllText(_mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
 
-            // Get boss
-            // name x y hp
-            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
             Boss boss = null;
-            foreach (string s in strBoss)
-            {
-                string[] str = s.Split(" ");
 
-                boss = new Boss(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
+            if (text.Contains("BOSS"))
+            {
+                // Get boss
+                // name x y hp
+                string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
+
+                foreach (string s in strBoss)
+                {
+                    string[] str = s.Split(" ");
+
+                    boss = new Boss(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
+                }
             }
+
+
             return boss;
 
 
         }
         private Sprite RetrieveSpriteWithId(string strId)
         {
-            foreach(Sprite spr in _sprites)
+            foreach (Sprite spr in _sprites)
             {
                 if (spr.Id == strId) return spr;
             }
@@ -360,17 +371,17 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
-        
+
 
         internal Position GetEndPosition
         {
             get
             {
-                foreach(KeyValuePair<Position, Sprite> s in _map)
+                foreach (KeyValuePair<Position, Sprite> s in _map)
                 {
                     if (s.Value.IsEnd) return s.Key;
                 }
-                
+
                 throw new InvalidOperationException("END NOT FOUND!");
             }
         }
