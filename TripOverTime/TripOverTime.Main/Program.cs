@@ -117,6 +117,7 @@ namespace TripOverTime.Main
                     // Start a game
                     engine.StartGame(chooseMap); //map, player sprite
                     engine.GetGUI.InitGame();
+                    engine.GetGUI.ShowLoading(100);
 
                     short result = 1;
                     // GameLoop

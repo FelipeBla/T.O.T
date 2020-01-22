@@ -177,13 +177,24 @@ namespace TripOverTime.EngineNamespace
             // Get monsters
             // name x y hp
             string[] strmonsters = StringBetweenString(text, "MONSTER", "MONSTEREND").Split("\n");
+            Dictionary<string, Sprite> allMonsters = new Dictionary<string, Sprite>();
             List<Monster> monsters = new List<Monster>();
+
             foreach (string s in strmonsters)
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
+                if (!(allMonsters.ContainsKey(str[0]))) // Ne contient pas deja le monstre
+                {
+                    allMonsters.Add(str[0], new Sprite("MONSTER420", str[0], $@"..\..\..\..\Assets\Monster\{str[0]}", true, _context.GetMapObject, true, false));
+                }
+            }
 
+            foreach (string s in strmonsters)
+            {
+                string[] str = s.Split(" ");
+
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], allMonsters[str[0]]));
             }
 
             return monsters;
