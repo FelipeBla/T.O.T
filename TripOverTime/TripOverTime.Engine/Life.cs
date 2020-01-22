@@ -145,6 +145,19 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        public void BonusPoint2(ushort bonus)
+        {
+            if (bonus < 0) return;
+            if (bonus + _currentPoint2 >= _maxPoint)
+            {
+                _currentPoint2 = _maxPoint;
+            }
+            else
+            {
+                _currentPoint2 += bonus;
+            }
+        }
+
     }
 
 }

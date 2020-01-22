@@ -30,7 +30,9 @@ namespace TripOverTime.EngineNamespace
         Position _realPosition;
         Position2 _realPosition2;
         int _incrementationHeal;
+        int _incrementationHeal2;
         int _incrementationAttack;
+        int _incrementationAttack2;
         Life _life;
         ushort _attack;
         Life _life2;
@@ -70,6 +72,11 @@ namespace TripOverTime.EngineNamespace
             _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
             _imgPath = imgPath;
             _orientation = "right";
+
+            _incrementationHeal = 0;
+            _incrementationHeal2 = 0;
+            _incrementationAttack = 0;
+            _incrementationAttack2 = 0;
 
             _attackSpeed = 1;
             _attackRange = 1.0f; // En block
@@ -265,6 +272,17 @@ namespace TripOverTime.EngineNamespace
                     {
                         //Attack
                         monsterToAttack.life2.DecreasedPoint2(_attack2);
+                    }
+                    if (_incrementationHeal2 > 2)
+                    {
+                        _life2.BonusPoint2(1);
+                        _incrementationHeal2 = 0;
+                    }
+                    _incrementationAttack2++;
+                    if (_incrementationAttack2 > 1)
+                    {
+                        _attack2++;
+                        _incrementationAttack2 = 0;
                     }
                 }
                 _sprite2.AttackAnimation2(4, "attack", 100);
@@ -695,6 +713,7 @@ namespace TripOverTime.EngineNamespace
         internal ushort GetAttack2
         {
             get => _attack2;
+            set => _attack2 = value;
         }
         internal Sprite GetPlayerSprite
         {
