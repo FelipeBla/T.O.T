@@ -102,7 +102,10 @@ namespace TripOverTime.EngineNamespace
             _attack2 = attack;
             _isJumping2 = false;
             _isAttack2 = false;
-            _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
+            if (_context2 == null)
+                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, null, false, true);
+            else
+                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
             _orientation2 = "right";
 
             _attackSpeed2 = 1;
@@ -142,7 +145,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void Gravity()
         {
-            if(_isJumping && _origin != null && _realPosition.Y <= _origin.Y + JUMPING_LIMIT) // Jump
+            if (_isJumping && _origin != null && _realPosition.Y <= _origin.Y + JUMPING_LIMIT) // Jump
             {
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
@@ -177,7 +180,7 @@ namespace TripOverTime.EngineNamespace
             if (_isAttack)
             {
                 //Evite le spam d'attaque
-                if (_attackTimer.ElapsedMilliseconds >= 400/_attackSpeed)
+                if (_attackTimer.ElapsedMilliseconds >= 400 / _attackSpeed)
                 {
                     _attackTimer.Restart();
                     //Attack
@@ -204,7 +207,7 @@ namespace TripOverTime.EngineNamespace
                                 monsterToAttack = m;
                         }
                         //boss
-                        
+
                     }
                     if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
                     {
@@ -222,14 +225,14 @@ namespace TripOverTime.EngineNamespace
                             _incrementationHeal = 0;
                         }
                         _incrementationAttack++;
-                        if (_incrementationAttack>1)
+                        if (_incrementationAttack > 1)
                         {
                             _attack++;
                             _incrementationAttack = 0;
                         }
                     }
                 }
-                _sprite.AttackAnimation(4,"attack", 100);
+                _sprite.AttackAnimation(4, "attack", 100);
             }
         }
 
@@ -317,7 +320,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveRight(float width)
         {
-            
+
             // ORIENTATION
             if (_orientation != "right")
             {
@@ -470,7 +473,7 @@ namespace TripOverTime.EngineNamespace
         internal SFML.System.Vector2f MoveLeft(float width)
         {
             // ORIENTATION
-            if(_orientation != "left")
+            if (_orientation != "left")
             {
                 //Sprite to left
                 _orientation = "left";
@@ -490,7 +493,7 @@ namespace TripOverTime.EngineNamespace
 
                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X - PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
-                    foreach(Monster m in _context.GetMonsters) //Monster block?
+                    foreach (Monster m in _context.GetMonsters) //Monster block?
                     {
                         if (m.Position.Y <= _realPosition.Y && m.Position.Y >= _realPosition.Y - 0.8f) //Meme niveau Y
                         {
