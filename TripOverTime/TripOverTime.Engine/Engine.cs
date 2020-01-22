@@ -90,7 +90,15 @@ namespace TripOverTime.EngineNamespace
             if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
             {
                 //Block under player isn't solid
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                {
+                    //DIE
+                    _game.GetPlayer.KilledBy = "Trap";
+                    return -1;
+                }
                 _game.GetPlayer.Gravity();
+
+
             }
             else
             {
