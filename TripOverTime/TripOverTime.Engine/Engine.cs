@@ -23,6 +23,7 @@ namespace TripOverTime.EngineNamespace
         Settings _settings;
         GUI _gui;
         Font _globalFont;
+        string _oldOrientation;
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
@@ -34,6 +35,7 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
             _verifHeal2 = new List<Position2>();
+            _oldOrientation = "null";
         }
 
         public void StartGame(string mapPath, bool multiplayer = false)
@@ -88,9 +90,24 @@ namespace TripOverTime.EngineNamespace
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
-            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+
+            //Console.WriteLine("Player: " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            // Block sous player
+            if (_game.GetPlayer.Orientation == "right")
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X + 0.3f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            }
+            else
+            {
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X - 0.5f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            }
+
+            //Console.WriteLine("Get+ " + sToPositive.Name + " at " + (float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity) + ";" + (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity));
+            //Console.WriteLine("Get- " + sToNegative.Name + " at " + (float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity) + ";" + (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity));
+
+            if ((sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid))
             {
                 //Block under player isn't solid
                 if (sToPositive.IsDangerous || sToNegative.IsDangerous)
@@ -100,8 +117,7 @@ namespace TripOverTime.EngineNamespace
                     return -1;
                 }
                 _game.GetPlayer.Gravity();
-
-
+                _oldOrientation = _game.GetPlayer.Orientation;
             }
             else
             {
@@ -109,6 +125,30 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
+            // Verify if in a block when orientation change after gravity
+            if (_oldOrientation != "null")
+            {
+                Sprite sTemp = null;
+
+                if (_game.GetPlayer.Orientation == "left" && _oldOrientation == "right")
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out sTemp);
+                    if (sTemp != null && sTemp.IsSolid) //In a block
+                    {
+                        _game.GetPlayer.RealPosition.X += 0.3f;
+                    }
+                    _oldOrientation = "null";
+                }
+                else if (_game.GetPlayer.Orientation == "right" && _oldOrientation == "left")
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out sTemp);
+                    if (sTemp != null && sTemp.IsSolid) //In a block
+                    {
+                        _game.GetPlayer.RealPosition.X -= 0.5f;
+                    }
+                    _oldOrientation = "null";
+                }
+            }
 
             //Heal
             List<Position> heart = _game.GetMapObject.GetHeart;
@@ -121,7 +161,6 @@ namespace TripOverTime.EngineNamespace
                     _gui.LoadMap();
                 }
             }
-
 
             //strength
             List<Position> star = _game.GetMapObject.GetStar;
@@ -176,8 +215,27 @@ namespace TripOverTime.EngineNamespace
             {
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+
+                if (m.Orientation == "right")
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X + 0.3f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                }
+                else
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X - 0.5f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                }
+
                 if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
+                    //Block under monster isn't solid
+                    if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                    {
+                        //DIE
+                        m.life.CurrentPoint = 0;
+                        m.MonsterDead();
+                    }
                     //Block under monster isn't solid
                     m.Gravity();
                 }
@@ -242,6 +300,7 @@ namespace TripOverTime.EngineNamespace
 
             // Recalibrate float
             _game.GetPlayer.RoundX();
+
             // WIN !!!
             Position end = _game.GetMapObject.GetEndPosition;
             if (end.X <= _game.GetPlayer.RealPosition.X)
@@ -742,7 +801,7 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
             lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
 
-            
+
 
             for (int i = 0; i < lines.Count; i++)
             {
