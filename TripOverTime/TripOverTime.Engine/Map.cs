@@ -35,7 +35,7 @@ namespace TripOverTime.EngineNamespace
         List<Position2> _checkpointPosition2;
         Game _context2;
 
-        internal Map(Game context, string mapPath)
+        internal Map(Game context, string mapPath, bool multiplayer = false)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
             if (context == null) throw new ArgumentNullException("Context null!");
@@ -49,16 +49,18 @@ namespace TripOverTime.EngineNamespace
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
 
-            _heart2 = new List<Position2>();
-            _star2 = new List<Position2>();
-            _context2 = context;
-            _map2 = new Dictionary<Position2, Sprite>();
-            _sprites2 = new List<Sprite>();
-            _mapPath2 = mapPath;
-            _checkpointPosition2 = new List<Position2>();
+            if (multiplayer)
+            {
+                _heart2 = new List<Position2>();
+                _star2 = new List<Position2>();
+                _context2 = context;
+                _map2 = new Dictionary<Position2, Sprite>();
+                _sprites2 = new List<Sprite>();
+                _mapPath2 = mapPath;
+                _checkpointPosition2 = new List<Position2>();
+            }
 
             GenerateMap();
-            //GenerateMap2();
         }
 
         /// <summary>
@@ -97,11 +99,13 @@ namespace TripOverTime.EngineNamespace
             _limitMax = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get limits2
+            /*
             string[] limits2 = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
             string[] limitMin2 = limits[0].Split(" ");
             _limitMin2 = new Position2(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
             string[] limitMax2 = limits[1].Split(" ");
             _limitMax2 = new Position2(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
+            */
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
@@ -111,21 +115,21 @@ namespace TripOverTime.EngineNamespace
                 string[] str = s.Split(" ");
                 Sprite SpriteToAdd = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
                 _sprites.Add(SpriteToAdd);
-                _sprites2.Add(SpriteToAdd);
+                if (_context2 != null) _sprites2.Add(SpriteToAdd);
                 if (str[1] == "TRAP")
                 {
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
                     //{
                     _sprites[i].IsDangerous = true;
-                    _sprites2[i].IsDangerous2 = true;
+                    if (_context2 != null) _sprites2[i].IsDangerous2 = true;
                     Console.WriteLine(str[1] + " IS DANGEROUS");
                     //}
                 }
                 if (str[1] == "AIR")
                 {
                     _spriteChange = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
-                    _spriteChange2 = _spriteChange;
+                    if (_context2 != null) _spriteChange2 = _spriteChange;
                 }
             }
 
@@ -157,62 +161,7 @@ namespace TripOverTime.EngineNamespace
                 for (int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
                 {
                     _map.Add(new Position(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
-                    _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
-                }
-                indexTemp++;
-            }
-        }
-
-        void GenerateMap2()
-        {
-            //Verify if it's a map file
-            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
-            // Open map file
-            string text = File.ReadAllText(_mapPath);
-            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
-
-            // Get background path
-            _backgroundPath = StringBetweenString(text, "BACKGROUNDPATH", "BACKGROUNDPATHEND");
-            _backgroundPath = _backgroundPath.Replace("\r", "");
-
-            // Get limits
-            string[] limits = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
-            string[] limitMin = limits[0].Split(" ");
-            _limitMin = new Position(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
-            string[] limitMax = limits[1].Split(" ");
-            _limitMax = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
-
-            // Get all blocks in level (id, name, path, isSolid)
-            string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
-            for (int i = 0; i < blocks.Length; i++)
-            {
-                string s = (string)blocks[i];
-                string[] str = s.Split(" ");
-                _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
-                _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
-                if (str.Length > 4)
-                {
-                    //Console.WriteLine(str[4]);
-
-                    //if (str[4] == "DANGEROUS")
-                    //{
-                    _sprites[i].IsDangerous = true;
-                    _sprites2[i].IsDangerous2 = true;
-                    Console.WriteLine(str[1] + " IS DANGEROUS");
-                    //}
-                }
-            }
-
-            // Get map
-            string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
-
-            //Boucle Y
-            int indexTemp = 0;
-            for (int y = Convert.ToInt32(_limitMax.Y); y >= Convert.ToInt32(_limitMin.Y); y--)
-            {
-                for (int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
-                {
-                    _map.Add(new Position(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
+                    if (_context2 != null) _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
                 }
                 indexTemp++;
             }

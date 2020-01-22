@@ -36,7 +36,7 @@ namespace TripOverTime.EngineNamespace
             _verifHeal2 = new List<Position2>();
         }
 
-        public void StartGame(string mapPath)
+        public void StartGame(string mapPath, bool multiplayer = false)
         {
             //Verify if it's a map file
             if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
@@ -48,7 +48,7 @@ namespace TripOverTime.EngineNamespace
             // path x y life atk
             string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
 
-            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
+            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), multiplayer); //0, 3
 
         }
         public void StartGame2(string mapPath)
@@ -79,9 +79,6 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
-
-            //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
-            //Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
@@ -611,15 +608,15 @@ namespace TripOverTime.EngineNamespace
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
 
-            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
-            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            //background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("PLAYER1 1 WIN !", _globalFont, 64));
+            lines.Add(new Text("PLAYER 1 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
