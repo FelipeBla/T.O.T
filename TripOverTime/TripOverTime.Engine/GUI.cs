@@ -586,6 +586,39 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
+        public void ShowLoading(int percent)
+        {
+            if (percent > 100)
+            {
+                percent = 100;
+            }
+            else if (percent < 0)
+            {
+                percent = 0;
+            }
+
+            _window.Clear();
+
+            // Background
+            _window.Draw(new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png")));
+
+            // Loading bar
+            RectangleShape r1 = new RectangleShape(new Vector2f(((_window.Size.X / 2)/100) * percent, 30));
+            RectangleShape r2 = new RectangleShape(new Vector2f((_window.Size.X / 2) + 10, 40));
+
+            r1.FillColor = Color.Green;
+            r2.FillColor = Color.White;
+
+            r2.Position = new Vector2f((_window.Size.X / 2) - (r2.Size.X / 2), (_window.Size.Y / 2) - (r2.Size.Y / 2));
+            r1.Position = new Vector2f(r2.Position.X + 5, (_window.Size.Y / 2) - (r1.Size.Y / 2));
+
+            _window.Draw(r2);
+            _window.Draw(r1);
+
+            // Display
+            _window.Display();
+        }
+
         public SFML.Window.Keyboard.Key RightAction
         {
             get { return _RightAction; }

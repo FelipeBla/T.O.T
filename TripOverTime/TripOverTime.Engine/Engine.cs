@@ -38,11 +38,16 @@ namespace TripOverTime.EngineNamespace
 
         public void StartGame(string mapPath, bool multiplayer = false)
         {
+            // Ecran chargement
+            _gui.ShowLoading(1);
+
             //Verify if it's a map file
             if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
             // Open map file
             string text = File.ReadAllText(mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            _gui.ShowLoading(5);
 
             // Get player
             // path x y life atk
@@ -50,6 +55,7 @@ namespace TripOverTime.EngineNamespace
 
             _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), multiplayer); //0, 3
 
+            _gui.ShowLoading(90);
         }
         public void StartGame2(string mapPath)
         {

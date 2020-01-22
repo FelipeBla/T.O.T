@@ -41,7 +41,7 @@ namespace TripOverTime.EngineNamespace
         float _range2;
         string _attackCombo;
 
-        internal Monster(Game context, String name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo)
+        internal Monster(Game context, string name, Position position, Life life, ushort attack, float monsterMove, float range, string attackCombo, Sprite sprite = null)
         {
             _context = context;
             _name = name;
@@ -49,16 +49,25 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _isAlive = true;
             _attack = new Attack(context, this, attack, attackCombo);
-            if (_context == null) _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
-            else _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
+            if (sprite == null)
+            {
+                if (_context == null) _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
+                else _sprite = new Sprite(MONSTER_ID, _name, $@"..\..\..\..\Assets\Monster\{name}", true, _context.GetMapObject, true, false);
+            }
+            else
+            {
+                _sprite = sprite;
+            }
+            
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _monsterMove = monsterMove / 100;
             _range = range + 0.2f;
-            _range2 = range + 0.2f;
             _attackCombo = attackCombo;
+
             _context2 = context;
             _name2 = name;
+            _range2 = range + 0.2f;
             _position2 = new Position2(_position.X, _position.Y);
             _life2 = life;
             _isAlive2 = true;

@@ -27,9 +27,17 @@ namespace TripOverTime.EngineNamespace
             _mapPath = mapPath;
             _context = context;
             _map = new Map(this, mapPath, multiplayer);
+            _context.GetGUI.ShowLoading(15);
+            Console.WriteLine("map charged");
             _player = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath, multiplayer);
+            _context.GetGUI.ShowLoading(25);
+            Console.WriteLine("player charged");
             _monsters = _map.GenerateMonsters();
+            _context.GetGUI.ShowLoading(60);
+            Console.WriteLine("monsters charged"); // Prend + de temps
             _boss = _map.GenerateBoss();
+            _context.GetGUI.ShowLoading(85);
+            Console.WriteLine("boss charged"); // Prends + de temps
             _timer = new Stopwatch();
             _timer.Start();
 
