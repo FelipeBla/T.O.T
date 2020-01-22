@@ -85,7 +85,7 @@ namespace TripOverTime.EngineNamespace
 
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
-            /*pw = 128;
+            pw = 128;
             ph = 128;
 
             _monsterKillName = "void";
@@ -112,7 +112,7 @@ namespace TripOverTime.EngineNamespace
 
 
             _attackTimer2 = new Stopwatch();
-            _attackTimer2.Start();*/
+            _attackTimer2.Start();
         }
 
         internal void Jump()

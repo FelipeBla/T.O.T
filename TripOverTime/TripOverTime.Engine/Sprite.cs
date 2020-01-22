@@ -61,7 +61,6 @@ namespace TripOverTime.EngineNamespace
         Texture _texture2; //img
         Dictionary<string, Texture> _playerTexture2;
         Dictionary<string, Texture> _monsterTexture2;
-        SFML.Graphics.Sprite _sprite2;
         Stopwatch _animTimer2;
 
 internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
