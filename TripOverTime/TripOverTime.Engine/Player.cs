@@ -195,7 +195,7 @@ namespace TripOverTime.EngineNamespace
                                 monsterToAttack = m;
                         }
                         // boss
-                        if (_context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                        if (_context.GetBoss != null && _context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
                             _context.GetBoss.life.DecreasedPoint(_attack);
                     }
                     else
@@ -209,7 +209,7 @@ namespace TripOverTime.EngineNamespace
                         //boss
 
                     }
-                    if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                    if (_context.GetBoss != null && _context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
                     {
                         _context.GetBoss.life.DecreasedPoint(_attack);
                     }
@@ -358,15 +358,20 @@ namespace TripOverTime.EngineNamespace
                     }
 
                     //boss
-                    if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1 && _context.GetBoss.IsAlive)
+                    if (_context.GetBoss != null)
                     {
-                        if (_context.GetBoss.GetBossSprite.IsSolid)
+
+                        if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1 && _context.GetBoss.IsAlive)
                         {
-                            //Blocked by boss
-                            blocked = true;
+                            if (_context.GetBoss.GetBossSprite.IsSolid)
+                            {
+                                //Blocked by boss
+                                blocked = true;
+                            }
                         }
-                    
+                        
                     }
+                    
 
                     if (!blocked)
                     {

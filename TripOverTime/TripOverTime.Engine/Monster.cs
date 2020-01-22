@@ -66,12 +66,12 @@ namespace TripOverTime.EngineNamespace
             if (_context2 == null) _sprite = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, null, true, false);
             else _sprite2 = new Sprite(MONSTER_ID, _name + "2", $@"..\..\..\..\Assets\Monster\{name}", true, _context2.GetMapObject, true, false);
             //ph2 = _sprite2.GetSprite2.TextureRect.Height;
-            _monsterMove2 = monsterMove;
+            _monsterMove2 = monsterMove / 100;
         }
 
         internal void MonsterMove()
         {
-            //Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
+            Console.WriteLine("Monster position: [ " + _position.X + " ; " + _position.Y + " ] Orientation: " + _orientation);
             if (!_ismoving)
             {
                 Sprite s = null;

@@ -2318,7 +2318,7 @@ namespace TripOverTime.EngineNamespace
             mapFileString += "MONSTER\r\n";
             foreach (Monster m in monsterOnMap)
             { //Golem1 3 3 10 1 3 1 SAAAAA
-                mapFileString += m.Name + " " + m.Position.X + " " + m.Position.Y + " " + m.life.MaxPoint + " " + m.GetAttack.GetAttack + " " + Convert.ToInt32(m.MoveSpeed*100) + " " + Convert.ToInt32(m.Range - 0.2f) + " " + m.AttackCombo + "\r\n";
+                mapFileString += m.Name + " " + m.Position.X + " " + m.Position.Y + " " + m.life.MaxPoint + " " + m.GetAttack.GetAttack + " " + m.MoveSpeed*100*100 + " " + Convert.ToInt32(m.Range - 0.2f) + " " + m.AttackCombo + "\r\n";
             }
             mapFileString += "MONSTEREND\r\n";
 

@@ -144,11 +144,11 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                if (m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
                 {
                     m.Orientation = "left";
                 }
-                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                else if (m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
                 {
                     m.Orientation = "right";
                 }
@@ -187,50 +187,54 @@ namespace TripOverTime.EngineNamespace
 
 
             // boss
-            if (!_game.GetBoss.IsAlive)
+            if (_game.GetBoss != null)
             {
-                _game.GetBoss.BossDead();
-            }
-            else
-            {
-                if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
+                if (!_game.GetBoss.IsAlive)
                 {
-                    _game.GetBoss.Orientation = "left";
+                    _game.GetBoss.BossDead();
                 }
-                else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X) //right
+                else
                 {
-                    _game.GetBoss.Orientation = "right";
-                }
+                    if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
+                    {
+                        _game.GetBoss.Orientation = "left";
+                    }
+                    else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X) //right
+                    {
+                        _game.GetBoss.Orientation = "right";
+                    }
 
-                _game.GetBoss.GetBossSprite.BossOrientation(_game.GetBoss);
+                    _game.GetBoss.GetBossSprite.BossOrientation(_game.GetBoss);
 
-                if (_game.GetBoss.Position.X + 3 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 3 < _game.GetPlayer.RealPosition.X) //attack
-                {
-                    if (_game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                    if (_game.GetBoss.Position.X + 3 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 3 < _game.GetPlayer.RealPosition.X) //attack
+                    {
+                        if (_game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                        {
+                            _game.GetBoss.BossMove();
+                        }
+                        _game.GetBoss.BossAttack();
+                    }
+
+                    else if (_game.GetBoss.Position.X - 6 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 6 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
                     {
                         _game.GetBoss.BossMove();
+                        _game.GetBoss.GetBossSprite.BossMoveAnimation(_game.GetBoss);
                     }
-                    _game.GetBoss.BossAttack();
                 }
 
-                else if (_game.GetBoss.Position.X - 6 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 6 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
-                    _game.GetBoss.BossMove();
-                    _game.GetBoss.GetBossSprite.BossMoveAnimation(_game.GetBoss);
+                    //Block under monster isn't solid
+                    _game.GetBoss.Gravity();
                 }
-            }
+                else
+                {
+                    _game.GetBoss.IsMoving = false;
+                    _game.GetBoss.RoundY(); // Don't stuck monster in ground
+                }
 
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
-            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
-            {
-                //Block under monster isn't solid
-                _game.GetBoss.Gravity();
-            }
-            else
-            {
-                _game.GetBoss.IsMoving = false;
-                _game.GetBoss.RoundY(); // Don't stuck monster in ground
             }
 
             // Recalibrate float
@@ -323,7 +327,7 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                
+
 
                 if (!m.isAlive)
                 {
@@ -462,7 +466,7 @@ namespace TripOverTime.EngineNamespace
                 if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
                 {
                     _game2.GetPlayer2.GetLife2.BonusPoint2(1);
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
                     _gui.LoadMap2();
                 }
             }
@@ -476,8 +480,8 @@ namespace TripOverTime.EngineNamespace
                 {
 
                     _game2.GetPlayer2.GetAttack2++;
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
-                    _gui.LoadMap();
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
+                    _gui.LoadMap2();
 
                 }
             }
@@ -627,7 +631,7 @@ namespace TripOverTime.EngineNamespace
 
             for (int i = 0; i < lines.Count; i++)
             {
-                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width)/2, (_window.Size.Y / 6) * i);
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
                 _window.Draw(lines[i]);
             }
 
@@ -635,7 +639,7 @@ namespace TripOverTime.EngineNamespace
 
             bool quit = false;
 
-            while(!quit)
+            while (!quit)
             {
                 Joystick.Update();
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Enter) || (Joystick.IsConnected(0) && Joystick.IsButtonPressed(0, 0)))

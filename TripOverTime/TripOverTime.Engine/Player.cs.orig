@@ -59,11 +59,7 @@ namespace TripOverTime.EngineNamespace
         float _attackRange2;
         string _imgPath;
 
-<<<<<<< HEAD
-        internal Player(Game context, String name, Position position, Position2 position2, Life life, ushort attack, string imgPath)
-=======
         internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath)
->>>>>>> Quentin
         {
             _context = context;
             _name = name;
@@ -73,15 +69,10 @@ namespace TripOverTime.EngineNamespace
             _attack = attack;
             _isJumping = false;
             _isAttack = false;
-<<<<<<< HEAD
-            _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true, false);
-            _imgPath = imgPath;
-=======
             if (context != null)
                 _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
             else
                 _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, null, false, true);
->>>>>>> Quentin
             _orientation = "right";
 
             _incrementationHeal = 0;
@@ -94,14 +85,7 @@ namespace TripOverTime.EngineNamespace
 
             _attackTimer = new Stopwatch();
             _attackTimer.Start();
-<<<<<<< HEAD
             pw = 128;
-=======
-
-
-            //Player 2
-            /*pw = 128;
->>>>>>> Quentin
             ph = 128;
 
             _monsterKillName = "void";
@@ -112,13 +96,16 @@ namespace TripOverTime.EngineNamespace
             _monsterKillName2 = "void";
             _context2 = context;
             _name2 = name;
-            _position2 = position2;
+            _position2 = new Position2(_position.X, _position.Y);
             _realPosition2 = new Position2(_position2.X2, _position2.Y2);
             _life2 = life;
             _attack2 = attack;
             _isJumping2 = false;
             _isAttack2 = false;
-            _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
+            if (_context2 == null)
+                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, null, false, true);
+            else
+                _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
             _orientation2 = "right";
 
             _attackSpeed2 = 1;
@@ -128,7 +115,7 @@ namespace TripOverTime.EngineNamespace
 
 
             _attackTimer2 = new Stopwatch();
-            _attackTimer2.Start();*/
+            _attackTimer2.Start();
         }
 
         internal void Jump()
@@ -158,7 +145,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void Gravity()
         {
-            if(_isJumping && _origin != null && _realPosition.Y <= _origin.Y + JUMPING_LIMIT) // Jump
+            if (_isJumping && _origin != null && _realPosition.Y <= _origin.Y + JUMPING_LIMIT) // Jump
             {
                 _realPosition.Y += JUMPING_SPEED;
                 _position.Y += JUMPING_SPEED;
@@ -193,7 +180,7 @@ namespace TripOverTime.EngineNamespace
             if (_isAttack)
             {
                 //Evite le spam d'attaque
-                if (_attackTimer.ElapsedMilliseconds >= 400/_attackSpeed)
+                if (_attackTimer.ElapsedMilliseconds >= 400 / _attackSpeed)
                 {
                     _attackTimer.Restart();
                     //Attack
@@ -208,7 +195,7 @@ namespace TripOverTime.EngineNamespace
                                 monsterToAttack = m;
                         }
                         // boss
-                        if (_context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                        if (_context.GetBoss != null && _context.GetBoss.Position.X <= _realPosition.X + _attackRange && _context.GetBoss.Position.X >= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
                             _context.GetBoss.life.DecreasedPoint(_attack);
                     }
                     else
@@ -220,9 +207,9 @@ namespace TripOverTime.EngineNamespace
                                 monsterToAttack = m;
                         }
                         //boss
-                        
+
                     }
-                    if (_context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
+                    if (_context.GetBoss != null && _context.GetBoss.Position.X >= _realPosition.X - _attackRange && _context.GetBoss.Position.X <= _realPosition.X && _context.GetBoss.Position.Y == _realPosition.Y)
                     {
                         _context.GetBoss.life.DecreasedPoint(_attack);
                     }
@@ -238,14 +225,14 @@ namespace TripOverTime.EngineNamespace
                             _incrementationHeal = 0;
                         }
                         _incrementationAttack++;
-                        if (_incrementationAttack>1)
+                        if (_incrementationAttack > 1)
                         {
                             _attack++;
                             _incrementationAttack = 0;
                         }
                     }
                 }
-                _sprite.AttackAnimation(4,"attack", 100);
+                _sprite.AttackAnimation(4, "attack", 100);
             }
         }
 
@@ -333,7 +320,7 @@ namespace TripOverTime.EngineNamespace
 
         internal SFML.System.Vector2f MoveRight(float width)
         {
-            
+
             // ORIENTATION
             if (_orientation != "right")
             {
@@ -371,17 +358,31 @@ namespace TripOverTime.EngineNamespace
                     }
 
                     //boss
-                    if ((_context.GetBoss.Position.Y == _realPosition.Y || _context.GetBoss.Position.Y + 1 == _realPosition.Y) && _context.GetBoss.IsAlive) //Meme niveau Y
+<<<<<<< HEAD
+                    if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1 && _context.GetBoss.IsAlive)
                     {
-                        if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1)
+                        if (_context.GetBoss.GetBossSprite.IsSolid)
                         {
-                            if (_context.GetBoss.GetBossSprite.IsSolid)
+                            //Blocked by boss
+                            blocked = true;
+=======
+                    if (_context.GetBoss != null)
+                    {
+                        if ((_context.GetBoss.Position.Y == _realPosition.Y || _context.GetBoss.Position.Y + 1 == _realPosition.Y) && _context.GetBoss.IsAlive) //Meme niveau Y
+                        {
+                            if (Math.Round(_context.GetBoss.Position.X) == Math.Round(_realPosition.X) + 1)
                             {
-                                //Blocked by boss
-                                blocked = true;
+                                if (_context.GetBoss.GetBossSprite.IsSolid)
+                                {
+                                    //Blocked by boss
+                                    blocked = true;
+                                }
                             }
+>>>>>>> master
                         }
+                    
                     }
+                    
 
                     if (!blocked)
                     {
@@ -486,7 +487,7 @@ namespace TripOverTime.EngineNamespace
         internal SFML.System.Vector2f MoveLeft(float width)
         {
             // ORIENTATION
-            if(_orientation != "left")
+            if (_orientation != "left")
             {
                 //Sprite to left
                 _orientation = "left";
@@ -506,7 +507,7 @@ namespace TripOverTime.EngineNamespace
 
                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_realPosition.X - PLAYER_MOVE, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_realPosition.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                 {
-                    foreach(Monster m in _context.GetMonsters) //Monster block?
+                    foreach (Monster m in _context.GetMonsters) //Monster block?
                     {
                         if (m.Position.Y <= _realPosition.Y && m.Position.Y >= _realPosition.Y - 0.8f) //Meme niveau Y
                         {
