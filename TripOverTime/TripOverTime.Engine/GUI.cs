@@ -218,7 +218,9 @@ namespace TripOverTime.EngineNamespace
             // Player
             if (_context.GetGame.GetPlayer.IsAlive)
             {
-                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetPlayer.Position.X * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                //_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f((_context.GetGame.GetPlayer.Position.X + 0.5f) * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position = new SFML.System.Vector2f((_context.GetGame.GetPlayer.RealPosition.X) * 128, _window.Size.Y + _context.GetGame.GetPlayer.Position.Y * -128 - 65);
+                _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite);
             }
 
