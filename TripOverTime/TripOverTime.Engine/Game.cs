@@ -38,7 +38,7 @@ namespace TripOverTime.EngineNamespace
             _mapPath2 = mapPath;
             _context2 = context;
             _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
-            _monsters2 = _map.GenerateMonsters();
+            _monsters2 = _map.GenerateMonsters2();
             _timer2 = new Stopwatch();
             _timer2.Start();
         }

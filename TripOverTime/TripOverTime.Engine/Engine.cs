@@ -270,21 +270,18 @@ namespace TripOverTime.EngineNamespace
             if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
             {
                 //Block under player isn't solid
-                _game.GetPlayer.Gravity();
-            }
-            else
-            {
-                _game.GetPlayer.IsJumping = false;
-                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
-                else
-                {
-                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
-                }
+                _game.GetPlayer.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
             //Heal
             List<Position> heart = _game.GetMapObject.GetHeart;
@@ -444,21 +441,18 @@ namespace TripOverTime.EngineNamespace
             if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
             {
                 //Block under player isn't solid
-                _game2.GetPlayer2.Gravity2();
-            }
-            else
-            {
-                _game2.GetPlayer2.IsJumping2 = false;
-                if ((sToPositive2 != null && sToNegative2 != null) && (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2))
+                if (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2)
                 {
                     //DIE
                     _game2.GetPlayer2.KilledBy2 = "Trap";
                     return -1;
                 }
-                else
-                {
-                    _game2.GetPlayer2.RoundY2(); // Don't stuck player in ground
-                }
+                _game2.GetPlayer2.Gravity2();
+            }
+            else
+            {
+                _game2.GetPlayer2.IsJumping2 = false;
+                _game2.GetPlayer2.RoundY2(); // Don't stuck player in ground
             }
             //Heal
             List<Position2> heart2 = _game2.GetMapObject2.GetHeart2;
