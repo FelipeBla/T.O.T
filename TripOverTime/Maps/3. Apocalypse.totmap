@@ -13,13 +13,13 @@ A AIR ..\..\..\..\Assets\air.png false
 G STONE ..\..\..\..\Assets\Ground\Stone\stoneMidBlack.png true
 1 DIRT ..\..\..\..\Assets\Ground\Stone\stoneCenterBlack.png true
 2 FENCE ..\..\..\..\Assets\Tiles\bridgeA.png true
-3 TRAP ..\..\..\..\Assets\Tiles\spikesBlack.png true DANGEROUS
-4 TRAP ..\..\..\..\Assets\Tiles\spikesRevert.png true DANGEROUS
-5 TRAP ..\..\..\..\Assets\Tiles\spikesRevert1.png true DANGEROUS
-6 TRAP ..\..\..\..\Assets\Tiles\spikesRevert2.png true DANGEROUS
+3 TRAP ..\..\..\..\Assets\Tiles\spikesBlack.png false DANGEROUS
+4 TRAP ..\..\..\..\Assets\Tiles\spikesRevert.png false DANGEROUS
+5 TRAP ..\..\..\..\Assets\Tiles\spikesRevert1.png false DANGEROUS
+6 TRAP ..\..\..\..\Assets\Tiles\spikesRevert2.png false DANGEROUS
 7 OBSTACLE ..\..\..\..\Assets\Particles\brickBrown.png true
-8 LAVA ..\..\..\..\Assets\Tiles\lava.png true DANGEROUS
-9 LAVA ..\..\..\..\Assets\Tiles\lavaTop_low.png true DANGEROUS
+8 TRAP ..\..\..\..\Assets\Tiles\lava.png true DANGEROUS
+9 TRAP ..\..\..\..\Assets\Tiles\lavaTop_low.png false DANGEROUS
 B BRICK ..\..\..\..\Assets\Particles\brickBlack.png true
 S SIGN ..\..\..\..\Assets\Tiles\signExit.png false
 R SIGN ..\..\..\..\Assets\Tiles\signRight.png false

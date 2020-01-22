@@ -125,6 +125,7 @@ namespace TripOverTime.EngineNamespace
                 if (str[1] == "AIR")
                 {
                     _spriteChange = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
+                    _spriteChange2 = _spriteChange;
                 }
             }
 
