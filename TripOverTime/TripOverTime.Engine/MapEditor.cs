@@ -111,13 +111,13 @@ namespace TripOverTime.EngineNamespace
 
                     if (selected == 0)
                     {
-                        r.FillColor = Color.White;
-                        t.FillColor = Color.Black;
+                        t.FillColor = Color.White;
+                        r.FillColor = Color.Black;
                     }
                     else
                     {
-                        r.FillColor = Color.Black;
-                        t.FillColor = Color.White;
+                        t.FillColor = Color.Black;
+                        r.FillColor = Color.White;
                     }
 
                     window.Draw(r);
@@ -132,13 +132,13 @@ namespace TripOverTime.EngineNamespace
 
                     if (selected == 1)
                     {
-                        r.FillColor = Color.White;
-                        t.FillColor = Color.Black;
+                        t.FillColor = Color.White;
+                        r.FillColor = Color.Black;
                     }
                     else
                     {
-                        r.FillColor = Color.Black;
-                        t.FillColor = Color.White;
+                        t.FillColor = Color.Black;
+                        r.FillColor = Color.White;
                     }
 
                     window.Draw(r);
