@@ -154,7 +154,7 @@ namespace TripOverTime.Main
                         window.Close();
                     }
                     // Start a game
-                    engine.StartGame(chooseMap); //map, player sprite
+                    engine.StartGame2(chooseMap); //map, player sprite
                     engine.GetGUI.InitGame2();
 
                     short result = 1;
