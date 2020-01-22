@@ -106,17 +106,6 @@ namespace TripOverTime.EngineNamespace
                 _game.GetPlayer.RoundY(); // Don't stuck player in ground
             }
 
-            List<Position> _trap = _game.GetMapObject.GetTrap;
-            foreach (Position position in _trap)
-            {
-                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetPlayer.RealPosition.Y == position.Y)
-                {
-                    //DIE
-                    _game.GetPlayer.KilledBy = "Trap";
-                    return -1;
-                }
-            }
-
 
             //Heal
             List<Position> heart = _game.GetMapObject.GetHeart;
@@ -162,15 +151,6 @@ namespace TripOverTime.EngineNamespace
                 else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
                 {
                     m.Orientation = "right";
-                }
-
-                foreach (Position position in _trap)
-                {
-                    if (m.Position.X == position.X && m.Position.Y == position.Y)
-                    {
-                        //DIE
-                        m.life.DecreasedPoint(100);
-                    }
                 }
 
                 if (!m.isAlive)
