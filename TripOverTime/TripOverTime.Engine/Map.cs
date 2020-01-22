@@ -12,6 +12,7 @@ namespace TripOverTime.EngineNamespace
         List<Position> _star;
         List<Position> _trap;
         Sprite _spriteChange;
+        Sprite _spriteChange2;
         List<Position2> _heart2;
         List<Position2> _star2;
         List<Sprite> _sprites;
@@ -409,6 +410,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _star;
         }
+        internal List<Position2> GetStar2
+        {
+            get => _star2;
+        }
         internal List<Position> GetTrap
         {
             get => _trap;
@@ -418,14 +423,13 @@ namespace TripOverTime.EngineNamespace
             get => _heart2;
             set => _heart2 = value;
         }
-        internal List<Position2> GetStar2
-        {
-            get => _star2;
-            set => _star2 = value;
-        }
         internal Sprite GetSpriteChange
         {
             get => _spriteChange;
+        }
+        internal Sprite GetSpriteChange2
+        {
+            get => _spriteChange2;
         }
     }
 }

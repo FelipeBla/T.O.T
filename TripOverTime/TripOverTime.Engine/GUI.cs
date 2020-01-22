@@ -288,7 +288,7 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        private void LoadMap2()
+        internal void LoadMap2()
         {
             if (!_window.IsOpen) throw new Exception("Window is not open!");
 

@@ -295,6 +295,7 @@ namespace TripOverTime.EngineNamespace
                 }
             }
 
+
             //strength
             List<Position> star = _game.GetMapObject.GetStar;
             foreach (Position position in star)
@@ -458,45 +459,26 @@ namespace TripOverTime.EngineNamespace
             List<Position2> heart2 = _game2.GetMapObject2.GetHeart2;
             foreach (Position2 position2 in heart2)
             {
-                if (_game2.GetPlayer2.Position2.X2 == position2.X2)
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
                 {
-
-                    bool verif2 = true;
-                    foreach (Position2 position12 in _verifHeal2)
-                    {
-                        if (position12.X2 == position2.X2)
-                        {
-                            verif2 = false;
-                        }
-                    }
-                    if (verif2)
-                    {
-                        _game2.GetPlayer2.GetLife2.BonusPoint2(1);
-                        _verifHeal2.Add(position2);
-                    }
+                    _game2.GetPlayer2.GetLife2.BonusPoint2(1);
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _gui.LoadMap2();
                 }
             }
+
 
             //strength
             List<Position2> star2 = _game2.GetMapObject2.GetStar2;
             foreach (Position2 position2 in star2)
             {
-                if (_game2.GetPlayer2.Position2.X2 == position2.X2)
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
                 {
 
-                    bool verif2 = true;
-                    foreach (Position2 position12 in _verifHeal2)
-                    {
-                        if (position12.X2 == position2.X2)
-                        {
-                            verif2 = false;
-                        }
-                    }
-                    if (verif2)
-                    {
-                        _game2.GetPlayer2.GetAttack2++;
-                        _verifHeal2.Add(position2);
-                    }
+                    _game2.GetPlayer2.GetAttack2++;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _gui.LoadMap();
+
                 }
             }
 
