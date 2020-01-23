@@ -63,7 +63,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _monsterTexture2;
         Stopwatch _animTimer2;
 
-        internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false, bool multiplayer = false)
+        internal Sprite(string id, string name, string imgPath, bool isSolid, bool multiplayer, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
         {
             if (String.IsNullOrEmpty(imgPath)) throw new ArgumentException("imgPath is null or empty!");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("name is null or empty!");

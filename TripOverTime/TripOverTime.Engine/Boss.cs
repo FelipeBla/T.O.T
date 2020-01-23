@@ -44,8 +44,8 @@ namespace TripOverTime.EngineNamespace
             _life = life;
             _attack = new Attack(_context, null, attack, attackCombo, this);
             _attack2 = new Attack(_context2, null, attack, attackCombo, this);
-            _sprite = new Sprite(BOSS_ID, _name, $@"..\..\..\..\Assets\Boss\{name}\All", true, _context.GetMapObject, false, false, true);
-            _sprite2 = new Sprite(BOSS_ID, _name, $@"..\..\..\..\Assets\Boss\{name}\All", true, _context.GetMapObject, false, false, true);
+            _sprite = new Sprite(BOSS_ID, _name, $@"..\..\..\..\Assets\Boss\{name}\All", true, false, _context.GetMapObject, false, false, true);
+            _sprite2 = new Sprite(BOSS_ID, _name, $@"..\..\..\..\Assets\Boss\{name}\All", true, true, _context.GetMapObject, false, false, true);
             pw = _sprite.GetSprite.TextureRect.Width;
             ph = _sprite.GetSprite.TextureRect.Height;
             _bossMove = bossMove;

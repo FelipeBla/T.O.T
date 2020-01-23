@@ -169,8 +169,8 @@ namespace TripOverTime.EngineNamespace
                 posMin = new Position(0, 1);
                 playerLife = 10;
                 playerAtk = 5;
-                blocks.Add(new Sprite("A", "Snow", @"..\..\..\..\Assets\Ground\Snow\snowMid.png", true));
-                blocks.Add(new Sprite("B", "Dirt", @"..\..\..\..\Assets\Ground\Snow\snowCenter.png", true));
+                blocks.Add(new Sprite("A", "Snow", @"..\..\..\..\Assets\Ground\Snow\snowMid.png", true, true));
+                blocks.Add(new Sprite("B", "Dirt", @"..\..\..\..\Assets\Ground\Snow\snowCenter.png", true, true));
                 monsters.Add(new Monster(null, "Golem1", new Position(0, 0), new Life(10), 1, 3, 1, "SAAA"));
             }
             else
@@ -1160,7 +1160,7 @@ namespace TripOverTime.EngineNamespace
             // Add Win Flag block
             _blockId = Convert.ToChar(blocks[blocks.Count - 1].Id);
             _blockId++;
-            blocks.Add(new Sprite(Convert.ToString(_blockId), "END", @"..\..\..\..\Assets\Items\flagGreen_down.png", false));
+            blocks.Add(new Sprite(Convert.ToString(_blockId), "END", @"..\..\..\..\Assets\Items\flagGreen_down.png", false, true));
 
             // EDITORRRRRR
             string mapToSave = ShowMap(window, bgPath, playerPath, playerPos, posMax, posMin, playerLife, playerAtk, blocks, monsters);
@@ -1551,7 +1551,7 @@ namespace TripOverTime.EngineNamespace
                 _blockId++;
                 if (path.ToLower().EndsWith(".png") || path.ToLower().EndsWith(".jpg"))
                 {
-                    s = new Sprite(Convert.ToString(_blockId), name, path, isSolid);
+                    s = new Sprite(Convert.ToString(_blockId), name, path, isSolid, true);
                 }
             }
 
@@ -1987,7 +1987,7 @@ namespace TripOverTime.EngineNamespace
             string mapFileString = "null";
             Dictionary<Position, Sprite> map = new Dictionary<Position, Sprite>(); //Map
             List<Monster> monsterOnMap = new List<Monster>(); //Monster on the map
-            Player player = new Player(null, "Player", playerPos, new Life(playerLife), playerAtk, playerPath);
+            Player player = new Player(null, "Player", playerPos, new Life(playerLife), playerAtk, playerPath, true);
             Position posActual = new Position(posMin.X, posMin.Y);
             bool showMapAgain = true;
             ushort choosenBlock = 0;
@@ -2301,7 +2301,7 @@ namespace TripOverTime.EngineNamespace
 
             //Process
             _blockId++;
-            blocks.Add(new Sprite(Convert.ToString(_blockId), "Air", @"..\..\..\..\Assets\air.png", false));
+            blocks.Add(new Sprite(Convert.ToString(_blockId), "Air", @"..\..\..\..\Assets\air.png", false, true));
 
             //Background & Player
             mapFileString = "BACKGROUNDPATH\r\n" + bgPath + "\r\nBACKGROUNDPATHEND\r\nPLAYER\r\n" + playerPath + " " + playerPos.X + " " + playerPos.Y + " " + playerLife + " " + playerAtk + "\r\nPLAYEREND\r\n";

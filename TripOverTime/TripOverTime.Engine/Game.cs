@@ -22,7 +22,7 @@ namespace TripOverTime.EngineNamespace
         string _mapPath;
         string _mapPath2;
 
-        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk, bool multiplayer = false)
+        internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk, bool multiplayer)
         {
             _mapPath = mapPath;
             _context = context;
@@ -41,13 +41,13 @@ namespace TripOverTime.EngineNamespace
             _timer = new Stopwatch();
             _timer.Start();
 
-            if (multiplayer)
+            if (multiplayer == true)
             {
                 _map2 = new Map(this, mapPath, multiplayer);
                 _boss2 = _map2.GenerateBoss2();
                 _mapPath2 = mapPath;
                 _context2 = context;
-                _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath);
+                _player2 = new Player(this, "player", startPosition, new Life(lifePoint), atk, playerPath, true);
                 _monsters2 = _map.GenerateMonsters2();
                 _timer2 = new Stopwatch();
                 _timer2.Start();
