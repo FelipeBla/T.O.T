@@ -319,7 +319,7 @@ namespace TripOverTime.EngineNamespace
 
 
             Dictionary<Position2, Sprite> map = _context2.GetGame2.GetMapObject2.GetMap2;
-
+            _spritesDisplayed.Clear();
             foreach (KeyValuePair<Position2, Sprite> s in map)
             {
                 s.Value.GetSprite2.Position = new SFML.System.Vector2f(s.Key.X2 * 128, _window.Size.Y + s.Key.Y2 * -128); //128*128 = Size of a sprite
@@ -351,7 +351,7 @@ namespace TripOverTime.EngineNamespace
 
 
             Dictionary<Position2, Sprite> map2 = _context2.GetGame2.GetMapObject2.GetMap2;
-
+            _spritesDisplayed2.Clear();
             foreach (KeyValuePair<Position2, Sprite> s2 in map2)
             {
                 s2.Value.GetSprite2.Position = new SFML.System.Vector2f(s2.Key.X2 * 128, _window.Size.Y + s2.Key.Y2 * -128); //128*128 = Size of a sprite
