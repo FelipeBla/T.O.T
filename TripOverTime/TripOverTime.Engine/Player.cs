@@ -195,7 +195,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context.GetMonsters)
                         {
-                            if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y && m.isAlive)
                             {
                                 monsterToAttack = m;
                             }
@@ -209,7 +209,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context.GetMonsters)
                         {
-                            if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y && m.isAlive)
                             {
                                 monsterToAttack = m;
                             }
@@ -222,7 +222,7 @@ namespace TripOverTime.EngineNamespace
                     }
                     
                     // Si il y a un monstre
-                    if (monsterToAttack != null && monsterToAttack.isAlive)
+                    if (monsterToAttack != null)
                     {
                         //Attack
                         Console.WriteLine("-" + _attack + " to " + monsterToAttack.Name + " who have " + monsterToAttack.life.GetCurrentPoint);
