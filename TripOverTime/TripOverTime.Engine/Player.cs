@@ -59,7 +59,7 @@ namespace TripOverTime.EngineNamespace
         float _attackRange2;
         string _imgPath;
 
-        internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath, bool multiplayer = false)
+        internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath, bool multiplayer)
         {
             _context = context;
             _name = name;
@@ -71,9 +71,9 @@ namespace TripOverTime.EngineNamespace
             _isJumping = false;
             _isAttack = false;
             if (context != null)
-                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, _context.GetMapObject, false, true);
+                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, true, _context.GetMapObject, false, true);
             else
-                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, null, false, true);
+                _sprite = new Sprite(PLAYER_ID, _name, imgPath, true, true, null, false, true);
             _orientation = "right";
 
             _incrementationHeal = 0;
@@ -106,9 +106,9 @@ namespace TripOverTime.EngineNamespace
                 _isJumping2 = false;
                 _isAttack2 = false;
                 if (_context2 == null)
-                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, null, false, true);
+                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, true, null, false, true);
                 else
-                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, _context2.GetMapObject, false, true);
+                    _sprite2 = new Sprite(PLAYER_ID2, _name2, imgPath, true, true, _context2.GetMapObject, false, true);
                 _orientation2 = "right";
 
                 _attackSpeed2 = 1;

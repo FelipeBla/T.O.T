@@ -71,8 +71,8 @@ namespace TripOverTime.EngineNamespace
             // path x y life atk
             string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
 
-            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
-            _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
+            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), false); //0, 3
+            _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), true); //0, 3
 
         }
 
@@ -525,10 +525,12 @@ namespace TripOverTime.EngineNamespace
             List<Position2> heart2 = _game2.GetMapObject2.GetHeart2;
             foreach (Position2 position2 in heart2)
             {
-                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
+
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id2 != "A")
                 {
+                    
                     _game2.GetPlayer2.GetLife2.BonusPoint2(1);
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
                     _gui.LoadMap2();
                 }
             }
@@ -538,11 +540,11 @@ namespace TripOverTime.EngineNamespace
             List<Position2> star2 = _game2.GetMapObject2.GetStar2;
             foreach (Position2 position2 in star2)
             {
-                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id != "A")
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id2 != "A")
                 {
 
                     _game2.GetPlayer2.GetAttack2++;
-                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
                     _gui.LoadMap2();
 
                 }

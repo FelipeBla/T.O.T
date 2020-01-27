@@ -10,6 +10,7 @@ namespace TripOverTime.EngineNamespace
     class Sprite
     {
         string _id;
+        string _id2;
         string _name;
         string _imgPath;
         bool _isSolid;
@@ -42,7 +43,6 @@ namespace TripOverTime.EngineNamespace
         Stopwatch _animTimer;
 
         int _bossAttack2;
-        string _id2;
         string _name2;
         string _imgPath2;
         bool _isSolid2;
@@ -63,7 +63,7 @@ namespace TripOverTime.EngineNamespace
         Dictionary<string, Texture> _monsterTexture2;
         Stopwatch _animTimer2;
 
-        internal Sprite(string id, string name, string imgPath, bool isSolid, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false, bool multiplayer = false)
+        internal Sprite(string id, string name, string imgPath, bool isSolid, bool multiplayer, Map context = null, bool isMonster = false, bool isPlayer = false, bool isBoss = false)
         {
             if (String.IsNullOrEmpty(imgPath)) throw new ArgumentException("imgPath is null or empty!");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("name is null or empty!");
@@ -987,6 +987,10 @@ namespace TripOverTime.EngineNamespace
         internal string Id
         {
             get => _id;
+        }
+        internal string Id2
+        {
+            get => _id2;
         }
 
         internal string Name
