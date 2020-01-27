@@ -62,7 +62,7 @@ namespace TripOverTime.EngineNamespace
             _window.Clear();
             //view player 1
             View view1 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
-            view1.Viewport = new FloatRect(0f, 0f, 1f, 0.5f);
+            view1.Viewport = new FloatRect(0.25f, 0f, 0.5f, 0.5f);
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
             Vector2f PositionScreen1 = new Vector2f(400, 300);
@@ -122,7 +122,7 @@ namespace TripOverTime.EngineNamespace
 
             //view player 2
             View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
-            view2.Viewport = new FloatRect(0f, 0.5f, 1f, 0.5f);
+            view2.Viewport = new FloatRect(0.25f, 0.5f, 0.5f, 0.5f);
             view2.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             Vector2f PositionScreen2 = new Vector2f(400, 300);
             _window.SetView(view2);
