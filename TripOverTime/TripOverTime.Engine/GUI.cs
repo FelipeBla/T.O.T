@@ -31,6 +31,7 @@ namespace TripOverTime.EngineNamespace
         static SFML.Window.Keyboard.Key _JumpAction2 = Keyboard.Key.Z;
         static SFML.Window.Keyboard.Key _AttackAction2 = Keyboard.Key.E;
 
+        SFML.Graphics.Sprite _backgroundMultiplayer = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
 
         internal GUI(Engine context, RenderWindow window)
         {
@@ -59,7 +60,12 @@ namespace TripOverTime.EngineNamespace
         {
             if (!_window.IsOpen) _context.Close = true;
 
+
             _window.Clear();
+
+            
+            //_window.Draw(_backgroundMultiplayer);
+
             //view player 1
             View view1 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
             view1.Viewport = new FloatRect(0.25f, 0f, 0.5f, 0.5f);
@@ -115,10 +121,12 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Boss
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 -205);
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
-            _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
-            Console.WriteLine("BossPos: " + _context.GetGame.GetBoss.Position.X + ";" + _context.GetGame.GetBoss.Position.Y);
+            if (_context.GetGame.GetBoss != null)
+            {
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128 - 150, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 205);
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
+            }
 
             //view player 2
             View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
@@ -176,10 +184,12 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(m.GetMonsterSprite2.GetSprite2);
             }
             // Boss
-            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetBoss2.Position2.X2 * 128, _window.Size.Y + _context2.GetGame2.GetBoss2.Position2.Y2 * -128 - 205);
-            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position -= _moveTheMapOf2;
-            _window.Draw(_context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2);
-            Console.WriteLine("BossPos: " + _context2.GetGame2.GetBoss2.Position2.X2 + ";" + _context2.GetGame2.GetBoss2.Position2.Y2);
+            if (_context2.GetGame2.GetBoss2 != null)
+            {
+                _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetBoss2.Position2.X2 * 128 - 150, _window.Size.Y + _context2.GetGame2.GetBoss2.Position2.Y2 * -128 - 205);
+                _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position -= _moveTheMapOf2;
+                _window.Draw(_context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2);
+            }
             // Display
             _window.Display();
 
