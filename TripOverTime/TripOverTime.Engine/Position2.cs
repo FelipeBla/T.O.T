@@ -4,10 +4,8 @@ using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
-    public class Position
+    public class Position2
     {
-        float _x;
-        float _y;
         float _x2;
         float _y2;
 
@@ -16,34 +14,32 @@ namespace TripOverTime.EngineNamespace
         /// </summary>
         /// <param name="x">Default 0</param>
         /// <param name="y">Default 0</param>
-        public Position(float x = 0, float y = 0)
+        public Position2(float x = 0, float y = 0)
         {
-            _x = x;
-            _y = y;
+            _x2 = x;
+            _y2 = y;
         }
-
-        public float X
+        public float X2
         {
-            get => _x;
-            internal set => _x = value;
+            get => _x2;
+            internal set => _x2 = value;
         }
-        public float Y
+        public float Y2
         {
-            get => _y;
-            internal set => _y = value;
+            get => _y2;
+            internal set => _y2 = value;
         }
-
 
         // For TryGetValue
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Position)) return false;
-            return ((Position)obj).X == this.X && ((Position)obj).Y == this.Y;
+            if (obj == null || !(obj is Position2)) return false;
+            return ((Position2)obj).X2 == this.X2 && ((Position2)obj).Y2 == this.Y2;
         }
 
         public override int GetHashCode()
         {
-            return (this.X + this.Y).GetHashCode();
+            return (this.X2 + this.Y2).GetHashCode();
         }
 
     }

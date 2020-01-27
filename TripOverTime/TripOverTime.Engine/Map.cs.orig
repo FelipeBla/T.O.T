@@ -11,21 +11,17 @@ namespace TripOverTime.EngineNamespace
         List<Position> _heart;
         List<Position> _star;
         List<Position> _trap;
-        List<Position2> _trap2;
         Sprite _spriteChange;
-        Sprite _spriteChange2;
         List<Position2> _heart2;
         List<Position2> _star2;
         List<Sprite> _sprites;
         string _backgroundPath;
         string _lifebarPath = "..\\..\\..\\..\\Assets\\HUD\\lifebar.png";
-        string _arrowKeyPath = "..\\..\\..\\..\\Assets\\HUD\\arrowKeysSpace.png";
         string _mapPath;
         Position _limitMin;
         Position _limitMax;
         List<Position> _checkpointPosition;
         Game _context;
-        bool _multiplayer;
 
         //multipayer
         Dictionary<Position2, Sprite> _map2;
@@ -38,7 +34,7 @@ namespace TripOverTime.EngineNamespace
         List<Position2> _checkpointPosition2;
         Game _context2;
 
-        internal Map(Game context, string mapPath, bool multiplayer)
+        internal Map(Game context, string mapPath)
         {
             if (String.IsNullOrEmpty(mapPath)) throw new ArgumentException("mapPath is null or empty!");
             if (context == null) throw new ArgumentNullException("Context null!");
@@ -51,24 +47,17 @@ namespace TripOverTime.EngineNamespace
             _sprites = new List<Sprite>();
             _mapPath = mapPath;
             _checkpointPosition = new List<Position>();
-            _multiplayer = multiplayer;
 
-            if (multiplayer)
-            {
-                _heart2 = new List<Position2>();
-                _star2 = new List<Position2>();
-                _context2 = context;
-                _map2 = new Dictionary<Position2, Sprite>();
-                _sprites2 = new List<Sprite>();
-                _mapPath2 = mapPath;
-                _checkpointPosition2 = new List<Position2>();
-                _heart2 = new List<Position2>();
-                _star2 = new List<Position2>();
-                _trap2 = new List<Position2>();
-
-            }
+            _heart2 = new List<Position2>();
+            _star2 = new List<Position2>();
+            _context2 = context;
+            _map2 = new Dictionary<Position2, Sprite>();
+            _sprites2 = new List<Sprite>();
+            _mapPath2 = mapPath;
+            _checkpointPosition2 = new List<Position2>();
 
             GenerateMap();
+            //GenerateMap2();
         }
 
         /// <summary>
@@ -107,15 +96,11 @@ namespace TripOverTime.EngineNamespace
             _limitMax = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get limits2
-            if (_multiplayer)
-            {
-                string[] limits2 = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
-                string[] limitMin2 = limits[0].Split(" ");
-                _limitMin2 = new Position2(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
-                string[] limitMax2 = limits[1].Split(" ");
-                _limitMax2 = new Position2(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
-            }
-            
+            string[] limits2 = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
+            string[] limitMin2 = limits[0].Split(" ");
+            _limitMin2 = new Position2(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
+            string[] limitMax2 = limits[1].Split(" ");
+            _limitMax2 = new Position2(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
 
             // Get all blocks in level (id, name, path, isSolid)
             string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
@@ -123,23 +108,26 @@ namespace TripOverTime.EngineNamespace
             {
                 string s = (string)blocks[i];
                 string[] str = s.Split(" ");
-                Sprite SpriteToAdd = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]),true, this, false, false, false);
+                Sprite SpriteToAdd = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
                 _sprites.Add(SpriteToAdd);
-                if (_context2 != null) _sprites2.Add(SpriteToAdd);
+                _sprites2.Add(SpriteToAdd);
                 if (str[1] == "TRAP")
                 {
                     //Console.WriteLine(str[4]);
                     //if (str[4] == "DANGEROUS")
                     //{
-                    _sprites[i].IsDangerous = true;
-                    if (_context2 != null) _sprites2[i].IsDangerous2 = true;
-                    Console.WriteLine(str[1] + " IS DANGEROUS");
+                        _sprites[i].IsDangerous = true;
+<<<<<<< HEAD
+                        _sprites2[i].IsDangerous2 = true;
+                        Console.WriteLine(str[1] + " IS DANGEROUS");
+=======
+                        //Console.WriteLine(str[1] + " IS DANGEROUS");
+>>>>>>> Quentin
                     //}
                 }
                 if (str[1] == "AIR")
                 {
-                    _spriteChange = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), true, this, false, false, false);
-                    if (_context2 != null) _spriteChange2 = _spriteChange;
+                    _spriteChange = new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this);
                 }
             }
 
@@ -147,34 +135,78 @@ namespace TripOverTime.EngineNamespace
             string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
             for (int y = 0; y < mapParsed.Length; y++)
             {
-                for (int x = 0; x < mapParsed[y].Length; x++)
+                for(int x = 0; x < mapParsed[y].Length; x++)
                 {
                     if (mapParsed[y][x] == 'H')
                     {
-                        _heart.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _heart2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
+                        _heart.Add(new Position((float) x, (float)_limitMax.Y - y));
                     }
                     if (mapParsed[y][x] == 'S')
                     {
                         _star.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _star2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
                     }
                     if (mapParsed[y][x] == '2')
                     {
                         _trap.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _trap2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
                     }
                 }
             }
+
+            //Boucle Y
+            int indexTemp = 0;
+            for(int y = Convert.ToInt32(_limitMax.Y); y >= Convert.ToInt32(_limitMin.Y); y-- )
+            {
+                for(int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
+                {
+                    _map.Add(new Position(x, y), RetrieveSpriteWithId( mapParsed[indexTemp].Substring(x, 1) ));
+                    _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
+                }
+                indexTemp++;
+            }
+        }
+
+        void GenerateMap2()
+        {
+            //Verify if it's a map file
+            if (!_mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(_mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            // Get background path
+            _backgroundPath = StringBetweenString(text, "BACKGROUNDPATH", "BACKGROUNDPATHEND");
+            _backgroundPath = _backgroundPath.Replace("\r", "");
+
+            // Get limits
+            string[] limits = StringBetweenString(text, "LIMIT", "LIMITEND").Split("\n");
+            string[] limitMin = limits[0].Split(" ");
+            _limitMin = new Position(Convert.ToSingle(limitMin[0]), Convert.ToSingle(limitMin[1]));
+            string[] limitMax = limits[1].Split(" ");
+            _limitMax = new Position(Convert.ToSingle(limitMax[0]), Convert.ToSingle(limitMax[1]));
+
+            // Get all blocks in level (id, name, path, isSolid)
+            string[] blocks = StringBetweenString(text, "BLOCKS", "BLOCKSEND").Split("\n");
+            for (int i = 0; i < blocks.Length; i++)
+            {
+                string s = (string)blocks[i];
+                string[] str = s.Split(" ");
+                _sprites.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                _sprites2.Add(new Sprite(str[0], str[1], str[2], Convert.ToBoolean(str[3]), this));
+                if (str.Length > 4)
+                {
+                    //Console.WriteLine(str[4]);
+
+                    //if (str[4] == "DANGEROUS")
+                    //{
+                    _sprites[i].IsDangerous = true;
+                    _sprites2[i].IsDangerous2 = true;
+                    Console.WriteLine(str[1] + " IS DANGEROUS");
+                    //}
+                }
+            }
+
+            // Get map
+            string[] mapParsed = StringBetweenString(text, "MAP", "MAPEND").Split("\n");
 
             //Boucle Y
             int indexTemp = 0;
@@ -183,7 +215,6 @@ namespace TripOverTime.EngineNamespace
                 for (int x = Convert.ToInt32(_limitMin.X); x <= Convert.ToInt32(_limitMax.X); x++)
                 {
                     _map.Add(new Position(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
-                    if (_context2 != null) _map2.Add(new Position2(x, y), RetrieveSpriteWithId(mapParsed[indexTemp].Substring(x, 1)));
                 }
                 indexTemp++;
             }
@@ -199,24 +230,17 @@ namespace TripOverTime.EngineNamespace
             // Get monsters
             // name x y hp
             string[] strmonsters = StringBetweenString(text, "MONSTER", "MONSTEREND").Split("\n");
-            Dictionary<string, Sprite> allMonsters = new Dictionary<string, Sprite>();
             List<Monster> monsters = new List<Monster>();
-
             foreach (string s in strmonsters)
             {
                 string[] str = s.Split(" ");
 
-                if (!(allMonsters.ContainsKey(str[0]))) // Ne contient pas deja le monstre
-                {
-                    allMonsters.Add(str[0], new Sprite("MONSTER420", str[0], $@"..\..\..\..\Assets\Monster\{str[0]}", true, true, _context.GetMapObject, true, false, false));
-                }
-            }
-
-            foreach (string s in strmonsters)
-            {
-                string[] str = s.Split(" ");
-
-                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], allMonsters[str[0]].Clone()));
+<<<<<<< HEAD
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, Convert.ToSingle(str[6]), str[7]));
+                
+=======
+                monsters.Add(new Monster(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7]));
+>>>>>>> Quentin
             }
 
             return monsters;
@@ -237,7 +261,7 @@ namespace TripOverTime.EngineNamespace
             {
                 string[] str = s.Split(" ");
 
-                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]), Convert.ToSingle(str[6]), str[7], null, true));
+                monsters.Add(new Monster(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, Convert.ToSingle(str[6]), str[7]));
 
             }
 
@@ -251,23 +275,19 @@ namespace TripOverTime.EngineNamespace
             string text = File.ReadAllText(_mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
 
+            // Get boss
+            // name x y hp
+            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
             Boss boss = null;
-
-            if (text.Contains("BOSS"))
+            foreach (string s in strBoss)
             {
-                // Get boss
-                // name x y hp
-                string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
-                foreach (string s in strBoss)
-                {
-                    string[] str = s.Split(" ");
+                string[] str = s.Split(" ");
 
-                    boss = new Boss(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
-                }
+                boss = new Boss(_context, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5])/100, float.Parse(str[6]), str[7]);
             }
-
             return boss;
 
+            
         }
         internal Boss GenerateBoss2()
         {
@@ -277,30 +297,23 @@ namespace TripOverTime.EngineNamespace
             string text = File.ReadAllText(_mapPath);
             if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
 
+            // Get boss
+            // name x y hp
+            string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
             Boss boss = null;
-
-            if (text.Contains("BOSS"))
+            foreach (string s in strBoss)
             {
-                // Get boss
-                // name x y hp
-                string[] strBoss = StringBetweenString(text, "BOSS", "BOSSEND").Split("\n");
+                string[] str = s.Split(" ");
 
-                foreach (string s in strBoss)
-                {
-                    string[] str = s.Split(" ");
-
-                    boss = new Boss(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
-                }
+                boss = new Boss(_context2, str[0], new Position(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Position2(Convert.ToSingle(str[1]), Convert.ToSingle(str[2])), new Life(Convert.ToUInt16(str[3])), Convert.ToUInt16(str[4]), float.Parse(str[5]) / 100, float.Parse(str[6]), str[7]);
             }
-
-
             return boss;
 
 
         }
         private Sprite RetrieveSpriteWithId(string strId)
         {
-            foreach (Sprite spr in _sprites)
+            foreach(Sprite spr in _sprites)
             {
                 if (spr.Id == strId) return spr;
             }
@@ -353,22 +366,17 @@ namespace TripOverTime.EngineNamespace
         {
             get => _lifebarPath;
         }
-
-        internal string GetArrowKey
-        {
-            get => _arrowKeyPath;
-        }
-
+        
 
         internal Position GetEndPosition
         {
             get
             {
-                foreach (KeyValuePair<Position, Sprite> s in _map)
+                foreach(KeyValuePair<Position, Sprite> s in _map)
                 {
                     if (s.Value.IsEnd) return s.Key;
                 }
-
+                
                 throw new InvalidOperationException("END NOT FOUND!");
             }
         }
@@ -409,10 +417,6 @@ namespace TripOverTime.EngineNamespace
         {
             get => _star;
         }
-        internal List<Position2> GetStar2
-        {
-            get => _star2;
-        }
         internal List<Position> GetTrap
         {
             get => _trap;
@@ -422,13 +426,14 @@ namespace TripOverTime.EngineNamespace
             get => _heart2;
             set => _heart2 = value;
         }
+        internal List<Position2> GetStar2
+        {
+            get => _star2;
+            set => _star2 = value;
+        }
         internal Sprite GetSpriteChange
         {
             get => _spriteChange;
-        }
-        internal Sprite GetSpriteChange2
-        {
-            get => _spriteChange2;
         }
     }
 }
