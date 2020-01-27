@@ -4,6 +4,7 @@ using System.Text;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
+using System.Diagnostics;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -21,6 +22,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _rect1;
         Texture _lifebarTexture;
+        List<Stopwatch> _spDegats;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
         static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
         static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
@@ -44,6 +46,7 @@ namespace TripOverTime.EngineNamespace
             _moveTheMapOf2 = new SFML.System.Vector2f(0, 0);
             _hpBar = new SFML.Graphics.Sprite();
             _rect1 = new SFML.Graphics.Sprite();
+            _spDegats = new List<Stopwatch>();
         }
 
 
@@ -252,6 +255,50 @@ namespace TripOverTime.EngineNamespace
                 _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
             }
+
+            // Show degats
+            for (int i = 0; i < _context.GetGame.GetPlayer.DegatsToShow.Count; i++)
+            {
+                if (_context.GetGame.GetPlayer.DegatsToShow[i] != 0)
+                {
+                    if (_spDegats.Count == i)
+                    {
+                        _spDegats.Add(new Stopwatch());
+                        _spDegats[i].Start();
+                    }
+                    else if (_spDegats.Count > i)
+                    {
+                        if (_spDegats[i].ElapsedMilliseconds >= 1500)
+                        {
+                            // Delete
+                            _context.GetGame.GetPlayer.DegatsToShow.RemoveAt(i);
+                            _spDegats.RemoveAt(i);
+                        }
+                        else
+                        {
+                            Text t = new Text(Convert.ToString(_context.GetGame.GetPlayer.DegatsToShow[i]), _context.GetFont, 48);
+
+                            if (_context.GetGame.GetPlayer.DegatsToShow[i] > 0) // Attack
+                            {
+                                t.FillColor = Color.Blue;
+                                t.Position = new Vector2f(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X + 128, _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.Y - _spDegats[i].ElapsedMilliseconds / 10);
+                            }
+                            else // Hurt
+                            {
+                                t.FillColor = Color.Red;
+                                t.Position = new Vector2f(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X + 20, _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.Y - _spDegats[i].ElapsedMilliseconds / 10);
+                            }
+
+                            RectangleShape r = new RectangleShape(new Vector2f(t.GetGlobalBounds().Width + 15, t.GetGlobalBounds().Height + 15));
+                            r.FillColor = new Color(0, 0, 0, 128);
+                            r.Position = new Vector2f(t.Position.X - 5, t.Position.Y - 5);
+                            _window.Draw(r);
+                            _window.Draw(t);
+                        }
+                    }
+                }
+            }
+            
            
             // Display
             _window.Display();
