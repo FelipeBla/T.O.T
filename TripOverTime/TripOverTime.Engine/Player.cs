@@ -228,13 +228,13 @@ namespace TripOverTime.EngineNamespace
                         Console.WriteLine("-" + _attack + " to " + monsterToAttack.Name + " who have " + monsterToAttack.life.GetCurrentPoint);
                         monsterToAttack.life.DecreasedPoint(_attack);
                         _incrementationHeal++;
-                        if (_incrementationHeal > 10)
+                        if (_incrementationHeal > 5)
                         {
                             _life.BonusPoint(1);
                             _incrementationHeal = 0;
                         }
                         _incrementationAttack++;
-                        if (_incrementationAttack > 5)
+                        if (_incrementationAttack > 1)
                         {
                             _attack++;
                             _incrementationAttack = 0;
@@ -287,7 +287,7 @@ namespace TripOverTime.EngineNamespace
                         //Attack
                         monsterToAttack.life2.DecreasedPoint2(_attack2);
                     }
-                    if (_incrementationHeal2 > 2)
+                    if (_incrementationHeal2 > 5)
                     {
                         _life2.BonusPoint2(1);
                         _incrementationHeal2 = 0;
