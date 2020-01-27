@@ -358,22 +358,18 @@ namespace TripOverTime.EngineNamespace
         {
             _context.GetPlayer.GetLife.DecreasedPoint(_attack);
             _context.GetPlayer.HurtPlayer = true;
+            _context.GetPlayer.DegatsToShow.Add(0 - Convert.ToInt32(_attack));
             HurtPlayerAnimation();
         }
 
         internal void HurtPlayerAnimation()
         {
+            //Hurt animation
             _context.GetPlayer.GetPlayerSprite.PlayerAnimation(4, "hurt", 60);
         }
         internal void HurtPlayerAnimation2()
         {
             _context2.GetPlayer2.GetPlayerSprite2.PlayerAnimation2(4, "hurt", 60);
-        }
-        private string StringBetweenString(string original, string str1, string str2)
-        {
-            int firstStringPosition = original.IndexOf(str1);
-            int secondStringPosition = original.IndexOf(str2);
-            return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
         internal void HurtPlayer2()

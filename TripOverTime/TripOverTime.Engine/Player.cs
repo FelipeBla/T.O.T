@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace TripOverTime.EngineNamespace
@@ -58,6 +59,7 @@ namespace TripOverTime.EngineNamespace
         float _attackRange;
         float _attackRange2;
         string _imgPath;
+        List<int> _degatsToShow;
 
         internal Player(Game context, string name, Position position, Life life, ushort attack, string imgPath, bool multiplayer)
         {
@@ -90,6 +92,7 @@ namespace TripOverTime.EngineNamespace
             ph = 128;
 
             _monsterKillName = "void";
+            _degatsToShow = new List<int>();
 
             if (multiplayer)
             {
@@ -195,7 +198,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context.GetMonsters)
                         {
-                            if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            if (m.Position.X <= _realPosition.X + _attackRange && m.Position.X >= _realPosition.X && m.Position.Y == _realPosition.Y && m.isAlive)
                             {
                                 monsterToAttack = m;
                             }
@@ -209,7 +212,7 @@ namespace TripOverTime.EngineNamespace
                         //try get monster with position
                         foreach (Monster m in _context.GetMonsters)
                         {
-                            if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y)
+                            if (m.Position.X >= _realPosition.X - _attackRange && m.Position.X <= _realPosition.X && m.Position.Y == _realPosition.Y && m.isAlive)
                             {
                                 monsterToAttack = m;
                             }
@@ -222,10 +225,13 @@ namespace TripOverTime.EngineNamespace
                     }
                     
                     // Si il y a un monstre
-                    if (monsterToAttack != null && monsterToAttack.isAlive)
+                    if (monsterToAttack != null)
                     {
                         //Attack
                         Console.WriteLine("-" + _attack + " to " + monsterToAttack.Name + " who have " + monsterToAttack.life.GetCurrentPoint);
+                        //ICI
+                        _degatsToShow.Add(_attack);
+
                         monsterToAttack.life.DecreasedPoint(_attack);
                         _incrementationHeal++;
                         if (_incrementationHeal > 10)
@@ -720,6 +726,12 @@ namespace TripOverTime.EngineNamespace
         internal string Orientation2
         {
             get => _orientation2;
+        }
+
+        internal List<int> DegatsToShow
+        {
+            get => _degatsToShow;
+            set => _degatsToShow = value;
         }
 
         internal ushort GetAttack
