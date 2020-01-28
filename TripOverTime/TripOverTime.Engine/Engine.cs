@@ -424,7 +424,14 @@ namespace TripOverTime.EngineNamespace
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
                 if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
+                    
                     //Block under monster isn't solid
+                    if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                    {
+                        //DIE
+                        m.life.CurrentPoint = 0;
+                        m.MonsterDead();
+                    }
                     m.Gravity();
                 }
                 else
@@ -592,6 +599,12 @@ namespace TripOverTime.EngineNamespace
                 if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
                 {
                     //Block under monster isn't solid
+                    if (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2)
+                    {
+                        //DIE
+                        m2.life2.CurrentPoint2 = 0;
+                        m2.MonsterDead2();
+                    }
                     m2.Gravity2();
                 }
                 else

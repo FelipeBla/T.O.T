@@ -91,23 +91,38 @@ namespace TripOverTime.EngineNamespace
                 if (_orientation == "left")
                 {
                     if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
+                    {
                         if (!s.IsSolid)
-                            _position.X -= _monsterMove;
+                        {
+                            if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            {
+                                if (s.IsSolid)
+                                    _position.X -= _monsterMove;
+                            }
+                        }
+                    }
+
                 }
                 else
                 {
                     if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                     {
                         if (!s.IsSolid)
-                            _position.X += _monsterMove;
+                        {
+                            if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            {
+                                if (s.IsSolid)
+                                    _position.X += _monsterMove;
+                            }
+                        }
                     }
                 }
 
                 _ismoving = true;
                 _sprite.MonsterMoveAnimation(this);
-           
+
             }
-       
+
         }
 
         internal void MonsterMove2()
@@ -293,7 +308,7 @@ namespace TripOverTime.EngineNamespace
         {
             get => _ismoving2;
             set => _ismoving2 = value;
-        
+
         }
 
         internal float MoveSpeed

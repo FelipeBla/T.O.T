@@ -4,6 +4,7 @@ using System.Text;
 using SFML.Window;
 using SFML.Graphics;
 using SFML.System;
+using System.Diagnostics;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -21,6 +22,7 @@ namespace TripOverTime.EngineNamespace
         SFML.Graphics.Sprite _hpBar2;
         SFML.Graphics.Sprite _rect1;
         Texture _lifebarTexture;
+        List<Stopwatch> _spDegats;
         static SFML.Window.Keyboard.Key _LeftAction = Keyboard.Key.Left;
         static SFML.Window.Keyboard.Key _RightAction = Keyboard.Key.Right;
         static SFML.Window.Keyboard.Key _JumpAction = Keyboard.Key.Up;
@@ -31,6 +33,7 @@ namespace TripOverTime.EngineNamespace
         static SFML.Window.Keyboard.Key _JumpAction2 = Keyboard.Key.Z;
         static SFML.Window.Keyboard.Key _AttackAction2 = Keyboard.Key.E;
 
+        SFML.Graphics.Sprite _backgroundMultiplayer = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
 
         internal GUI(Engine context, RenderWindow window)
         {
@@ -44,6 +47,7 @@ namespace TripOverTime.EngineNamespace
             _moveTheMapOf2 = new SFML.System.Vector2f(0, 0);
             _hpBar = new SFML.Graphics.Sprite();
             _rect1 = new SFML.Graphics.Sprite();
+            _spDegats = new List<Stopwatch>();
         }
 
 
@@ -59,10 +63,15 @@ namespace TripOverTime.EngineNamespace
         {
             if (!_window.IsOpen) _context.Close = true;
 
+
             _window.Clear();
+
+            
+            //_window.Draw(_backgroundMultiplayer);
+
             //view player 1
             View view1 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
-            view1.Viewport = new FloatRect(0f, 0f, 1f, 0.5f);
+            view1.Viewport = new FloatRect(0.25f, 0f, 0.5f, 0.5f);
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
             Vector2f PositionScreen1 = new Vector2f(400, 300);
@@ -115,14 +124,16 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Boss
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 -205);
-            _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
-            _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
-            Console.WriteLine("BossPos: " + _context.GetGame.GetBoss.Position.X + ";" + _context.GetGame.GetBoss.Position.Y);
+            if (_context.GetGame.GetBoss != null)
+            {
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position = new SFML.System.Vector2f(_context.GetGame.GetBoss.Position.X * 128 - 150, _window.Size.Y + _context.GetGame.GetBoss.Position.Y * -128 - 205);
+                _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
+                _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
+            }
 
             //view player 2
             View view2 = new View(new Vector2f(Settings.XResolution/2, Settings.YResolution/2), new Vector2f(Settings.XResolution, Settings.YResolution));
-            view2.Viewport = new FloatRect(0f, 0.5f, 1f, 0.5f);
+            view2.Viewport = new FloatRect(0.25f, 0.5f, 0.5f, 0.5f);
             view2.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             Vector2f PositionScreen2 = new Vector2f(400, 300);
             _window.SetView(view2);
@@ -176,10 +187,12 @@ namespace TripOverTime.EngineNamespace
                 _window.Draw(m.GetMonsterSprite2.GetSprite2);
             }
             // Boss
-            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetBoss2.Position2.X2 * 128, _window.Size.Y + _context2.GetGame2.GetBoss2.Position2.Y2 * -128 - 205);
-            _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position -= _moveTheMapOf2;
-            _window.Draw(_context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2);
-            Console.WriteLine("BossPos: " + _context2.GetGame2.GetBoss2.Position2.X2 + ";" + _context2.GetGame2.GetBoss2.Position2.Y2);
+            if (_context2.GetGame2.GetBoss2 != null)
+            {
+                _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position = new SFML.System.Vector2f(_context2.GetGame2.GetBoss2.Position2.X2 * 128 - 150, _window.Size.Y + _context2.GetGame2.GetBoss2.Position2.Y2 * -128 - 205);
+                _context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2.Position -= _moveTheMapOf2;
+                _window.Draw(_context2.GetGame2.GetBoss2.GetBossSprite2.GetSprite2);
+            }
             // Display
             _window.Display();
 
@@ -252,6 +265,50 @@ namespace TripOverTime.EngineNamespace
                 _context.GetGame.GetBoss.GetBossSprite.GetSprite.Position -= _moveTheMapOf;
                 _window.Draw(_context.GetGame.GetBoss.GetBossSprite.GetSprite);
             }
+
+            // Show degats
+            for (int i = 0; i < _context.GetGame.GetPlayer.DegatsToShow.Count; i++)
+            {
+                if (_context.GetGame.GetPlayer.DegatsToShow[i] != 0)
+                {
+                    if (_spDegats.Count == i)
+                    {
+                        _spDegats.Add(new Stopwatch());
+                        _spDegats[i].Start();
+                    }
+                    else if (_spDegats.Count > i)
+                    {
+                        if (_spDegats[i].ElapsedMilliseconds >= 1500)
+                        {
+                            // Delete
+                            _context.GetGame.GetPlayer.DegatsToShow.RemoveAt(i);
+                            _spDegats.RemoveAt(i);
+                        }
+                        else
+                        {
+                            Text t = new Text(Convert.ToString(_context.GetGame.GetPlayer.DegatsToShow[i]), _context.GetFont, 48);
+
+                            if (_context.GetGame.GetPlayer.DegatsToShow[i] > 0) // Attack
+                            {
+                                t.FillColor = Color.Blue;
+                                t.Position = new Vector2f(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X + 128, _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.Y - _spDegats[i].ElapsedMilliseconds / 10);
+                            }
+                            else // Hurt
+                            {
+                                t.FillColor = Color.Red;
+                                t.Position = new Vector2f(_context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.X + 20, _context.GetGame.GetPlayer.GetPlayerSprite.GetSprite.Position.Y - _spDegats[i].ElapsedMilliseconds / 10);
+                            }
+
+                            RectangleShape r = new RectangleShape(new Vector2f(t.GetGlobalBounds().Width + 15, t.GetGlobalBounds().Height + 15));
+                            r.FillColor = new Color(0, 0, 0, 128);
+                            r.Position = new Vector2f(t.Position.X - 5, t.Position.Y - 5);
+                            _window.Draw(r);
+                            _window.Draw(t);
+                        }
+                    }
+                }
+            }
+            
            
             // Display
             _window.Display();
