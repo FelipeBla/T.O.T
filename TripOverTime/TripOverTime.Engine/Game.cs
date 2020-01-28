@@ -21,6 +21,7 @@ namespace TripOverTime.EngineNamespace
         Stopwatch _timer2;
         string _mapPath;
         string _mapPath2;
+        string _music;
 
         internal Game(Engine context, string mapPath, string playerPath, Position startPosition, Position2 startPosition2, ushort lifePoint, ushort atk, bool multiplayer)
         {
@@ -105,6 +106,10 @@ namespace TripOverTime.EngineNamespace
         {
             get => _monsters2;
             set => _monsters2 = value;
+        }
+        internal string GetMusic
+        {
+            get => _music;
         }
     }
 }

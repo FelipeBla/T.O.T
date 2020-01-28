@@ -11,7 +11,6 @@ namespace TripOverTime.EngineNamespace
         List<Position> _heart;
         List<Position> _star;
         List<Position> _trap;
-        List<Position2> _trap2;
         Sprite _spriteChange;
         Sprite _spriteChange2;
         List<Position2> _heart2;
@@ -61,10 +60,7 @@ namespace TripOverTime.EngineNamespace
                 _sprites2 = new List<Sprite>();
                 _mapPath2 = mapPath;
                 _checkpointPosition2 = new List<Position2>();
-                _heart2 = new List<Position2>();
-                _star2 = new List<Position2>();
-                _trap2 = new List<Position2>();
-
+                
             }
 
             GenerateMap();
@@ -151,26 +147,14 @@ namespace TripOverTime.EngineNamespace
                     if (mapParsed[y][x] == 'H')
                     {
                         _heart.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _heart2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
                     }
                     if (mapParsed[y][x] == 'S')
                     {
                         _star.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _star2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
                     }
                     if (mapParsed[y][x] == '2')
                     {
                         _trap.Add(new Position((float)x, (float)_limitMax.Y - y));
-                        if (_multiplayer)
-                        {
-                            _trap2.Add(new Position2((float)x, (float)_limitMax.Y - y));
-                        }
                     }
                 }
             }
@@ -297,6 +281,7 @@ namespace TripOverTime.EngineNamespace
 
 
         }
+
         private Sprite RetrieveSpriteWithId(string strId)
         {
             foreach (Sprite spr in _sprites)

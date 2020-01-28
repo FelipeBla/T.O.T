@@ -6,6 +6,8 @@ using SFML;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using SFML.Audio;
+
 
 namespace TripOverTime.EngineNamespace
 {
@@ -24,6 +26,8 @@ namespace TripOverTime.EngineNamespace
         GUI _gui;
         Font _globalFont;
         string _oldOrientation;
+        Music _music;
+
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
@@ -58,6 +62,13 @@ namespace TripOverTime.EngineNamespace
             _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), multiplayer); //0, 3
 
             _gui.ShowLoading(90);
+
+            //Music
+            string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
+            if (String.IsNullOrEmpty(strMusic[0])) throw new ArgumentException("Music is null or empty!");
+
+            _music = new Music(strMusic[0]);
+            _music.Play();
         }
         public void StartGame2(string mapPath)
         {
@@ -114,6 +125,8 @@ namespace TripOverTime.EngineNamespace
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
+                    _music.Stop();
+                    _music.Dispose();
                     return -1;
                 }
                 _game.GetPlayer.Gravity();
@@ -180,6 +193,8 @@ namespace TripOverTime.EngineNamespace
             {
                 //DIE
                 _game.GetPlayer.KilledBy = "Monster";
+                _music.Stop();
+                _music.Dispose();
                 return -1;
             }
 
@@ -306,6 +321,8 @@ namespace TripOverTime.EngineNamespace
             if (end.X <= _game.GetPlayer.RealPosition.X)
             {
                 Console.WriteLine("YOUWINNNNNNNNNN");
+                _music.Stop();
+                _music.Dispose();
                 // SHOW WIN MENU !
                 return 0;
             }
