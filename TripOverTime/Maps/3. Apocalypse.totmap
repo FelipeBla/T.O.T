@@ -9,7 +9,8 @@ LIMIT
 394 10
 LIMITEND
 MUSIC
-..\..\..\..\Music\victory.ogg MUSICEND
+..\..\..\..\Music\victory.ogg 
+MUSICEND
 BLOCKS
 A AIR ..\..\..\..\Assets\air.png false
 G STONE ..\..\..\..\Assets\Ground\Stone\stoneMidBlack.png true

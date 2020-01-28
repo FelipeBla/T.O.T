@@ -9,7 +9,8 @@ LIMIT
 99 7
 LIMITEND
 MUSIC
-..\..\..\..\Music\victory.ogg MUSICEND
+..\..\..\..\Music\victory.ogg 
+MUSICEND
 BLOCKS
 A AIR ..\..\..\..\Assets\air.png false
 G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
