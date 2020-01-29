@@ -65,10 +65,11 @@ namespace TripOverTime.EngineNamespace
 
             //Music
             string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
-            if (String.IsNullOrEmpty(strMusic[0])) throw new ArgumentException("Music is null or empty!");
-
-            _music = new Music(strMusic[0]);
-            _music.Play();
+            if (!String.IsNullOrEmpty(strMusic[0]))
+            {
+                _music = new Music(strMusic[0]);
+                _music.Play();
+            }
         }
         public void StartGame2(string mapPath)
         {
@@ -125,8 +126,11 @@ namespace TripOverTime.EngineNamespace
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
-                    _music.Stop();
-                    _music.Dispose();
+                    if (_music != null)
+                    {
+                        _music.Stop();
+                        _music.Dispose();
+                    }
                     return -1;
                 }
                 _game.GetPlayer.Gravity();
@@ -193,8 +197,11 @@ namespace TripOverTime.EngineNamespace
             {
                 //DIE
                 _game.GetPlayer.KilledBy = "Monster";
-                _music.Stop();
-                _music.Dispose();
+                if (_music != null)
+                {
+                    _music.Stop();
+                    _music.Dispose();
+                }
                 return -1;
             }
 
@@ -321,8 +328,11 @@ namespace TripOverTime.EngineNamespace
             if (end.X <= _game.GetPlayer.RealPosition.X)
             {
                 Console.WriteLine("YOUWINNNNNNNNNN");
-                _music.Stop();
-                _music.Dispose();
+                if (_music != null)
+                {
+                    _music.Stop();
+                    _music.Dispose();
+                }
                 // SHOW WIN MENU !
                 return 0;
             }
