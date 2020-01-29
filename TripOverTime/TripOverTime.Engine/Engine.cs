@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using SFML;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace TripOverTime.EngineNamespace
@@ -13,6 +14,7 @@ namespace TripOverTime.EngineNamespace
         bool CLOSE = false;
         Stopwatch _timer;
         Checkpoint _checkpoint;
+        List<Position2> _verifHeal2;
 
         SFML.Graphics.RenderWindow _window;
         Menu _menu;
@@ -22,6 +24,7 @@ namespace TripOverTime.EngineNamespace
         GUI _gui;
         Font _globalFont;
         Font _latoFont;
+        string _oldOrientation;
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
@@ -33,15 +36,32 @@ namespace TripOverTime.EngineNamespace
             _latoFont = new Font(@"..\..\..\..\Assets\Fonts\Lato-Regular.ttf");
             _timer = new Stopwatch();
             _timer.Start();
+            _verifHeal2 = new List<Position2>();
+            _oldOrientation = "null";
         }
 
-        /// <summary>
-        /// Starts the game.
-        /// </summary>
-        /// <param name="mapPath">The map path.</param>
-        /// <exception cref="ArgumentException">The map file is not correct (.totmap)</exception>
-        /// <exception cref="FileLoadException">File is empty ?</exception>
-        public void StartGame(string mapPath)
+        public void StartGame(string mapPath, bool multiplayer = false)
+        {
+            // Ecran chargement
+            _gui.ShowLoading(1);
+
+            //Verify if it's a map file
+            if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
+            // Open map file
+            string text = File.ReadAllText(mapPath);
+            if (String.IsNullOrEmpty(text)) throw new FileLoadException("File is empty ?");
+
+            _gui.ShowLoading(5);
+
+            // Get player
+            // path x y life atk
+            string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
+
+            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), multiplayer); //0, 3
+
+            _gui.ShowLoading(90);
+        }
+        public void StartGame2(string mapPath)
         {
             //Verify if it's a map file
             if (!mapPath.EndsWith(".totmap")) throw new ArgumentException("The map file is not correct (.totmap)");
@@ -53,8 +73,8 @@ namespace TripOverTime.EngineNamespace
             // path x y life atk
             string[] strPlayer = StringBetweenString(text, "PLAYER", "PLAYEREND").Split(" ");
 
-            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
-            _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4])); //0, 3
+            _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), false); //0, 3
+            _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), true); //0, 3
 
         }
 
@@ -69,35 +89,96 @@ namespace TripOverTime.EngineNamespace
             //Events
             _gui.Events();
 
-
-            //Console.Write("Player : " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
-            //Console.WriteLine(" | Monster1 : " + _game.GetMonsters[0].Position.X + ";" + _game.GetMonsters[0].Position.Y + " " + _game.GetMonsters[0].life.GetCurrentPoint() + "HP.");
             //Gravity 4 player
             Sprite sToPositive = null;
             Sprite sToNegative = null;
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
-            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+
+            //Console.WriteLine("Player: " + _game.GetPlayer.RealPosition.X + ";" + _game.GetPlayer.RealPosition.Y);
+            // Block sous player
+            if (_game.GetPlayer.Orientation == "right")
             {
-                //Block under player isn't solid
-                _game.GetPlayer.Gravity();
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X + 0.3f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
             }
             else
             {
-                _game.GetPlayer.IsJumping = false;
-                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X - 0.5f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            }
+
+            //Console.WriteLine("Get+ " + sToPositive.Name + " at " + (float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity) + ";" + (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity));
+            //Console.WriteLine("Get- " + sToNegative.Name + " at " + (float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity) + ";" + (float)Math.Round(_game.GetPlayer.RealPosition.Y - 1, MidpointRounding.ToPositiveInfinity));
+
+            if ((sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid))
+            {
+                //Block under player isn't solid
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
-                else
+                _game.GetPlayer.Gravity();
+                _oldOrientation = _game.GetPlayer.Orientation;
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                _game.GetPlayer.RoundY(); // Don't stuck player in ground
+            }
+
+            // Verify if in a block when orientation change after gravity
+            if (_oldOrientation != "null")
+            {
+                Sprite sTemp = null;
+
+                if (_game.GetPlayer.Orientation == "left" && _oldOrientation == "right")
                 {
-                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out sTemp);
+                    if (sTemp != null && sTemp.IsSolid) //In a block
+                    {
+                        _game.GetPlayer.RealPosition.X += 0.3f;
+                    }
+                    _oldOrientation = "null";
+                }
+                else if (_game.GetPlayer.Orientation == "right" && _oldOrientation == "left")
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetPlayer.RealPosition.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetPlayer.RealPosition.Y, MidpointRounding.ToPositiveInfinity)), out sTemp);
+                    if (sTemp != null && sTemp.IsSolid) //In a block
+                    {
+                        _game.GetPlayer.RealPosition.X -= 0.5f;
+                    }
+                    _oldOrientation = "null";
                 }
             }
 
-            if(!_game.GetPlayer.IsAlive)
+            //Heal
+            List<Position> heart = _game.GetMapObject.GetHeart;
+            foreach (Position position in heart)
+            {
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
+                {
+                    _game.GetPlayer.GetLife.BonusPoint(1);
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+                }
+            }
+
+            //strength
+            List<Position> star = _game.GetMapObject.GetStar;
+            foreach (Position position in star)
+            {
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
+                {
+
+                    _game.GetPlayer.GetAttack++;
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+
+                }
+            }
+
+            if (!_game.GetPlayer.IsAlive)
             {
                 //DIE
                 _game.GetPlayer.KilledBy = "Monster";
@@ -107,11 +188,11 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                if ( m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
+                if (m.Position.X > _game.GetPlayer.RealPosition.X && m.isAlive) //left
                 {
                     m.Orientation = "left";
                 }
-                else if(m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
+                else if (m.Position.X < _game.GetPlayer.RealPosition.X && m.isAlive) //right
                 {
                     m.Orientation = "right";
                 }
@@ -136,8 +217,27 @@ namespace TripOverTime.EngineNamespace
             {
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
                 _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+
+                if (m.Orientation == "right")
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X + 0.3f, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                }
+                else
+                {
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X - 0.5f, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                    _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(m.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                }
+
                 if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
+                    //Block under monster isn't solid
+                    if (sToPositive.IsDangerous || sToNegative.IsDangerous)
+                    {
+                        //DIE
+                        m.life.CurrentPoint = 0;
+                        m.MonsterDead();
+                    }
                     //Block under monster isn't solid
                     m.Gravity();
                 }
@@ -150,54 +250,59 @@ namespace TripOverTime.EngineNamespace
 
 
             // boss
-            if (!_game.GetBoss.IsAlive)
+            if (_game.GetBoss != null)
             {
-                _game.GetBoss.BossDead();
-            }
-            else
-            {
-                if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
+                if (!_game.GetBoss.IsAlive)
                 {
-                    _game.GetBoss.Orientation = "left";
+                    _game.GetBoss.BossDead();
                 }
-                else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X) //right
+                else
                 {
-                    _game.GetBoss.Orientation = "right";
-                }
+                    if (_game.GetBoss.Position.X > _game.GetPlayer.RealPosition.X) //left
+                    {
+                        _game.GetBoss.Orientation = "left";
+                    }
+                    else if (_game.GetBoss.Position.X < _game.GetPlayer.RealPosition.X) //right
+                    {
+                        _game.GetBoss.Orientation = "right";
+                    }
 
-                _game.GetBoss.GetBossSprite.BossOrientation(_game.GetBoss);
+                    _game.GetBoss.GetBossSprite.BossOrientation(_game.GetBoss);
 
-                if (_game.GetBoss.Position.X + 3 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 3 < _game.GetPlayer.RealPosition.X) //attack
-                {
-                    if (_game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                    if (_game.GetBoss.Position.X + 3 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 3 < _game.GetPlayer.RealPosition.X) //attack
+                    {
+                        if (_game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                        {
+                            _game.GetBoss.BossMove();
+                        }
+                        _game.GetBoss.BossAttack();
+                    }
+
+                    else if (_game.GetBoss.Position.X - 6 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 6 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
                     {
                         _game.GetBoss.BossMove();
+                        _game.GetBoss.GetBossSprite.BossMoveAnimation(_game.GetBoss);
                     }
-                    _game.GetBoss.BossAttack();
                 }
 
-                else if (_game.GetBoss.Position.X - 6 < _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X - 1 > _game.GetPlayer.RealPosition.X || _game.GetBoss.Position.X + 6 > _game.GetPlayer.RealPosition.X && _game.GetBoss.Position.X + 1 < _game.GetPlayer.RealPosition.X)
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+                _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+                if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
                 {
-                    _game.GetBoss.BossMove();
-                    _game.GetBoss.GetBossSprite.BossMoveAnimation(_game.GetBoss);
+                    //Block under monster isn't solid
+                    _game.GetBoss.Gravity();
                 }
-            }
+                else
+                {
+                    _game.GetBoss.IsMoving = false;
+                    _game.GetBoss.RoundY(); // Don't stuck monster in ground
+                }
 
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
-            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
-            {
-                //Block under monster isn't solid
-                _game.GetBoss.Gravity();
-            }
-            else
-            {
-                _game.GetBoss.IsMoving = false;
-                _game.GetBoss.RoundY(); // Don't stuck monster in ground
             }
 
             // Recalibrate float
             _game.GetPlayer.RoundX();
+
             // WIN !!!
             Position end = _game.GetMapObject.GetEndPosition;
             if (end.X <= _game.GetPlayer.RealPosition.X)
@@ -233,22 +338,47 @@ namespace TripOverTime.EngineNamespace
             if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
             {
                 //Block under player isn't solid
-                _game.GetPlayer.Gravity();
-            }
-            else
-            {
-                _game.GetPlayer.IsJumping = false;
-                if ((sToPositive != null && sToNegative != null) && (sToPositive.IsDangerous || sToNegative.IsDangerous))
+                if (sToPositive.IsDangerous || sToNegative.IsDangerous)
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
                     return -1;
                 }
-                else
+                _game.GetPlayer.Gravity();
+            }
+            else
+            {
+                _game.GetPlayer.IsJumping = false;
+                _game.GetPlayer.RoundY(); // Don't stuck player in ground
+            }
+            //Heal
+            List<Position> heart = _game.GetMapObject.GetHeart;
+            foreach (Position position in heart)
+            {
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
                 {
-                    _game.GetPlayer.RoundY(); // Don't stuck player in ground
+                    _game.GetPlayer.GetLife.BonusPoint(1);
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
                 }
             }
+
+
+            //strength
+            List<Position> star = _game.GetMapObject.GetStar;
+            foreach (Position position in star)
+            {
+                if (_game.GetPlayer.RealPosition.X == position.X && _game.GetMapObject.GetMap[position].Id != "A")
+                {
+
+                    _game.GetPlayer.GetAttack++;
+                    _game.GetMapObject.GetMap[position] = _game.GetMapObject.GetSpriteChange;
+                    _gui.LoadMap();
+
+                }
+            }
+
+
 
             if (!_game.GetPlayer.IsAlive)
             {
@@ -261,7 +391,7 @@ namespace TripOverTime.EngineNamespace
             //Monsters move + Attack
             foreach (Monster m in _game.GetMonsters)
             {
-                
+
 
                 if (!m.isAlive)
                 {
@@ -364,92 +494,170 @@ namespace TripOverTime.EngineNamespace
                 // SHOW WIN MENU !
                 return 0;
             }
-
+            //win player 2
+            if (end.X <= _game2.GetPlayer2.RealPosition2.X2)
+            {
+                Console.WriteLine("YOUWINNNNNNNNNN");
+                // SHOW WIN MENU !
+                return 2;
+            }
 
             //-------------------------------------------------------player 2
-            _game2.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game2.GetPlayer2.RealPosition2.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
-            _game2.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game2.GetPlayer2.RealPosition2.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
+            _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_game2.GetPlayer2.RealPosition2.X2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game2.GetPlayer2.RealPosition2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
 
 
-            if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
+            if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
             {
                 //Block under player isn't solid
-                _game2.GetPlayer2.Gravity();
+                if (sToPositive2.IsDangerous2 || sToNegative2.IsDangerous2)
+                {
+                    //DIE
+                    _game2.GetPlayer2.KilledBy2 = "Trap";
+                    return -1;
+                }
+                _game2.GetPlayer2.Gravity2();
             }
             else
             {
-                _game.GetPlayer2.IsJumping = false;
-                if ((sToPositive2 != null && sToNegative2 != null) && (sToPositive2.IsDangerous || sToNegative2.IsDangerous))
+                _game2.GetPlayer2.IsJumping2 = false;
+                _game2.GetPlayer2.RoundY2(); // Don't stuck player in ground
+            }
+            //Heal
+            List<Position2> heart2 = _game2.GetMapObject2.GetHeart2;
+            foreach (Position2 position2 in heart2)
+            {
+
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id2 != "A")
                 {
-                    //DIE
-                    _game.GetPlayer2.KilledBy = "Trap";
-                    return -1;
-                }
-                else
-                {
-                    _game2.GetPlayer2.RoundY(); // Don't stuck player in ground
+                    
+                    _game2.GetPlayer2.GetLife2.BonusPoint2(1);
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _gui.LoadMap2();
                 }
             }
 
-            if (!_game.GetPlayer2.IsAlive)
+
+            //strength
+            List<Position2> star2 = _game2.GetMapObject2.GetStar2;
+            foreach (Position2 position2 in star2)
+            {
+                if (_game2.GetPlayer2.RealPosition2.X2 == position2.X2 && _game2.GetMapObject2.GetMap2[position2].Id2 != "A")
+                {
+
+                    _game2.GetPlayer2.GetAttack2++;
+                    _game2.GetMapObject2.GetMap2[position2] = _game2.GetMapObject2.GetSpriteChange2;
+                    _gui.LoadMap2();
+
+                }
+            }
+
+            if (!_game2.GetPlayer2.IsAlive2)
             {
                 //DIE
-                _game.GetPlayer2.KilledBy = "Monster";
+                _game2.GetPlayer2.KilledBy2 = "Monster";
                 return -1;
             }
 
             //Monsters move + Attack
-            foreach (Monster m2 in _game.GetMonsters2)
+            foreach (Monster m2 in _game2.GetMonsters2)
             {
-                if (m2.Position.X > _game.GetPlayer2.RealPosition2.X && m2.isAlive) //left
+                if (m2.Position2.X2 > _game2.GetPlayer2.RealPosition2.X2 && m2.isAlive2) //left
                 {
-                    m2.Orientation = "left";
+                    m2.Orientation2 = "left";
                 }
-                else if (m2.Position.X < _game.GetPlayer2.RealPosition2.X && m2.isAlive) //right
+                else if (m2.Position2.X2 < _game2.GetPlayer2.RealPosition2.X2 && m2.isAlive2) //right
                 {
-                    m2.Orientation = "right";
-                }
-
-                if (!m2.isAlive)
-                {
-                    m2.MonsterDead();
-                }
-                else if (m2.Position.X - 4 < _game2.GetPlayer2.RealPosition2.X && m2.Position2.X - 1 > _game2.GetPlayer2.RealPosition.X || m2.Position.X + 4 > _game2.GetPlayer2.RealPosition2.X && m2.Position2.X + 1 < _game2.GetPlayer2.RealPosition.X)
-                {
-                    m2.MonsterMove();
+                    m2.Orientation2 = "right";
                 }
 
-                if (m2.Position2.X + 2 > _game2.GetPlayer2.RealPosition2.X && m2.Position2.X - 2 < _game.GetPlayer2.RealPosition2.X && m2.isAlive) //attack
+                if (!m2.isAlive2)
                 {
-                    m2.MonsterAttack();
+                    m2.MonsterDead2();
+                }
+                else if (m2.Position2.X2 - 4 < _game2.GetPlayer2.RealPosition2.X2 && m2.Position2.X2 - 1 > _game2.GetPlayer2.RealPosition2.X2 || m2.Position2.X2 + 4 > _game2.GetPlayer2.RealPosition2.X2 && m2.Position2.X2 + 1 < _game2.GetPlayer2.RealPosition2.X2)
+                {
+                    m2.MonsterMove2();
+                }
+
+                if (m2.Position2.X2 + 2 > _game2.GetPlayer2.RealPosition2.X2 && m2.Position2.X2 - 2 < _game2.GetPlayer2.RealPosition2.X2 && m2.isAlive2) //attack
+                {
+                    m2.MonsterAttack2();
                 }
             }
 
             //Gravity 4 monsters
-            foreach (Monster m2 in _game.GetMonsters2)
+            foreach (Monster m2 in _game2.GetMonsters2)
             {
-                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position2.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
-                _game2.GetMapObject.GetMap2.TryGetValue(new Position((float)Math.Round(m2.Position2.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position2.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
-                if (sToPositive2 != null && !sToPositive2.IsSolid && sToNegative2 != null && !sToNegative2.IsSolid)
+                _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(m2.Position2.X2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(m2.Position2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive2);
+                _game2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(m2.Position2.X2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(m2.Position2.Y2 - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative2);
+                if (sToPositive2 != null && !sToPositive2.IsSolid2 && sToNegative2 != null && !sToNegative2.IsSolid2)
                 {
                     //Block under monster isn't solid
-                    m2.Gravity();
+                    m2.Gravity2();
                 }
                 else
                 {
-                    m2.IsMoving = false;
-                    m2.RoundY(); // Don't stuck monster in ground
+                    m2.IsMoving2 = false;
+                    m2.RoundY2(); // Don't stuck monster in ground
                 }
 
 
 
             }
 
+            // boss
+            if (!_game2.GetBoss2.IsAlive2)
+            {
+                _game2.GetBoss2.BossDead2();
+            }
+            else
+            {
+                if (_game2.GetBoss2.Position2.X2 > _game2.GetPlayer2.RealPosition2.X2) //left
+                {
+                    _game2.GetBoss2.Orientation2 = "left";
+                }
+                else if (_game2.GetBoss2.Position2.X2 < _game2.GetPlayer2.RealPosition2.X2) //right
+                {
+                    _game2.GetBoss2.Orientation2 = "right";
+                }
+
+                _game2.GetBoss2.GetBossSprite2.BossOrientation2(_game2.GetBoss2);
+
+                if (_game2.GetBoss2.Position2.X2 + 3 > _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 - 3 < _game2.GetPlayer2.RealPosition2.X2) //attack
+                {
+                    if (_game2.GetBoss2.Position2.X2 - 1 > _game2.GetPlayer2.RealPosition2.X2 || _game2.GetBoss2.Position2.X2 + 1 < _game2.GetPlayer2.RealPosition2.X2)
+                    {
+                        _game2.GetBoss2.BossMove2();
+                    }
+                    _game2.GetBoss2.BossAttack2();
+                }
+
+                else if (_game2.GetBoss2.Position2.X2 - 6 < _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 - 1 > _game2.GetPlayer2.RealPosition2.X2 || _game2.GetBoss2.Position2.X2 + 6 > _game2.GetPlayer2.RealPosition2.X2 && _game2.GetBoss2.Position2.X2 + 1 < _game2.GetPlayer2.RealPosition2.X2)
+                {
+                    _game2.GetBoss2.BossMove2();
+                    _game2.GetBoss2.GetBossSprite2.BossMoveAnimation2(_game2.GetBoss2);
+                }
+            }
+
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToPositive);
+            _game.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_game.GetBoss.Position.X, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_game.GetBoss.Position.Y - 1, MidpointRounding.ToPositiveInfinity)), out sToNegative);
+            if (sToPositive != null && !sToPositive.IsSolid && sToNegative != null && !sToNegative.IsSolid)
+            {
+                //Block under monster isn't solid
+                _game.GetBoss.Gravity();
+            }
+            else
+            {
+                _game.GetBoss.IsMoving = false;
+                _game.GetBoss.RoundY(); // Don't stuck monster in ground
+            }
+
             // Recalibrate float
-            _game.GetPlayer2.RoundX();
+            _game2.GetPlayer2.RoundX2();
             // WIN !!!
-            Position end2 = _game2.GetMapObject.GetEndPosition;
-            if (end2.X <= _game2.GetPlayer2.RealPosition2.X)
+            Position2 end2 = _game2.GetMapObject2.GetEndPosition2;
+            if (end2.X2 <= _game2.GetPlayer2.RealPosition2.X2)
             {
                 Console.WriteLine("YOUWINNNNNNNNNN");
                 // SHOW WIN MENU !
@@ -509,34 +717,45 @@ namespace TripOverTime.EngineNamespace
 
             return 1;
         }
-        /// <summary>
-        /// Wins menu.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception">Sprite null!</exception>
+
         public bool WinMenu()
         {
-            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
-            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
             _window.Draw(background);
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU WIN !", _globalFont, 64));
+            lines.Add(new Text("PLAYER 1 WIN !", _globalFont, 64));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
-            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint() + " HP.", _globalFont, 32));
-            lines.Add(new Text("Press Esc to quit or Enter to play next level", _globalFont, 32));
-
-            lines[0].FillColor = Color.Green;
-            lines[1].FillColor = Color.Yellow;
-            lines[2].FillColor = Color.Red;
-            lines[3].FillColor = Color.Black;
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
             for (int i = 0; i < lines.Count; i++)
             {
-                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width)/2, (_window.Size.Y / 6) * i);
+                RectangleShape r = new RectangleShape(new Vector2f(lines[i].GetGlobalBounds().Width + 20, lines[i].GetGlobalBounds().Height + 20));
+                r.FillColor = Color.White;
+
+                if (i == 0)
+                    lines[i].FillColor = Color.Green;
+                else if (i == lines.Count - 1)
+                {
+                    r.FillColor = Color.Black;
+                    lines[i].FillColor = Color.White;
+                }
+                else
+                    lines[i].FillColor = Color.Black;
+
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                r.Position = new Vector2f(lines[i].Position.X - 10, lines[i].Position.Y);
+
+                _window.Draw(r);
                 _window.Draw(lines[i]);
             }
 
@@ -544,7 +763,7 @@ namespace TripOverTime.EngineNamespace
 
             bool keyPress = false;
             bool loadNextLevel = false;
-            while(!keyPress)
+            while (!keyPress)
             {
                 if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                 {
@@ -570,13 +789,13 @@ namespace TripOverTime.EngineNamespace
             return loadNextLevel;
         }
 
-        /// <summary>
-        /// Dies menu.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception">Sprite null!</exception>
-        public bool DieMenu()
+        public bool WinMenu2()
         {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
             SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
             if (background == null) throw new Exception("Sprite null!");
 
@@ -585,15 +804,151 @@ namespace TripOverTime.EngineNamespace
 
             List<Text> lines = new List<Text>();
             //Lines
-            lines.Add(new Text("YOU DIIIIE !", _globalFont, 64));
+            lines.Add(new Text("PLAYER 2 WIN !", _globalFont, 64));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 48));
+            lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * i);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool keyPress = false;
+            bool loadNextLevel = false;
+            while (!keyPress)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                {
+                    keyPress = true;
+                    loadNextLevel = true;
+                }
+
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    loadNextLevel = false;
+                    keyPress = true;
+                }
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(this, _window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
+
+            return loadNextLevel;
+        }
+
+        public bool DieMenu()
+        {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            _window.Draw(background);
+
+
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("PLAYER 1 DIIIIED !", _globalFont, 64));
             lines.Add(new Text("Killed by : " + _game.GetPlayer.KilledBy, _globalFont, 48));
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
-            lines.Add(new Text("Press Esc to quit or Enter to restart level", _globalFont, 32));
+            lines.Add(new Text("Press ENTER to QUIT", _globalFont, 32));
 
-            lines[0].FillColor = Color.Green;
-            lines[1].FillColor = Color.Yellow;
-            lines[2].FillColor = Color.Red;
-            lines[3].FillColor = Color.Black;
+
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                RectangleShape r = new RectangleShape(new Vector2f(lines[i].GetGlobalBounds().Width + 20, lines[i].GetGlobalBounds().Height + 20));
+                r.FillColor = Color.White;
+
+                if (i == 0)
+                    lines[i].FillColor = Color.Red;
+                else if (i == lines.Count - 1)
+                {
+                    r.FillColor = Color.Black;
+                    lines[i].FillColor = Color.White;
+                }
+                else
+                    lines[i].FillColor = Color.Black;
+
+                lines[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (lines[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+                r.Position = new Vector2f(lines[i].Position.X - 10, lines[i].Position.Y);
+
+                _window.Draw(r);
+                _window.Draw(lines[i]);
+            }
+
+            _window.Display();
+
+            bool keyPress = false;
+            bool restartLevel = false;
+            while (!keyPress)
+            {
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+                {
+                    keyPress = true;
+                    restartLevel = true;
+                }
+
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+                {
+                    restartLevel = false;
+                    keyPress = true;
+                }
+            }
+
+            // QUAND QUITTE LE MENU
+            _menu = new Menu(_window);
+            _settings = new Settings(this, _window);
+            _gui = new GUI(this, _window);
+            _timer = new Stopwatch();
+            _timer.Start();
+            _game = null;
+
+            return restartLevel;
+        }
+
+        public bool DieMenu2()
+        {
+            View view1 = new View(new Vector2f(Settings.XResolution / 2, Settings.YResolution / 2), new Vector2f(Settings.XResolution, Settings.YResolution));
+            view1.Viewport = new FloatRect(0f, 0f, 1f, 1f);
+            view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
+            _window.SetView(view1);
+
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            if (background == null) throw new Exception("Sprite null!");
+
+            background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
+            _window.Draw(background);
+
+            List<Text> lines = new List<Text>();
+            //Lines
+            lines.Add(new Text("PLAYER 2 DIEEEEED", _globalFont, 64));
+            lines.Add(new Text("Killed by : " + _game2.GetPlayer2.KilledBy2, _globalFont, 48));
+            lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
+            lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
+
+            lines[0].Color = Color.Green;
+            lines[1].Color = Color.Yellow;
+            lines[2].Color = Color.Red;
+            lines[3].Color = Color.Black;
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -683,7 +1038,5 @@ namespace TripOverTime.EngineNamespace
         {
             get => _latoFont;
         }
-
-
     }
 }

@@ -1,7 +1,10 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 namespace TripOverTime.EngineNamespace
 {
@@ -11,14 +14,17 @@ namespace TripOverTime.EngineNamespace
         const ushort MAX_LINES2 = 5;
 
         RenderWindow _window;
-        int _selected;
-        private int MapSelected { get; set; }
-        Text[] MenuList;
-        Text[] MapList;
+        ushort _selected;
+        List<Text> _lines3;
         SFML.Graphics.Sprite _background;
         uint _charSize = 32;
         string[] _maps;
         Font _font;
+
+        private int MapSelected { get; set; }
+        Text[] MenuList;
+        Text[] MapList;
+
 
         internal Menu(RenderWindow window)
         {
@@ -28,16 +34,15 @@ namespace TripOverTime.EngineNamespace
             _selected = 0;
             MapSelected = 0;
             _font = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
+            _lines3 = new List<Text>();
+
             MenuList = new Text[MAX_LINES];
             MapList = new Text[MAX_LINES2];
         }
 
-        /// <summary>
-        /// Starts the main menu.
-        /// </summary>
-        /// <exception cref="Exception">Sprite null!</exception>
         public void StartMainMenu()
         {
+            //Background
             // Set background
             _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (_background == null) throw new Exception("Sprite null!");
@@ -98,7 +103,7 @@ namespace TripOverTime.EngineNamespace
 
             if (tampon == 1)
             {
-                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)); //Tampon
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
             }
             else if (tampon == 2)
             {
@@ -178,6 +183,12 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
         }
 
+        /// <summary>
+        /// Gets the map menu.
+        /// </summary>
+        /// <param name="EnableLevelTwo">if set to <c>true</c> [enable level two].</param>
+        /// <param name="EnableLevelThree">if set to <c>true</c> [enable level three].</param>
+        /// <returns></returns>
         public string GetMapMenu(bool EnableLevelTwo = false, bool EnableLevelThree = false)
         {
             //Run menu
@@ -192,7 +203,7 @@ namespace TripOverTime.EngineNamespace
 
             if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
-                if (MapSelected == MAX_LINES2-1) //Edited map
+                if (MapSelected == MAX_LINES2 - 1) //Edited map
                 {
                     result = "mainMenu"; //temporaire
                 }
@@ -210,17 +221,19 @@ namespace TripOverTime.EngineNamespace
             {
                 tampon = 1;
 
-                if(MapSelected < 1)
+                if (MapSelected < 1)
                 {
                     MapSelected++;
                 }
-                else if(MapSelected == 1 && EnableLevelTwo)
+                else if (MapSelected == 1 && EnableLevelTwo)
                 {
                     MapSelected = 2;
-                }else if (MapSelected == 2 && EnableLevelThree)
+                }
+                else if (MapSelected == 2 && EnableLevelThree)
                 {
                     MapSelected = 3;
-                }else if (MapSelected >= 3)
+                }
+                else if (MapSelected >= 3)
                 {
                     MapSelected++;
                 }
@@ -265,7 +278,7 @@ namespace TripOverTime.EngineNamespace
                     r.FillColor = Color.Black;
                     MapList[i].Color = Color.White;
                 }
-                else if((i == 2 && !EnableLevelTwo) || (i == 3 && !EnableLevelThree))
+                else if ((i == 2 && !EnableLevelTwo) || (i == 3 && !EnableLevelThree))
                 {
                     r = new RectangleShape(new SFML.System.Vector2f(MapList[i].GetGlobalBounds().Width * 1.5f, MapList[i].GetGlobalBounds().Height * 2));
                     r.Position = new SFML.System.Vector2f(_window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1) - (MapList[i].GetGlobalBounds().Height / 3));
@@ -280,7 +293,7 @@ namespace TripOverTime.EngineNamespace
                     MapList[i].Color = Color.Black;
                 }
 
-                
+
 
                 _window.Draw(r);
                 _window.Draw(MapList[i]);
@@ -289,6 +302,114 @@ namespace TripOverTime.EngineNamespace
             _window.Display();
         }
 
+        public void InitMapEditedMenu()
+        {
+            _lines3.Clear();
+            _selected = 0;
+            
+            // Get all maps
+            _maps = Directory.GetFiles(@"..\..\..\..\Maps\Edited\", "*.totmap");
+
+            // Init menu
+            //Background
+            // Set background
+            _background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
+            if (_background == null) throw new Exception("Sprite null!");
+
+            _window.Draw(_background);
+
+            //Lines
+            for (int i = 0; i < _maps.Length; i++)
+            {
+                _lines3.Add(new Text(StringBetweenString(_maps[i], @"..\..\..\..\Maps\Edited\", ".totmap"), _font, _charSize));
+            }
+
+            _lines3.Add(new Text("Back", _font, _charSize));
+
+            for (int i = 0; i < _lines3.Count; i++)
+            {
+                _lines3[i].Position = new SFML.System.Vector2f(_window.Size.X / 2 - (_lines3[i].GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1));
+            }
+
+            _window.Display();
+
+        }
+
+        public string ChooseMapEditedMenu()
+        {
+            //Run menu
+            //Events
+            string result = "editedMap";
+            short tampon = 0;
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Escape))
+            {
+                result = "quit";
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
+            {
+                if (_selected == _lines3.Count - 1) //Edited map
+                {
+                    // Back
+                    result = "back";
+                }
+                else
+                {
+                    result = _maps[_selected];
+                }
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Down) && _selected < _lines3.Count - 1)
+            {
+                tampon = 1;
+                _selected++;
+            }
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.Up) && _selected > 0)
+            {
+                tampon = 2;
+                _selected--;
+            }
+
+
+            //Graphics
+            _window.Clear();
+            _window.Draw(_background);
+
+            for (int i = 0; i < _lines3.Count; i++)
+            {
+                RectangleShape r = null;
+                if (i == _selected)
+                {
+                    r = new RectangleShape(new SFML.System.Vector2f(_lines3[i].GetGlobalBounds().Width * 1.5f + 20, _lines3[i].GetGlobalBounds().Height * 2 + 20));
+                    r.Position = new SFML.System.Vector2f(_window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1) - (_lines3[i].GetGlobalBounds().Height / 3) - 10);
+                    r.FillColor = Color.Black;
+                    _lines3[i].FillColor = Color.White;
+                }
+                else
+                {
+                    r = new RectangleShape(new SFML.System.Vector2f(_lines3[i].GetGlobalBounds().Width * 1.5f, _lines3[i].GetGlobalBounds().Height * 2));
+                    r.Position = new SFML.System.Vector2f(_window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (_window.Size.Y / 6) * (i + 1) - (_lines3[i].GetGlobalBounds().Height / 3));
+                    r.FillColor = Color.White;
+                    _lines3[i].FillColor = Color.Black;
+                }
+                _window.Draw(r);
+                _window.Draw(_lines3[i]);
+            }
+
+            _window.Display();
+
+            if (tampon == 1)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Down)) ; //Tampon
+            }
+            else if (tampon == 2)
+            {
+                while (Keyboard.IsKeyPressed(Keyboard.Key.Up)) ; //Tampon
+            }
+
+            return result;
+        }
         private string StringBetweenString(string original, string str1, string str2)
         {
             int firstStringPosition = original.IndexOf(str1);

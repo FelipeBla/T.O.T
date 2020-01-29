@@ -2,6 +2,7 @@
 using SFML.Window;
 using System;
 using System.Diagnostics;
+using System.IO;
 using TripOverTime.EngineNamespace;
 
 namespace TripOverTime.Main
@@ -28,6 +29,26 @@ namespace TripOverTime.Main
         {
 
             #region initialized
+            choose = -2;
+            MapSelected = null;
+
+            // Settings
+            if (File.Exists("settings"))
+            {
+                string settingsFile = File.ReadAllText("settings");
+                string[] st = settingsFile.Split("\n");
+                Settings.Fullscreen = Convert.ToBoolean(st[0]);
+                Settings.NbFPS = Convert.ToUInt16(st[1]);
+                Settings.XResolution = Convert.ToUInt16(st[2]);
+                Settings.YResolution = Convert.ToUInt16(st[3]);
+
+            }
+            else
+            {
+                string settingsFile = Settings.Fullscreen + "\n" + Settings.NbFPS + "\n" + Settings.XResolution + "\n" + Settings.YResolution;
+                File.WriteAllText("settings", settingsFile);
+            }
+
             //Window & Engine start
             if (Settings.Fullscreen)
             {
@@ -69,7 +90,8 @@ namespace TripOverTime.Main
             else if (choose == 2) 
             {
                 // Map editor
-                MapEditor.Run(window);
+                MapEditor m = new MapEditor();
+                m.Run(window);
             }
             else if (choose == 3) 
             {
@@ -109,8 +131,6 @@ namespace TripOverTime.Main
 
             if (MapSelected == "mainMenu")
             {
-                choose = -2;
-                MapSelected = null;
                 StartApp();
             }
             else if(MapSelected == "tutorial")
@@ -119,7 +139,7 @@ namespace TripOverTime.Main
             }
             else
             {
-                StartGame(engine, MapSelected);
+                StartOnePlayerGame(engine, MapSelected);
             }  
         }
 
@@ -128,7 +148,7 @@ namespace TripOverTime.Main
         /// </summary>
         /// <param name="engine">The engine.</param>
         /// <exception cref="Exception">WTF?!</exception>
-        public void StartGame(Engine engine, string chooseMap)
+        public void StartOnePlayerGame(Engine engine, string chooseMap)
         {
             // Start a game
             engine.StartGame(chooseMap); //map, player sprite
@@ -158,35 +178,7 @@ namespace TripOverTime.Main
             {
                 Console.WriteLine("YOU WIN!");
                 bool loadNextLevel = engine.WinMenu();
-                if (!loadNextLevel)
-                {
-                    choose = -2;
-                    MapSelected = null;
-                    StartApp();
-                }
-                else
-                {
-                    if (!EnableLevelTwo)
-                    {
-                        EnableLevelTwo = true;
-                        chooseMap = engine.GetMenu.GetNextLevel(2);
-                        Console.WriteLine("EnableLevelTwo and chooseMap: " + chooseMap);
-                        StartGame(engine, chooseMap);
-                    }
-                    else if (!EnableLevelThree)
-                    {
-                        EnableLevelThree = true;
-                        chooseMap = engine.GetMenu.GetNextLevel(3);
-                        Console.WriteLine("EnableLevelThree and chooseMap: " + chooseMap);
-                        StartGame(engine, chooseMap);
-                    }
-                    else
-                    {
-                        choose = -2;
-                        MapSelected = null;
-                        StartApp();
-                    }                       
-                }
+                GetNextActionOnePlayer(loadNextLevel, false, chooseMap, engine);
             }
             else if (result == -1)
             {
@@ -195,7 +187,7 @@ namespace TripOverTime.Main
 
                 if (engine.GetGame.GetPlayer.KilledBy == "Trap")
                 {
-                    while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                    while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint > 0)
                     {
                         engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
                         if (spGui.ElapsedMilliseconds >= 1000 / fps)
@@ -208,12 +200,7 @@ namespace TripOverTime.Main
                 }
 
                 bool restartLevel = engine.DieMenu();
-                if (restartLevel)
-                {
-                    Console.WriteLine("******** Restart level: ");
-                    Console.WriteLine("chooseMap: " + chooseMap);
-                    StartGame(engine, chooseMap);
-                }
+                GetNextActionOnePlayer(false, restartLevel, chooseMap, engine);
             }
         }
 
@@ -225,8 +212,8 @@ namespace TripOverTime.Main
         public void StartTwoPlayerGame(Engine engine, string chooseMap)
         {
             // Start a game
-            engine.StartGame(chooseMap); //map, player sprite
-            engine.GetGUI.InitGame();
+            engine.StartGame2(chooseMap); //map, player sprite
+            engine.GetGUI.InitGame2();
 
             short result = 1;
             // GameLoop
@@ -253,6 +240,14 @@ namespace TripOverTime.Main
                 //WIN
                 Console.WriteLine("YOU WIN!");
                 bool loadNextLevel = engine.WinMenu();
+                GetNextActionTwoPlayer(loadNextLevel, false, chooseMap, engine);
+            }
+            else if (result == 2)
+            {
+                //WIN
+                Console.WriteLine("YOU WIN!");
+                bool loadNextLevel = engine.WinMenu2();
+                GetNextActionTwoPlayer(loadNextLevel, false, chooseMap, engine);
             }
             else if (result == -1)
             {
@@ -261,7 +256,7 @@ namespace TripOverTime.Main
 
                 if (engine.GetGame.GetPlayer.KilledBy == "Trap")
                 {
-                    while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint() > 0)
+                    while (engine.GetGame.GetPlayer.GetLife.GetCurrentPoint > 0)
                     {
                         engine.GetGame.GetPlayer.GetLife.DecreasedPoint(1);
                         if (spGui.ElapsedMilliseconds >= 1000 / fps)
@@ -272,8 +267,106 @@ namespace TripOverTime.Main
                         }
                     }
                 }
+                if (engine.GetGame2.GetPlayer2.KilledBy2 == "Trap")
+                {
+                    while (engine.GetGame2.GetPlayer2.GetLife2.GetCurrentPoint2() > 0)
+                    {
+                        engine.GetGame2.GetPlayer2.GetLife2.DecreasedPoint2(1);
+                        if (spGui.ElapsedMilliseconds >= 1000 / fps)
+                        {
+                            //GUI
+                            engine.GetGUI.ShowMapMultiplayer();
+                            spGui.Restart();
+                        }
+                    }
+                }
+                if (engine.GetGame.GetPlayer.KilledBy != "void")
+                {
+                    bool restartLevel = engine.DieMenu();
+                    GetNextActionTwoPlayer(false, restartLevel, chooseMap, engine);
+                }
 
-                engine.DieMenu();
+                if (engine.GetGame2.GetPlayer2.KilledBy2 != "void")
+                {
+                    bool restartLevel = engine.DieMenu2();
+                    GetNextActionTwoPlayer(false, restartLevel, chooseMap, engine);
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// Gets the next action.
+        /// </summary>
+        /// <param name="loadNextLevel">if set to <c>true</c> [load next level].</param>
+        /// <param name="chooseMap">The choose map.</param>
+        /// <param name="engine">The engine.</param>
+        public void GetNextActionTwoPlayer(bool loadNextLevel, bool restartLevel, string chooseMap, Engine engine)
+        {
+            if (loadNextLevel)
+            {
+                if (!EnableLevelTwo)
+                {
+                    EnableLevelTwo = true;
+                    chooseMap = engine.GetMenu.GetNextLevel(2);
+                    StartTwoPlayerGame(engine, chooseMap);
+                }
+                else if (!EnableLevelThree)
+                {
+                    EnableLevelThree = true;
+                    chooseMap = engine.GetMenu.GetNextLevel(3);
+                    StartTwoPlayerGame(engine, chooseMap);
+                }
+                else
+                {
+                    StartApp();
+                }
+            }
+            else if(restartLevel)
+            {
+                StartTwoPlayerGame(engine, chooseMap);
+            }
+            else
+            {
+                StartApp();
+            }
+        }
+
+        /// <summary>
+        /// Gets the next action one player.
+        /// </summary>
+        /// <param name="loadNextLevel">if set to <c>true</c> [load next level].</param>
+        /// <param name="restartLevel">if set to <c>true</c> [restart level].</param>
+        /// <param name="chooseMap">The choose map.</param>
+        /// <param name="engine">The engine.</param>
+        public void GetNextActionOnePlayer(bool loadNextLevel, bool restartLevel, string chooseMap, Engine engine)
+        {
+            if (loadNextLevel)
+            {
+                if (!EnableLevelTwo)
+                {
+                    EnableLevelTwo = true;
+                    chooseMap = engine.GetMenu.GetNextLevel(2);
+                    StartOnePlayerGame(engine, chooseMap);
+                }
+                else if (!EnableLevelThree)
+                {
+                    EnableLevelThree = true;
+                    chooseMap = engine.GetMenu.GetNextLevel(3);
+                    StartOnePlayerGame(engine, chooseMap);
+                }
+                else
+                {
+                    StartApp();
+                }
+            }
+            else if (restartLevel)
+            {
+                StartOnePlayerGame(engine, chooseMap);
+            }
+            else
+            {
+                StartApp();
             }
         }
 
@@ -308,8 +401,6 @@ namespace TripOverTime.Main
             }
 
             //Restart game
-            choose = -2;
-            MapSelected = null;
             StartApp();
 
         }
@@ -330,8 +421,6 @@ namespace TripOverTime.Main
 
             if (MapSelected == "mainMenu")
             {
-                choose = -2;
-                MapSelected = null;
                 StartApp();
             }
             else if (MapSelected == "tutorial")

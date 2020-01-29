@@ -29,6 +29,11 @@ namespace TripOverTime.EngineNamespace
             get { return _currentPoint; }
             internal set => _currentPoint = value;
         }
+        public ushort CurrentPoint2
+        {
+            get { return _currentPoint2; }
+            internal set => _currentPoint2 = value;
+        }
 
         public ushort MaxPoint
         {
@@ -38,6 +43,10 @@ namespace TripOverTime.EngineNamespace
         public float PerCent
         {
             get => (float)_currentPoint / (float)_maxPoint;
+        }
+        public float PerCent2
+        {
+            get => (float)_currentPoint2 / (float)_maxPoint;
         }
 
         public bool IsFull
@@ -76,9 +85,10 @@ namespace TripOverTime.EngineNamespace
             _currentPoint = 1000;
         }
 
-        public ushort GetCurrentPoint()
+        public ushort GetCurrentPoint
         {
-            return _currentPoint;
+            get => _currentPoint;
+            set => _currentPoint = value;
         }
         public ushort GetCurrentPoint2()
         {
@@ -101,7 +111,6 @@ namespace TripOverTime.EngineNamespace
             if (damage >= _currentPoint) 
             { 
                 _currentPoint = 0;
-                Console.WriteLine("The player is dead.");
             }
             else
             {
@@ -109,15 +118,46 @@ namespace TripOverTime.EngineNamespace
             }
         }
 
-        public ushort BonusPoint(ushort bonus)
+        public void DecreasedPoint2(ushort damage)
         {
-            _currentPoint += Convert.ToUInt16(Math.Max(Convert.ToInt32(bonus), 0));
-            int valeur = bonus;
-            if (valeur + CurrentPoint > 1000)
-                return 0;
-            return _maxPoint;
-
+            if (damage < 0) return;
+            if (damage >= _currentPoint2)
+            {
+                _currentPoint2 = 0;
+                Console.WriteLine("The player is dead.");
+            }
+            else
+            {
+                _currentPoint2 -= damage;
+            }
         }
+
+        public void BonusPoint(ushort bonus)
+        {
+            if (bonus < 0) return;
+            if (bonus + _currentPoint >= _maxPoint)
+            {
+                _currentPoint = _maxPoint;
+            }
+            else
+            {
+                _currentPoint += bonus;
+            }
+        }
+
+        public void BonusPoint2(ushort bonus)
+        {
+            if (bonus < 0) return;
+            if (bonus + _currentPoint2 >= _maxPoint)
+            {
+                _currentPoint2 = _maxPoint;
+            }
+            else
+            {
+                _currentPoint2 += bonus;
+            }
+        }
+
     }
 
 }
