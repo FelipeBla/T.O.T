@@ -26,13 +26,19 @@ namespace TripOverTime.EngineNamespace
         GUI _gui;
         Font _globalFont;
         string _oldOrientation;
-        Music _music;
+        Music _musicJeux;
+        Music _musicMenu;
 
 
         public Engine(SFML.Graphics.RenderWindow window)
         {
             _window = window;
             _menu = new Menu(window);
+            if (_musicMenu == null)
+            {
+                _musicMenu = new Music("..\\..\\..\\..\\Music\\SkyWorld.ogg");
+                _musicMenu.Play();
+            }
             _settings = new Settings(this, window);
             _gui = new GUI(this, window);
             _globalFont = new Font(@"..\..\..\..\Assets\Fonts\Blanka-Regular.ttf");
@@ -65,10 +71,11 @@ namespace TripOverTime.EngineNamespace
 
             //Music
             string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
+            _musicMenu.Stop();
             if (!String.IsNullOrEmpty(strMusic[0]))
             {
-                _music = new Music(strMusic[0]);
-                _music.Play();
+                _musicJeux = new Music(strMusic[0]);
+                _musicJeux.Play();
             }
         }
         public void StartGame2(string mapPath)
@@ -126,11 +133,7 @@ namespace TripOverTime.EngineNamespace
                 {
                     //DIE
                     _game.GetPlayer.KilledBy = "Trap";
-                    if (_music != null)
-                    {
-                        _music.Stop();
-                        _music.Dispose();
-                    }
+                    MusicStop(_musicJeux);
                     return -1;
                 }
                 _game.GetPlayer.Gravity();
@@ -197,11 +200,7 @@ namespace TripOverTime.EngineNamespace
             {
                 //DIE
                 _game.GetPlayer.KilledBy = "Monster";
-                if (_music != null)
-                {
-                    _music.Stop();
-                    _music.Dispose();
-                }
+                MusicStop(_musicJeux);
                 return -1;
             }
 
@@ -328,11 +327,7 @@ namespace TripOverTime.EngineNamespace
             if (end.X <= _game.GetPlayer.RealPosition.X)
             {
                 Console.WriteLine("YOUWINNNNNNNNNN");
-                if (_music != null)
-                {
-                    _music.Stop();
-                    _music.Dispose();
-                }
+                MusicStop(_musicJeux);
                 // SHOW WIN MENU !
                 return 0;
             }
@@ -947,6 +942,16 @@ namespace TripOverTime.EngineNamespace
             return original.Substring(firstStringPosition + str1.Length + 2, secondStringPosition - firstStringPosition - str2.Length);
         }
 
+        internal void MusicStop(Music music)
+        {
+            if (music != null)
+            {
+                music.Stop();
+                music.Dispose();
+                _musicMenu.Play();
+            }
+        }
+
         public Menu GetMenu
         {
             get => _menu;
@@ -986,6 +991,10 @@ namespace TripOverTime.EngineNamespace
         public Font GetFont
         {
             get => _globalFont;
+        }
+        internal Music GetMusicMenu
+        {
+            get => _musicMenu;
         }
     }
 }

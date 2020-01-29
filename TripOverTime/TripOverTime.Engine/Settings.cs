@@ -375,23 +375,31 @@ namespace TripOverTime.EngineNamespace
                     //1920*1080
                     _XResolution = 1920;
                     _YResolution = 1080;
+                    _context.GetMusicMenu.Stop();
+                    _context.GetMusicMenu.Dispose();
                     restart();
                     break;
                 case 0:
                     //800*600
                     _XResolution = 800;
                     _YResolution = 600;
+                    _context.GetMusicMenu.Stop();
+                    _context.GetMusicMenu.Dispose();
                     restart();
                     break;
                 case 1:
                     //1280*720
                     _XResolution = 1280;
                     _YResolution = 720;
+                    _context.GetMusicMenu.Stop();
+                    _context.GetMusicMenu.Dispose();
                     restart();
                     break;
                 case 3:
                     //fullscreen
                     _fullscreen = !_fullscreen;
+                    _context.GetMusicMenu.Stop();
+                    _context.GetMusicMenu.Dispose();
                     restart();
                     break;
                     //4 quit (return to settings main)
