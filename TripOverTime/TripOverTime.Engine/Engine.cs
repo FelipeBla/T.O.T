@@ -92,7 +92,14 @@ namespace TripOverTime.EngineNamespace
 
             _game = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), false); //0, 3
             _game2 = new Game(this, mapPath, strPlayer[0], new Position(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), new Position2(Convert.ToSingle(strPlayer[1]), Convert.ToSingle(strPlayer[2])), Convert.ToUInt16(strPlayer[3]), Convert.ToUInt16(strPlayer[4]), true); //0, 3
-
+                                                                                                                                                                                                                                                                                               //Music
+            string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
+            _musicMenu.Stop();
+            if (!String.IsNullOrEmpty(strMusic[0]))
+            {
+                _musicJeux = new Music(strMusic[0]);
+                _musicJeux.Play();
+            }
         }
 
         /// <summary>
