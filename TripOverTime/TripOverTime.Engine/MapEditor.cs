@@ -161,17 +161,204 @@ namespace TripOverTime.EngineNamespace
 
             if (usePreset)
             {
-                //Preset
-                bgPath = @"..\..\..\..\Assets\Backgrounds\game_background_1.png";
-                playerPath = @"..\..\..\..\Assets\Players\Knight\AllViking";
-                playerPos = new Position(0, 2);
-                posMax = new Position(35, 10);
-                posMin = new Position(0, 1);
-                playerLife = 10;
-                playerAtk = 5;
-                blocks.Add(new Sprite("A", "Snow", @"..\..\..\..\Assets\Ground\Snow\snowMid.png", true, true));
-                blocks.Add(new Sprite("B", "Dirt", @"..\..\..\..\Assets\Ground\Snow\snowCenter.png", true, true));
-                monsters.Add(new Monster(null, "Golem1", new Position(0, 0), new Life(10), 1, 3, 1, "SAAA"));
+
+                // Preset or Manual
+
+                EventHandler<KeyEventArgs> eChoosePreset = (s, a) =>
+                {
+                    switch (a.Code)
+                    {
+                        case Keyboard.Key.Down:
+                            if (selected < 3)
+                            {
+                                selected++;
+                                display = true;
+                            }
+                            break;
+                        case Keyboard.Key.Up:
+                            if (selected > 0)
+                            {
+                                selected--;
+                                display = true;
+                            }
+                            break;
+                        case Keyboard.Key.Enter:
+                            again = false;
+                            break;
+                    }
+                };
+
+                window.KeyPressed += eChoosePreset;
+
+                window.DispatchEvents();
+
+                selected = 0;
+
+                do
+                {
+                    again = true;
+
+                    if (display)
+                    {
+                        // Graphic
+                        DisplayBackground(window);
+                        t = new Text("Vikings", _font1, _charSize);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 4);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 4) - (t.GetGlobalBounds().Height / 3));
+
+                        if (selected == 0)
+                        {
+                            t.FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+                        else
+                        {
+                            t.FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(t);
+
+                        t = new Text("Jungle", _font1, _charSize);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 4 * 2);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 4 * 2) - (t.GetGlobalBounds().Height / 3));
+
+
+                        if (selected == 1)
+                        {
+                            t.FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+                        else
+                        {
+                            t.FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(t);
+
+                        t = new Text("Apocalypse", _font1, _charSize);
+                        t.Position = new SFML.System.Vector2f(window.Size.X / 2 - (t.GetGlobalBounds().Width) / 2, window.Size.Y / 4 * 3);
+
+                        r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
+                        r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 4 * 3) - (t.GetGlobalBounds().Height / 3));
+
+
+                        if (selected == 2)
+                        {
+                            t.FillColor = Color.White;
+                            r.FillColor = Color.Black;
+                        }
+                        else
+                        {
+                            t.FillColor = Color.Black;
+                            r.FillColor = Color.White;
+                        }
+
+                        window.Draw(r);
+                        window.Draw(t);
+
+                        window.Display();
+
+                        display = false;
+                    }
+
+                    window.DispatchEvents();
+
+                } while (again);
+
+
+                window.KeyPressed -= eChoosePreset;
+                display = true;
+                again = true;
+
+                switch (selected)
+                {
+                    case 0: // Vikings
+                        bgPath = @"..\..\..\..\Assets\Backgrounds\game_background_1.png";
+                        playerPath = @"..\..\..\..\Assets\Players\Knight\AllViking";
+                        playerPos = new Position(0, 2);
+                        posMax = new Position(99, 17);
+                        posMin = new Position(0, 1);
+                        playerLife = 10;
+                        playerAtk = 1;
+
+                        blocks.Add(new Sprite("A", "GRASS", @"..\..\..\..\Assets\Ground\Snow\snowMid.png", true, true));
+                        blocks.Add(new Sprite("B", "DIRT", @"..\..\..\..\Assets\Ground\Snow\snowCenter.png", true, true));
+                        blocks.Add(new Sprite("C", "TRAP", @"..\..\..\..\Assets\Tiles\spikes.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+
+                        monsters.Add(new Monster(null, "Golem1", new Position(0, 0), new Life(10), 1, 3, 1, "SAAAAA"));
+                        monsters.Add(new Monster(null, "Golem2", new Position(0, 0), new Life(10), 1, 3, 1, "SAAAA"));
+                        monsters.Add(new Monster(null, "Angel1", new Position(0, 0), new Life(15), 1, 3, 1, "ASSS"));
+                        break;
+                    case 1: // Jungle
+                        bgPath = @"..\..\..\..\Assets\Backgrounds\Cartoon_Forest_BG_03.png";
+                        playerPath = @"..\..\..\..\Assets\Players\Rogue\AllJungle";
+                        playerPos = new Position(0, 2);
+                        posMax = new Position(99, 17);
+                        posMin = new Position(0, 1);
+                        playerLife = 10;
+                        playerAtk = 1;
+
+                        blocks.Add(new Sprite("A", "GRASS", @"..\..\..\..\Assets\Ground\Jungle\PNG\jungle_pack_05.png", true, true));
+                        blocks.Add(new Sprite("B", "DIRT", @"..\..\..\..\Assets\Ground\Jungle\PNG\jungle_pack_35.png", true, true));
+                        blocks.Add(new Sprite("C", "TRAP", @"..\..\..\..\Assets\Tiles\jungle_pack_52.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("D", "TRAP", @"..\..\..\..\Assets\Tiles\jungle_pack_54.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+
+                        monsters.Add(new Monster(null, "Golem1", new Position(0, 0), new Life(10), 1, 3, 1, "SAAAAA"));
+                        monsters.Add(new Monster(null, "Golem2", new Position(0, 0), new Life(12), 1, 3, 1, "SAAAA"));
+                        monsters.Add(new Monster(null, "Ogre", new Position(0, 0), new Life(15), 1, 3, 1, "A"));
+                        break;
+                    case 2: // Apocalypse
+                        bgPath = @"..\..\..\..\Assets\Backgrounds\20957702.jpg";
+                        playerPath = @"..\..\..\..\Assets\Players\Mage\AllMage";
+                        playerPos = new Position(0, 2);
+                        posMax = new Position(199, 17);
+                        posMin = new Position(0, 1);
+                        playerLife = 10;
+                        playerAtk = 1;
+
+                        blocks.Add(new Sprite("A", "STONE", @"..\..\..\..\Assets\Ground\Stone\stoneMidBlack.png", true, true));
+                        blocks.Add(new Sprite("B", "DIRT", @"..\..\..\..\Assets\Ground\Stone\stoneCenterBlack.png", true, true));
+                        blocks.Add(new Sprite("C", "FENCE", @"..\..\..\..\Assets\Tiles\bridgeA.png", true, true));
+                        blocks.Add(new Sprite("D", "OBSTACLE", @"..\..\..\..\Assets\Particles\brickBrown.png", true, true));
+                        blocks.Add(new Sprite("E", "BRICK", @"..\..\..\..\Assets\Particles\brickBlack.png", true, true));
+                        blocks.Add(new Sprite("F", "SIGN", @"..\..\..\..\Assets\Tiles\signExit.png", false, true));
+                        blocks.Add(new Sprite("G", "SIGN", @"..\..\..\..\Assets\Tiles\signRight.png", false, true));
+                        blocks.Add(new Sprite("H", "CHAINS", @"..\..\..\..\Assets\Tiles\chain.png", true, true));
+
+                        blocks.Add(new Sprite("J", "TRAP", @"..\..\..\..\Assets\Tiles\spikesBlack.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("K", "TRAP", @"..\..\..\..\Assets\Tiles\spikesRevert.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("L", "TRAP", @"..\..\..\..\Assets\Tiles\spikesRevert1.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("M", "TRAP", @"..\..\..\..\Assets\Tiles\spikesRevert2.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("N", "TRAP", @"..\..\..\..\Assets\Tiles\lava.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+                        blocks.Add(new Sprite("O", "TRAP", @"..\..\..\..\Assets\Tiles\lavaTop_low.png", false, true));
+                        blocks[blocks.Count - 1].IsDangerous = true;
+
+                        
+
+                        monsters.Add(new Monster(null, "ReaperMan1", new Position(0, 0), new Life(10), 1, 3, 1, "A"));
+                        monsters.Add(new Monster(null, "ReaperMan2", new Position(0, 0), new Life(12), 1, 3, 1, "A"));
+                        monsters.Add(new Monster(null, "Angel1", new Position(0, 0), new Life(15), 1, 3, 1, "A"));
+                        break;
+                }
+
+                selected = 0;
+
             }
             else
             {
