@@ -36,7 +36,7 @@ namespace TripOverTime.EngineNamespace
             _menu = new Menu(window);
             if (_musicMenu == null)
             {
-                _musicMenu = new Music("..\\..\\..\\..\\Music\\SkyWorld.ogg");
+                _musicMenu = new Music("..\\..\\..\\..\\Music\\Daft_Punk_-_Veridis_Quo_Cyberdesign_Remix.ogg");
                 _musicMenu.Play();
             }
             _settings = new Settings(this, window);
