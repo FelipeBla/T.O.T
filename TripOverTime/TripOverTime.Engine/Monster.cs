@@ -87,6 +87,7 @@ namespace TripOverTime.EngineNamespace
             if (!_ismoving)
             {
                 Sprite s = null;
+                bool moveAccept = true;
 
                 if (_orientation == "left")
                 {
@@ -94,11 +95,16 @@ namespace TripOverTime.EngineNamespace
                     {
                         if (!s.IsSolid)
                         {
-                            if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            for (int i = 1; (float)(Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i) >= _context.GetMapObject.GetLimitMin.Y; i++)
                             {
-                                if (s.IsSolid)
-                                    _position.X -= _monsterMove;
+                                if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i), out s)) // Check if he have a ground under
+                                {
+                                    if (s.IsDangerous)
+                                        moveAccept = false;
+                                }
                             }
+                            if (moveAccept)
+                                _position.X -= _monsterMove;
                         }
                     }
 
@@ -109,11 +115,16 @@ namespace TripOverTime.EngineNamespace
                     {
                         if (!s.IsSolid)
                         {
-                            if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            for (int i = 1; (float)(Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i) >= _context.GetMapObject.GetLimitMin.Y; i++)
                             {
-                                if (s.IsSolid)
-                                    _position.X += _monsterMove;
+                                if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i), out s)) // Check if he have a ground under
+                                {
+                                    if (s.IsDangerous)
+                                        moveAccept = false;
+                                }
                             }
+                            if (moveAccept)
+                                _position.X += _monsterMove;
                         }
                     }
                 }

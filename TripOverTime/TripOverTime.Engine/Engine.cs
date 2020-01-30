@@ -70,13 +70,17 @@ namespace TripOverTime.EngineNamespace
             _gui.ShowLoading(90);
 
             //Music
-            string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
             _musicMenu.Stop();
-            if (!String.IsNullOrEmpty(strMusic[0]))
+            if (text.Contains("MUSICEND"))
             {
-                _musicJeux = new Music(strMusic[0]);
-                _musicJeux.Play();
+                string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
+                if (!String.IsNullOrEmpty(strMusic[0]))
+                {
+                    _musicJeux = new Music(strMusic[0]);
+                    _musicJeux.Play();
+                }
             }
+            
         }
         public void StartGame2(string mapPath)
         {
