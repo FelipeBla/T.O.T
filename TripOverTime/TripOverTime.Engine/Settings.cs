@@ -285,6 +285,11 @@ namespace TripOverTime.EngineNamespace
             string settingsFile = _fullscreen + "\n" + _NbFPS + "\n" + _XResolution + "\n" + _YResolution;
             System.IO.File.WriteAllText("settings", settingsFile);
 
+            if (_applyNeed)
+            {
+                _context.GetMusicMenu.Stop();
+                _context.GetMusicMenu.Dispose();
+            }
             return _applyNeed;
         }
 
