@@ -136,14 +136,22 @@ namespace TripOverTime.EngineNamespace
                 {
                     if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 - _monsterMove2, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                         if (!s.IsSolid)
-                            _position2.X2 -= _monsterMove2;
+                            if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 + _monsterMove2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            {
+                                if (s.IsSolid2)
+                                    _position2.X2 -= _monsterMove2;
+                            }
                 }
                 else
                 {
                     if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 + _monsterMove2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity)), out s)) // Block is solid?
                     {
                         if (!s.IsSolid2)
-                            _position2.X2 += _monsterMove2;
+                            if (_context2.GetMapObject2.GetMap2.TryGetValue(new Position2((float)Math.Round(_position2.X2 + _monsterMove2, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position2.Y2, MidpointRounding.ToNegativeInfinity) - 1), out s)) // Check if he have a ground under
+                            {
+                                if (s.IsSolid2)
+                                    _position2.X2 += _monsterMove2;
+                            }
                     }
                 }
 

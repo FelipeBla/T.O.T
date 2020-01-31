@@ -779,7 +779,7 @@ namespace TripOverTime.EngineNamespace
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
 
-            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
             background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
@@ -897,7 +897,7 @@ namespace TripOverTime.EngineNamespace
             view1.Size = new Vector2f(Settings.XResolution, Settings.YResolution);
             _window.SetView(view1);
 
-            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\colored_desert.png"));
+            SFML.Graphics.Sprite background = new SFML.Graphics.Sprite(new Texture(@"..\..\..\..\Assets\Backgrounds\time-travel-background.png"));
             if (background == null) throw new Exception("Sprite null!");
 
             background.Scale = new SFML.System.Vector2f(_window.Size.X / 550, _window.Size.Y / 550);
