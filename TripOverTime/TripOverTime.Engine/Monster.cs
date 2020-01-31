@@ -99,8 +99,14 @@ namespace TripOverTime.EngineNamespace
                             {
                                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X - _monsterMove, MidpointRounding.ToNegativeInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i), out s)) // Check if he have a ground under
                                 {
+                                    if (s.IsSolid)
+                                    {
+                                        i = (int)_context.GetMapObject.GetLimitMax.Y;
+                                    }
                                     if (s.IsDangerous)
+                                    {
                                         moveAccept = false;
+                                    }
                                 }
                             }
                             if (moveAccept)
@@ -119,8 +125,14 @@ namespace TripOverTime.EngineNamespace
                             {
                                 if (_context.GetMapObject.GetMap.TryGetValue(new Position((float)Math.Round(_position.X + _monsterMove, MidpointRounding.ToPositiveInfinity), (float)Math.Round(_position.Y, MidpointRounding.ToNegativeInfinity) - i), out s)) // Check if he have a ground under
                                 {
+                                    if (s.IsSolid)
+                                    {
+                                        i = (int)_context.GetMapObject.GetLimitMax.Y;
+                                    }
                                     if (s.IsDangerous)
+                                    {
                                         moveAccept = false;
+                                    }
                                 }
                             }
                             if (moveAccept)
