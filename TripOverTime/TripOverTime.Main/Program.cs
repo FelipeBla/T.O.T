@@ -269,7 +269,8 @@ namespace TripOverTime.Main
                     }
                     else
                     {
-                        throw new Exception("WTF?!");
+                        //throw new Exception("WTF?!");
+                        Console.WriteLine("WTF?!");
                     }
                 }
                 else if (choose == 2) // Map editor
