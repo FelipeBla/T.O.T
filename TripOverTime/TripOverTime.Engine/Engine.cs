@@ -70,13 +70,17 @@ namespace TripOverTime.EngineNamespace
             _gui.ShowLoading(90);
 
             //Music
-            string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
             _musicMenu.Stop();
-            if (!String.IsNullOrEmpty(strMusic[0]))
+            if (text.Contains("MUSICEND"))
             {
-                _musicJeux = new Music(strMusic[0]);
-                _musicJeux.Play();
+                string[] strMusic = StringBetweenString(text, "MUSIC", "MUSICEND").Split(" ");
+                if (!String.IsNullOrEmpty(strMusic[0]))
+                {
+                    _musicJeux = new Music(strMusic[0]);
+                    _musicJeux.Play();
+                }
             }
+            
         }
         public void StartGame2(string mapPath)
         {
@@ -792,10 +796,10 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("With " + _game.GetPlayer.GetLife.GetCurrentPoint + " HP.", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
+            lines[0].FillColor = Color.Green;
+            lines[1].FillColor = Color.Yellow;
+            lines[2].FillColor = Color.Red;
+            lines[3].FillColor = Color.Black;
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -910,10 +914,10 @@ namespace TripOverTime.EngineNamespace
             lines.Add(new Text("in : " + _game.TimeElapsed / 1000 + " seconds !", _globalFont, 32));
             lines.Add(new Text("Press ENTER/A to QUIT", _globalFont, 32));
 
-            lines[0].Color = Color.Green;
-            lines[1].Color = Color.Yellow;
-            lines[2].Color = Color.Red;
-            lines[3].Color = Color.Black;
+            lines[0].FillColor = Color.Green;
+            lines[1].FillColor = Color.Yellow;
+            lines[2].FillColor = Color.Red;
+            lines[3].FillColor = Color.Black;
 
             for (int i = 0; i < lines.Count; i++)
             {
@@ -951,7 +955,7 @@ namespace TripOverTime.EngineNamespace
 
         internal void MusicStop(Music music)
         {
-            if (music != null)
+            if (music != null && music.Status == SoundStatus.Playing)
             {
                 music.Stop();
                 music.Dispose();
