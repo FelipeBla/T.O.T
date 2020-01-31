@@ -16,6 +16,7 @@ namespace TripOverTime.EngineNamespace
         List<EventHandler<KeyEventArgs>> _eventsKey;
         List<EventHandler<TextEventArgs>> _eventsText;
         char _blockId;
+        bool _return;
 
         public MapEditor()
         {
@@ -24,6 +25,7 @@ namespace TripOverTime.EngineNamespace
             _charSize = 32;
             _blockId = 'A';
             _blockId--;
+            _return = false;
 
             _eventsKey = new List<EventHandler<KeyEventArgs>>();
             _eventsText = new List<EventHandler<TextEventArgs>>();
@@ -62,7 +64,7 @@ namespace TripOverTime.EngineNamespace
             // Preset or Manual
             EventHandler<KeyEventArgs> ePresetOrManual = (s, a) =>
             {
-                switch(a.Code)
+                switch (a.Code)
                 {
                     case Keyboard.Key.Down:
                         if (selected == 0)
@@ -84,15 +86,27 @@ namespace TripOverTime.EngineNamespace
                             //Preset
                             usePreset = true;
                         }
+                        else
+                        {
+                            usePreset = false;
+                        }
                         again = false;
                         break;
+                }
+
+                if (a.Code == Keyboard.Key.Escape)
+                {
+                    _return = true;
                 }
             };
 
             window.KeyPressed += ePresetOrManual;
 
             window.DispatchEvents();
-
+            if (_return)
+            {
+                return;
+            }
             selected = 0;
 
             do
@@ -128,7 +142,7 @@ namespace TripOverTime.EngineNamespace
 
                     r = new RectangleShape(new SFML.System.Vector2f(t.GetGlobalBounds().Width * 1.5f, t.GetGlobalBounds().Height * 2));
                     r.Position = new SFML.System.Vector2f(window.Size.X / 2 - (r.GetGlobalBounds().Width) / 2, (window.Size.Y / 3 * 2) - (t.GetGlobalBounds().Height / 3));
-                    
+
 
                     if (selected == 1)
                     {
@@ -150,7 +164,10 @@ namespace TripOverTime.EngineNamespace
                 }
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
             } while (again);
 
 
@@ -186,12 +203,19 @@ namespace TripOverTime.EngineNamespace
                             again = false;
                             break;
                     }
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
+                    }
                 };
 
                 window.KeyPressed += eChoosePreset;
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 selected = 0;
 
                 do
@@ -270,7 +294,10 @@ namespace TripOverTime.EngineNamespace
                     }
 
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                 } while (again);
 
 
@@ -349,7 +376,7 @@ namespace TripOverTime.EngineNamespace
                         blocks.Add(new Sprite("O", "TRAP", @"..\..\..\..\Assets\Tiles\lavaTop_low.png", false, true));
                         blocks[blocks.Count - 1].IsDangerous = true;
 
-                        
+
 
                         monsters.Add(new Monster(null, "ReaperMan1", new Position(0, 0), new Life(10), 1, 3, 1, "A"));
                         monsters.Add(new Monster(null, "ReaperMan2", new Position(0, 0), new Life(12), 1, 3, 1, "A"));
@@ -385,9 +412,14 @@ namespace TripOverTime.EngineNamespace
                         display = true;
                     }
                     else if (a.Control && a.Code == Keyboard.Key.V) //Paste
-                {
+                    {
                         bgPath += Clipboard.Contents;
                         display = true;
+                    }
+
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -395,6 +427,10 @@ namespace TripOverTime.EngineNamespace
                 window.KeyPressed += _eventsKey[0];
 
                 window.DispatchEvents();
+                if (_return)
+                {
+                    return;
+                }
 
                 do
                 {
@@ -432,7 +468,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -467,9 +506,13 @@ namespace TripOverTime.EngineNamespace
                         again = false;
                     }
                     else if (a.Control && a.Code == Keyboard.Key.V) //Paste
-                {
+                    {
                         playerPath += Clipboard.Contents;
                         display = true;
+                    }
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -512,7 +555,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -526,11 +572,14 @@ namespace TripOverTime.EngineNamespace
                 display = true;
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 _eventsText.Add((s, a) =>
                 {
                     if (a.Unicode != "\b" && int.TryParse(a.Unicode, out int n)) //Verify if it's a number
-                {
+                    {
                         switch (selected)
                         {
                             case 0:
@@ -598,7 +647,7 @@ namespace TripOverTime.EngineNamespace
                         }
                     }
                     else if (a.Control && a.Code == Keyboard.Key.V) //Paste
-                {
+                    {
                         playerPath += Clipboard.Contents;
                         display = true;
                     }
@@ -611,6 +660,11 @@ namespace TripOverTime.EngineNamespace
                     {
                         display = true;
                         selected++;
+                    }
+
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -733,7 +787,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -746,11 +803,14 @@ namespace TripOverTime.EngineNamespace
                 display = true;
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 _eventsText.Add((s, a) =>
                 {
                     if (a.Unicode != "\b" && int.TryParse(a.Unicode, out int n)) //Verify if it's a number
-                {
+                    {
                         switch (selected)
                         {
                             case 0:
@@ -818,7 +878,7 @@ namespace TripOverTime.EngineNamespace
                         }
                     }
                     else if (a.Control && a.Code == Keyboard.Key.V) //Paste
-                {
+                    {
                         playerPath += Clipboard.Contents;
                         display = true;
                     }
@@ -831,6 +891,11 @@ namespace TripOverTime.EngineNamespace
                     {
                         display = true;
                         selected++;
+                    }
+
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -955,7 +1020,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -970,7 +1038,10 @@ namespace TripOverTime.EngineNamespace
                 display = true;
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 _eventsKey.Add((s, a) =>
                 {
                     if (!addingBlock)
@@ -978,25 +1049,25 @@ namespace TripOverTime.EngineNamespace
                         if (a.Code == Keyboard.Key.Enter)
                         {
                             if (selected == lines.Count + 1) // Next
-                        {
+                            {
                                 display = true;
                                 again = false;
                             }
                             else if (selected == lines.Count) // Add Block
-                        {
+                            {
                                 addingBlock = true;
 
                                 Sprite ss = AddBlock(window);
 
-                            // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
+                                // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
 
-                            if (ss != null)
+                                if (ss != null)
                                 {
                                     blocks.Add(ss);
                                     string tempPath = blocks[blocks.Count - 1].ImgPath;
 
                                     while (tempPath.Length > 55) // A TESTER
-                                {
+                                    {
                                         tempPath = tempPath.Remove(tempPath.Length - 1, 1);
                                     }
 
@@ -1009,9 +1080,9 @@ namespace TripOverTime.EngineNamespace
                                 display = true;
                             }
                             else if (selected < lines.Count && selected > 0) // Enter on a block line
-                        {
-                            // Edit
-                        }
+                            {
+                                // Edit
+                            }
                         }
                         else if (a.Code == Keyboard.Key.Delete)
                         {
@@ -1044,6 +1115,10 @@ namespace TripOverTime.EngineNamespace
                             }
 
                         }
+                    }
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -1148,7 +1223,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -1163,7 +1241,10 @@ namespace TripOverTime.EngineNamespace
                 display = true;
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 _eventsKey.Add((s, a) =>
                 {
                     if (!addingMonster)
@@ -1171,25 +1252,25 @@ namespace TripOverTime.EngineNamespace
                         if (a.Code == Keyboard.Key.Enter)
                         {
                             if (selected == lines.Count + 1) // Next
-                        {
+                            {
                                 display = true;
                                 again = false;
                             }
                             else if (selected == lines.Count) // Add Block
-                        {
+                            {
                                 addingMonster = true;
 
                                 Monster ss = AddMonster(window);
 
-                            // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
+                                // G GRASS ..\..\..\..\Assets\Ground\Snow\snowMid.png true
 
-                            if (ss != null)
+                                if (ss != null)
                                 {
                                     monsters.Add(ss);
 
-                                // Golem1 3 3 10 1 3 1 SAAAAA
-                                //lines.Add(new Text("NAME - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
-                                lines.Add(new Text(monsters[monsters.Count - 1].Name + " - " + monsters[monsters.Count - 1].life.GetMaxPoint() + " - " + monsters[monsters.Count - 1].GetAttack.GetAttack + " - " + monsters[monsters.Count - 1].MoveSpeed * 100 + " - " + monsters[monsters.Count - 1].Range + " - " + monsters[monsters.Count - 1].AttackCombo, _font2, _charSize));
+                                    // Golem1 3 3 10 1 3 1 SAAAAA
+                                    //lines.Add(new Text("NAME - HP - ATTACK - MOVESPEED - RANGE - COMBO", _font1, _charSize));
+                                    lines.Add(new Text(monsters[monsters.Count - 1].Name + " - " + monsters[monsters.Count - 1].life.GetMaxPoint() + " - " + monsters[monsters.Count - 1].GetAttack.GetAttack + " - " + monsters[monsters.Count - 1].MoveSpeed * 100 + " - " + monsters[monsters.Count - 1].Range + " - " + monsters[monsters.Count - 1].AttackCombo, _font2, _charSize));
                                 }
 
                                 selected++;
@@ -1198,9 +1279,9 @@ namespace TripOverTime.EngineNamespace
                                 display = true;
                             }
                             else if (selected < lines.Count && selected > 0) // Enter on a block line
-                        {
-                            // Edit
-                        }
+                            {
+                                // Edit
+                            }
                         }
                         else if (a.Code == Keyboard.Key.Delete)
                         {
@@ -1233,6 +1314,11 @@ namespace TripOverTime.EngineNamespace
                             }
 
                         }
+                    }
+
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
                     }
                 });
 
@@ -1337,7 +1423,10 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
@@ -1345,8 +1434,18 @@ namespace TripOverTime.EngineNamespace
             }
 
             // Add Win Flag block
-            _blockId = Convert.ToChar(blocks[blocks.Count - 1].Id);
-            _blockId++;
+            if (blocks.Count > 0)
+            {
+                _blockId = Convert.ToChar(blocks[blocks.Count - 1].Id);
+                _blockId++;
+            }
+            else
+            {
+                // 0 blocks
+                // QUIT?
+                return;
+            }
+
             blocks.Add(new Sprite(Convert.ToString(_blockId), "END", @"..\..\..\..\Assets\Items\flagGreen_down.png", false, true));
 
             // EDITORRRRRR
@@ -1382,13 +1481,20 @@ namespace TripOverTime.EngineNamespace
                         mapName += Clipboard.Contents;
                         display = true;
                     }
+                    if (a.Code == Keyboard.Key.Escape)
+                    {
+                        _return = true;
+                    }
                 });
 
                 window.TextEntered += _eventsText[_eventsText.Count - 1];
                 window.KeyPressed += _eventsKey[_eventsKey.Count - 1];
 
                 window.DispatchEvents();
-
+                if (_return)
+                {
+                    return;
+                }
                 display = true;
                 do
                 {
@@ -1426,19 +1532,33 @@ namespace TripOverTime.EngineNamespace
 
                     // Events
                     window.DispatchEvents();
-
+                    if (_return)
+                    {
+                        return;
+                    }
                     System.Threading.Thread.Sleep(1000 / 60);
                 } while (again);
 
                 mapName = mapName.Remove(0, 1);
                 mapName = mapName.Replace("\r", "");
+                mapName = mapName + ".totmap";
 
                 window.TextEntered -= _eventsText[_eventsText.Count - 1];
                 window.KeyPressed -= _eventsKey[_eventsKey.Count - 1];
 
 
                 // Save map
-                File.WriteAllText(@"..\..\..\..\Maps\Edited\" + mapName + ".totmap", mapToSave);
+                bool isValid = !string.IsNullOrEmpty(mapName) && mapName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && !File.Exists(Path.Combine(@"..\..\..\..\Maps\Edited\", mapName));
+                
+                if (isValid)
+                {
+                    File.WriteAllText(@"..\..\..\..\Maps\Edited\" + mapName, mapToSave);
+                    Console.WriteLine("Enregistrer avec succès!");
+                }
+                else
+                {
+                    Console.WriteLine("Non enregistré !!");
+                }
             }
 
         }
@@ -1728,7 +1848,6 @@ namespace TripOverTime.EngineNamespace
                 }
 
                 window.DispatchEvents();
-
                 System.Threading.Thread.Sleep(1000 / 60);
             } while (again);
 
@@ -2127,7 +2246,6 @@ namespace TripOverTime.EngineNamespace
                 }
 
                 window.DispatchEvents();
-
                 System.Threading.Thread.Sleep(1000 / 60);
             } while (again);
 
@@ -2345,8 +2463,6 @@ namespace TripOverTime.EngineNamespace
 
             window.KeyPressed += events;
 
-            window.DispatchEvents();
-
             RectangleShape r = new RectangleShape(new SFML.System.Vector2f(132, 132));
             r.FillColor = Color.Red;
 
@@ -2481,6 +2597,7 @@ namespace TripOverTime.EngineNamespace
 
                 //Events
                 window.DispatchEvents();
+
                 //System.Threading.Thread.Sleep(1);
             } while (showMapAgain);
 
@@ -2505,7 +2622,7 @@ namespace TripOverTime.EngineNamespace
             mapFileString += "MONSTER\r\n";
             foreach (Monster m in monsterOnMap)
             { //Golem1 3 3 10 1 3 1 SAAAAA
-                mapFileString += m.Name + " " + m.Position.X + " " + m.Position.Y + " " + m.life.MaxPoint + " " + m.GetAttack.GetAttack + " " + m.MoveSpeed*100*100 + " " + Convert.ToInt32(m.Range - 0.2f) + " " + m.AttackCombo + "\r\n";
+                mapFileString += m.Name + " " + m.Position.X + " " + m.Position.Y + " " + m.life.MaxPoint + " " + m.GetAttack.GetAttack + " " + m.MoveSpeed * 100 * 100 + " " + Convert.ToInt32(m.Range - 0.2f) + " " + m.AttackCombo + "\r\n";
             }
             mapFileString += "MONSTEREND\r\n";
 
